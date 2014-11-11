@@ -41,8 +41,8 @@ data.teams = [
   { id: 'PHI', name: 'Philadelphia 76ers'},
   { id: 'BOS', name: 'Boston Celtics'}
 ];
-
-
+ 
+ 
 // #######################
 // ### DATA INJECTION
 // #######################
@@ -61,11 +61,8 @@ data.injectData = function(controller) {
     if (game.awayScore && game.homeScore) {
       controller.addGame(game.date, game.time, game.awayId, game.homeId, game.awayScore, game.homeScore);
     }
-	if (game.date == todaysDate) {
+    if (game.date == todaysDate) {
       controller.addTodaysGame(game.awayId, game.homeId, game.time);
-	}
+    }
   }
 }
-
-
-
