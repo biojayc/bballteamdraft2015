@@ -20,14 +20,19 @@ var findRoute = function(path, method) {
   }
 };
 
-var startWebServer = function(ip, port) {
-  http.createServer(function (req, res) {
+var startWebServer = function(port, ip) {
+  var server = http.createServer(function (req, res) {
     var path = url.parse(req.url).pathname;
     console.log("Incoming Request for: " + req.method + " " + path);
     var handler = findRoute(path, req.method);
     handler(req, res);
     
-  }).listen(port, ip);
+  })
+  if (ip) {
+    server.listen(port, ip);
+  } else {
+    server.listen(port);
+  }
   console.log("Webserver running on " + ip + ":" + port);
 }
 
