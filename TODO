@@ -2,3 +2,4 @@
 * Add watchers on layout files to remove cache.
 * Move calculation logic to server side
 * Cache calculations and serve from cache??
+* Update RegisterStatic to support directory mapping.
