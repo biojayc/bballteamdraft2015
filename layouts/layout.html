@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2015 NBA Pick'em</title>
+<script type="text/javascript" src="static/javascript/util.js"></script>
+<script type="text/javascript" src="static/javascript/pickem.js"></script>
+<script type="text/javascript" src="static/javascript/games.js"></script>
+<script type="text/javascript" src="static/javascript/data.js"></script>
+<script type="text/javascript" src="static/javascript/ui.js"></script>
+<style>
+body,html {
+	background-color:lightblue;
+	margin:0px;
+	padding:0px;
+}
+h1 {
+	font-family:verdana;
+	margin:0px;
+	padding:0px;
+	margin-left:10px;
+	line-height:100px;
+	vertical-align:top;
+}
+h2 {
+	font-family:arial;
+	border-bottom:1px solid black;
+}
+td {
+	font-family:georgia;
+	font-size:14px;
+}
+#main {
+	width:1200px;
+}
+
+#scores {
+  float:left;
+  width:300px;
+}
+#wrapper {
+  padding:10px 50px;
+  width:700px;
+  float:left;
+  background-color:#ccffff;
+}
+#footer {
+	clear:left;
+	font-family:georgia;
+	font-size:14px;
+	margin-left:10px;
+}
+.winner {
+	font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+<div id='main'>
+	
+<h1>2015 NBA Pick'em</h1>
+
+<div id='scores'>
+<img id='winningimage' src="" title="Current Winner's Image" width=300>
+<table id='scoretable' border=0 cellpadding=5 cellspacing=1 align=center>
+<tr><th align=left>Name</th><th align=left>Score</th></tr>
+</table>
+</div>
+
+<div id='wrapper'>
+
+##BODYTEXT##
+
+
+</div>
+<div id ='footer'>&copy; 2014 Jamie Smith</div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+window.onload = function(event) {
+  var controller = new pickem.Controller();
+  data.injectData(controller);
+  ui.buildScoreTable(controller);
+  ui.buildTeamsTable(controller);
+  ui.buildGamesTable(controller);
+  ui.buildTodaysGamesTable(controller);
+}
+</script>
+</html>
