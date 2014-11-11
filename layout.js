@@ -23,6 +23,59 @@ var getLayoutText = function(bodyFile, layoutFile) {
   return html;
 }
 
+var substituteVars = function(html, vars) {
+  for(var key in vars) {
+    html = html.replace("##" + key + "##", vars[key]);
+  }
+  return html.replace(/##\w+##/g,"");
+}
+
+var getRepeatedRegions = function(html) {
+  var startRegex = /##(\w+)-begin##/;
+  var result = [];
+  var done = false;
+  
+  while (!done) {
+    var match = html.match(startRegex);
+    if (match) {
+      var regionName = match[1];
+      html = html.substr(html.search(startRegex) + regionName.length + 10, html.length);
+      var endRegex = "##" + regionName + "-end##";
+      var innerHTML = html.substr(0, html.search(endRegex));
+      html = html.substr(html.search(endRegex), html.length);
+      if (regionName && innerHTML) {
+        result.push({ name: regionName, html: innerHTML });
+      }
+    } else {
+      done = true;
+    }
+  }
+  return result;
+}
+
+var processRepeatedRegions = function(html, vars) {
+  var repeatedRegions = getRepeatedRegions(html);
+  var newHTML;
+  for(var i=0; i < repeatedRegions.length; i++) {
+    var region = repeatedRegions[i];
+    newHTML = "";
+    var regionName = region.name;
+    var regionHTML = region.html;
+    var arr = vars[regionName] || [];
+    for (var j=0;j < arr.length; j++) {
+      var obj = arr[j];
+      console.log(obj);
+      console.log(substituteVars(regionHTML, obj));
+      newHTML += substituteVars(regionHTML, obj);
+    }
+    console.log(newHTML);
+    var re = eval("/##" + regionName + "-begin##[.\\W\\w\\s\\r\\n]*" +
+        "##" + regionName + "-end##/");
+    html = html.replace(re, newHTML);
+  }
+  return html;
+}
+
 var LayoutEngine = function(bodyFile, layoutFile, vars) {
   this.bodyFile = bodyFile;
   this.layoutFile = layoutFile;
@@ -30,15 +83,9 @@ var LayoutEngine = function(bodyFile, layoutFile, vars) {
 }
 LayoutEngine.prototype.Render = function() {
   var html = getLayoutText(this.bodyFile, this.layoutFile);
-  for(var key in this.vars) {
-    html = html.replace("##" + key + "##", this.vars[key]);
-  }
-  html = html.replace(/##\w+##/g,"");
   
-  // Find repeated regions
-  if (html.match(/##\w+-start+##/)) {
-    console.log("have repeated region");
-  }
+  html = processRepeatedRegions(html, this.vars);
+  html = substituteVars(html, this.vars);
   return html;
 }
 
