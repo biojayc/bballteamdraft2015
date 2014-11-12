@@ -64,7 +64,8 @@ var processRepeatedRegions = function(html, vars) {
     var arr = vars[regionName] || [];
     for (var j=0;j < arr.length; j++) {
       var obj = arr[j];
-      newHTML += substituteVars(regionHTML, obj);
+      var tempHTML = processRepeatedRegions(regionHTML, obj);
+      newHTML += substituteVars(tempHTML, obj);
     }
     var re = eval("/##" + regionName + "-begin##[.\\W\\w\\s\\r\\n]*" +
         "##" + regionName + "-end##/");

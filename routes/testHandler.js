@@ -7,7 +7,26 @@ var main = function(req, res) {
   // var query = requestUtils.getQueryObj(req);
   var test = "test";
   
-  var obj = { test: test, region: [{ name: "hello" }, {name:"hi" } ] };
+  var obj = 
+  {
+      test: test, 
+      region: [
+          { 
+              name: "hello",
+              subregion: [
+                  { name: "hello2" },
+                  { name: "hello3" },
+              ],
+          },
+          {
+              name:"hi",
+              subregion: [
+                  { name: "hi2" },
+                  { name: "hi3" },
+              ],
+          }
+      ]
+  };
   
   var text = new layout.LayoutEngine(
       "test.html", "layout.html", obj).Render();
