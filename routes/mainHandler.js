@@ -53,10 +53,31 @@ var createTeams = function(controller) {
   return teams;
 }
 
+var createTeamsByOwner = function(controller) {
+  var tbos = [];
+  for (var i = 0; i < controller.people.length; i++) {
+    var person = controller.people[i];
+    var tbo = {};
+    tbo.name = person.name;
+    tbo.person = person;
+    tbo.ownerteams = [];
+    for (var j = 0; j < controller.teams.length; j++) {
+      var team = controller.teams[j];
+      if (team.ownerId == person.id) {
+        // console.log(tbo.name + " owns " + team.name);
+        tbo.ownerteams.push(team);
+      }
+    }
+    tbos.push(tbo);
+  }
+  return tbos;
+}
+
 var home = function(req, res) {
   var todaysgames = createTodaysGames(controller);
   var games = createGames(controller);
   var teams = createTeams(controller);
+  var tbo = createTeamsByOwner(controller);
   
   var obj = { 
     score: controller.people,
@@ -64,6 +85,7 @@ var home = function(req, res) {
     games: games,
     teams: teams,
     image: controller.people[0].image,
+    teamsbyowner: tbo,
   };
   var text = new layout.LayoutEngine(
       "index.html", "layout.html", obj).Render();
