@@ -64,11 +64,8 @@ var processRepeatedRegions = function(html, vars) {
     var arr = vars[regionName] || [];
     for (var j=0;j < arr.length; j++) {
       var obj = arr[j];
-      console.log(obj);
-      console.log(substituteVars(regionHTML, obj));
       newHTML += substituteVars(regionHTML, obj);
     }
-    console.log(newHTML);
     var re = eval("/##" + regionName + "-begin##[.\\W\\w\\s\\r\\n]*" +
         "##" + regionName + "-end##/");
     html = html.replace(re, newHTML);

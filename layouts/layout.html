@@ -2,11 +2,6 @@
 <html>
 <head>
 <title>2015 NBA Pick'em</title>
-<script type="text/javascript" src="static/javascript/util.js"></script>
-<script type="text/javascript" src="static/javascript/pickem.js"></script>
-<script type="text/javascript" src="static/javascript/games.js"></script>
-<script type="text/javascript" src="static/javascript/data.js"></script>
-<script type="text/javascript" src="static/javascript/ui.js"></script>
 <link rel="stylesheet" href="static/css/style.css" type="text/css" />
 </head>
 
@@ -16,9 +11,12 @@
 <h1>2015 NBA Pick'em</h1>
 
 <div id='scores'>
-<img id='winningimage' src="" title="Current Winner's Image" width=300>
+<img id='winningimage' src="##image##" title="Current Winner's Image" width=300>
 <table id='scoretable' border=0 cellpadding=5 cellspacing=1 align=center>
 <tr><th align=left>Name</th><th align=left>Score</th></tr>
+##score-begin##
+<tr><td>##name##</td><td>##wins##</td></tr>
+##score-end##
 </table>
 </div>
 
@@ -32,16 +30,4 @@
 </div>
 
 </body>
-
-<script type="text/javascript">
-
-window.onload = function(event) {
-  var controller = new pickem.Controller();
-  data.injectData(controller);
-  ui.buildScoreTable(controller);
-  ui.buildTeamsTable(controller);
-  ui.buildGamesTable(controller);
-  ui.buildTodaysGamesTable(controller);
-}
-</script>
 </html>

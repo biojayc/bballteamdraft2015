@@ -15,4 +15,23 @@ var main = function(req, res) {
   res.end(text);
 }
 
+var otherGet = function(req, res) {
+  var text = new layout.LayoutEngine("other.html", "layout.html", {}).Render();
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(text);
+}
+
+var otherPost = function(req, res) {
+  requestUtils.getPostObj(req, function(body) {
+    var title = "Thanks " + body.name + " age " + body.age;
+    var text = new layout.LayoutEngine("generic.html", "layout.html",
+        { title: title, body: "Thanks for posting."}).Render();
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(text);
+  });
+}
+
+
 exports.main = main;
+exports.otherGet = otherGet;
+exports.otherPost = otherPost;

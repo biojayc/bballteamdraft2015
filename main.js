@@ -6,8 +6,8 @@ var restify = require('./restify'),
 restify.startWebServer(1337);
 
 restify.registerRoute("/", "*", mainHandler.home);
-restify.registerRoute("/other.*", "GET", mainHandler.otherGet);
-restify.registerRoute("/other.*", "POST", mainHandler.otherPost);
+restify.registerRoute("/other.*", "GET", testHandler.otherGet);
+restify.registerRoute("/other.*", "POST", testHandler.otherPost);
 restify.registerRoute("/test.*", "GET", testHandler.main);
 restify.registerRoute("404", "GET", errorHandler.error);
 
