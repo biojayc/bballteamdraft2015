@@ -4,8 +4,7 @@ var layout = require('../layout'),
     qs = require('querystring'),
     controller = require('../model/pickem').controller;
 
-var home = function(req, res) {
-  //TODO: clean this crap up.  Move it somewhere else or something.
+var createTodaysGames = function(controller) {
   var todaysgames = [];
   for (var i = 0; i < controller.todaysGames.length; i++) {
     var game = controller.todaysGames[i];
@@ -20,7 +19,10 @@ var home = function(req, res) {
     todaysgames.push(
         { time: game.time, away: awayTeam.name + awayOwnerName, home: homeTeam.name + homeOwnerName});
   }
-  
+  return todaysgames;
+}
+
+var createGames = function(controller) {
   var games = [];
   for (var i = controller.games.length - 1, count = 9; i >= 0 && count >= 0; i--,count--) {
     var game = controller.games[i];
@@ -38,13 +40,23 @@ var home = function(req, res) {
             homeClass: "winner" });
     }
   }
-  
+  return games;
+}
+
+var createTeams = function(controller) {
   var teams = [];
   for (var i = 0; i < controller.teams.length; i++) {
     var team = controller.teams[i];
     var person = controller.findPerson(team.ownerId);
     teams.push({ name: team.name, wins: team.wins, losses: team.losses, person: person ? person.name : "" });
   }
+  return teams;
+}
+
+var home = function(req, res) {
+  var todaysgames = createTodaysGames(controller);
+  var games = createGames(controller);
+  var teams = createTeams(controller);
   
   var obj = { 
     score: controller.people,
