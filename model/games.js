@@ -1,6 +1,6 @@
 
 exports.games = [
-  { date: '10/28/2014', time: '5:00 PM', awayId: 'ORL', homeId: 'NOK', awayScore: 84, homeScore: 101 },
+{ date: '10/28/2014', time: '5:00 PM', awayId: 'ORL', homeId: 'NOK', awayScore: 84, homeScore: 101 },
   { date: '10/28/2014', time: '5:00 PM', awayId: 'DAL', homeId: 'SAS', awayScore: 100, homeScore: 101 },
   { date: '10/28/2014', time: '7:30 PM', awayId: 'HOU', homeId: 'LAL', awayScore: 108, homeScore: 90 },
    
@@ -110,10 +110,17 @@ exports.games = [
   { date: '11/09/2014', time: '6:00 PM', awayId: 'DEN', homeId: 'POR', awayScore: 100, homeScore: 116 },
   { date: '11/09/2014', time: '6:30 PM', awayId: 'CHA', homeId: 'LAL', awayScore: 92, homeScore: 107 },
    
-  { date: '11/10/2014', time: '4:00 PM', awayId: 'NOK', homeId: 'CLE', awayScore: 0, homeScore: 0 },
-  { date: '11/10/2014', time: '4:00 PM', awayId: 'UTA', homeId: 'IND', awayScore: 0, homeScore: 0 },
-  { date: '11/10/2014', time: '4:30 PM', awayId: 'ATL', homeId: 'NYK', awayScore: 0, homeScore: 0 },
-  { date: '11/10/2014', time: '5:00 PM', awayId: 'DET', homeId: 'CHI', awayScore: 0, homeScore: 0 },
-  { date: '11/10/2014', time: '7:30 PM', awayId: 'SAS', homeId: 'LAC', awayScore: 0, homeScore: 0 },
+  { date: '11/10/2014', time: '4:00 PM', awayId: 'NOK', homeId: 'CLE', awayScore: 111, homeScore: 118 },
+  { date: '11/10/2014', time: '4:00 PM', awayId: 'UTA', homeId: 'IND', awayScore: 86, homeScore: 97 },
+  { date: '11/10/2014', time: '4:30 PM', awayId: 'ATL', homeId: 'NYK', awayScore: 91, homeScore: 85 },
+  { date: '11/10/2014', time: '5:00 PM', awayId: 'DET', homeId: 'CHI', awayScore: 91, homeScore: 102 },
+  { date: '11/10/2014', time: '7:30 PM', awayId: 'SAS', homeId: 'LAC', awayScore: 89, homeScore: 85 },
+   
+  { date: '11/11/2014', time: '4:30 PM', awayId: 'ORL', homeId: 'TOR', awayScore: 0, homeScore: 0 },
+  { date: '11/11/2014', time: '5:00 PM', awayId: 'OKC', homeId: 'MIL', awayScore: 0, homeScore: 0 },
+  { date: '11/11/2014', time: '5:00 PM', awayId: 'LAL', homeId: 'MEG', awayScore: 0, homeScore: 0 },
+  { date: '11/11/2014', time: '5:30 PM', awayId: 'SAC', homeId: 'DAL', awayScore: 0, homeScore: 0 },
+  { date: '11/11/2014', time: '7:00 PM', awayId: 'CHA', homeId: 'POR', awayScore: 0, homeScore: 0 },
+  { date: '11/11/2014', time: '7:30 PM', awayId: 'SAS', homeId: 'GST', awayScore: 0, homeScore: 0 },
    
 ];
