@@ -16,7 +16,7 @@ var teams = [
   { id: 'SAS', name: 'San Antonio Spurs', owner: 'CS' },
   { id: 'LAC', name: 'LA Clippers', owner: 'BT' },
   { id: 'CHI', name: 'Chicago Bulls', owner: 'AK' },
-  { id: 'OKC', name: 'Oklahoma City', owner: 'JS' },
+  { id: 'OKC', name: 'Oklahoma City Thunder', owner: 'JS' },
   { id: 'HOU', name: 'Houston Rockets', owner: 'JRS' },
   { id: 'GST', name: 'Golden State Warriors', owner: 'JRS' },
   { id: 'MEG', name: 'Memphis Grizzlies', owner: 'JS' },
