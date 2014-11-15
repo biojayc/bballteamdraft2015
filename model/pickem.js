@@ -84,13 +84,13 @@ Controller.prototype.playGame = function(game) {
     winner.gamesplayed++;
     game.winningTeamId = winner.id;
   } else {
-    alert("could not find winner: " + game.date + " " + game.time);
+    console.log("could not find winner: " + game.date + " " + game.time);
   }
   if (loser) {
     loser.losses++;
     loser.gamesplayed++;
   } else {
-    alert("could not find loser: " + game.date + " " + game.time);
+    console.log("could not find loser: " + game.date + " " + game.time);
   }
   var person = this.findPerson(winner.ownerId);
   if (person) {

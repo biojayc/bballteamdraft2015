@@ -30,10 +30,12 @@ var startWebServer = function(port, ip) {
   })
   if (ip) {
     server.listen(port, ip);
+    console.log("Webserver running on " + ip + ":" + port);
   } else {
     server.listen(port);
+    console.log("Webserver running on port " + port);
   }
-  console.log("Webserver running on " + ip + ":" + port);
+  
 }
 
 var registerRoute = function(route, method, handler) {
