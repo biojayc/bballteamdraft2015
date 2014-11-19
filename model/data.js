@@ -42,7 +42,7 @@ var teams = [
   { id: 'PHI', name: 'Philadelphia 76ers'},
   { id: 'BOS', name: 'Boston Celtics'}
 ];
- 
+
 exports.injectData = function(controller) {
   for(var i = 0; i < people.length; i++) {
     var person = people[i];

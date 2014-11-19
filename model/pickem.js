@@ -9,18 +9,18 @@ var Person = function(i,n,im) {
   this.wins = 0;
   this.losses = 0;
 }
- 
+
 var Team = function(i,n,o) {
   this.id = i;
   this.name = n;
   this.ownerId = o;
- 
+
   //calculated data
   this.wins = 0;
   this.losses = 0;
   this.gamesplayed = 0;
 }
- 
+
 var Game = function(date, time, awayId, homeId, awayScore, homeScore) {
   this.date = date;
   this.time = time;
@@ -28,22 +28,22 @@ var Game = function(date, time, awayId, homeId, awayScore, homeScore) {
   this.homeId = homeId;
   this.awayScore = awayScore;
   this.homeScore = homeScore;
- 
+
   //calculated data
   this.winningTeamId = "";
   this.winningOwnerId = "";
 }
- 
+
 var TodaysGame = function(awayId, homeId, time) {
   this.awayId = awayId;
   this.homeId = homeId;
   this.time = time;
-   
-  //caluclated data
+
+  //calculated data
   this.awayOwnerId = "";
   this.homeOwnerId = "";
 }
- 
+
 // Controller
 var Controller = function() {
   this.teams = [];
