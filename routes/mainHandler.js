@@ -2,16 +2,66 @@ var layout = require('../layout'),
     url = require('url'),
     requestUtils = require('../requestUtils'),
     qs = require('querystring'),
-    controller = require('../model/pickem').controller;
+    controller = require('../model/pickem').controller,
+    ui = require('../model/ui');
+
+var createScores = function(controller) {
+  var scores = [];
+  var owners = controller.owners.slice();
+  owners.sort(function(a, b){return b.pct-a.pct});
+  for (var i = 0; i < owners.length; i++) {
+    var owner = owners[i];
+    scores.push({ name: owner.name, wins: owner.wins, pct: ui.formatWinningPercent(owner.pct) });
+  }
+  return scores;
+}
+
+var getWinningImage = function(controller) {
+  var owners = controller.owners.slice();
+  owners.sort(function(a, b){return b.pct-a.pct});
+  return owners[0].image;
+}
+
+var createVsTop = function(controller) {
+  var container = [];
+  for (var i = 0; i < controller.owners.length; i++) {
+    container.push({ initial: controller.owners[i].initial });
+  }
+  return container;
+}
+
+var createVsRows = function(controller) {
+  var container = [];
+  var owners = controller.owners;
+  for (var i = 0; i < owners.length; i++) {
+    var owner1 = owners[i];
+    
+    var cols = [];
+    for (var j = 0; j < owners.length; j++) {
+      var owner2 = owners[j];
+      var wins;
+      // This if is needed to prevent an owner with no teams from causing issues.
+      if (owner1.otherOwnersDataHash[owner2.id]) {
+        wins = owner1.otherOwnersDataHash[owner2.id].wins;
+      } else {
+        wins = 0;
+      }
+      cols.push({ wins: wins });
+    }
+    container.push({ first: owner1.first, vsrow: cols });
+  }
+  return container;
+}
 
 var createTodaysGames = function(controller) {
   var todaysgames = [];
-  for (var i = 0; i < controller.todaysGames.length; i++) {
-    var game = controller.todaysGames[i];
-    var awayTeam = controller.findTeam(game.awayId);
-    var homeTeam = controller.findTeam(game.homeId);
-    var awayOwner = controller.findPerson(awayTeam.ownerId);
-    var homeOwner = controller.findPerson(homeTeam.ownerId);
+  var games = controller.getGamesByDateOffset(0);
+  for (var i = 0; i < games.length; i++) {
+    var game = games[i];
+    var awayTeam = game.awayTeam;
+    var homeTeam = game.homeTeam
+    var awayOwner = awayTeam.owner;
+    var homeOwner = homeTeam.owner;
     var awayOwnerName = "";
     var homeOwnerName = "";
     if (awayOwner) { awayOwnerName = " (" + awayOwner.name + ")"; }
@@ -22,49 +72,53 @@ var createTodaysGames = function(controller) {
   return todaysgames;
 }
 
-var createGames = function(controller) {
-  var games = [];
-  for (var i = controller.games.length - 1, count = 9; i >= 0 && count >= 0; i--,count--) {
-    var game = controller.games[i];
-    var awayTeam, homeTeam;
-    var awayTeam = controller.findTeam(game.awayId).name + " (" + game.awayScore + ")";
-    var homeTeam = controller.findTeam(game.homeId).name + " (" + game.homeScore + ")";
-    var person = controller.findPerson(game.winningOwnerId);
-    if (game.winningTeamId == game.awayId) {
-      games.push(
-          { date: game.date, away: awayTeam, home: homeTeam, person: person ? person.name : "",
-            awayClass: "winner" });
-    } else {
-      games.push(
-          { date: game.date, away: awayTeam, home: homeTeam, person: person ? person.name : "",
-            homeClass: "winner" });
+var createYesterdaysGames = function(controller) {
+  var yesterdaysgames = [];
+  var games = controller.getGamesByDateOffset(-1);
+  for (var i = 0; i < games.length; i++) {
+    var game = games[i];
+    var awayTeamName = game.awayTeam.name + " (" + game.awayScore + ")";
+    var homeTeamName = game.homeTeam.name + " (" + game.homeScore + ")";
+    if (game.winningTeam) {
+      var owner = game.winningTeam.owner;
+      if (game.winningTeam.id == game.awayId) {
+        yesterdaysgames.push(
+            { time: game.time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
+              awayClass: "winner" });
+      } else {
+        yesterdaysgames.push(
+            { time: game.time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
+              homeClass: "winner" });
+      }
     }
   }
-  return games;
+  return yesterdaysgames;
 }
 
 var createTeams = function(controller) {
-  var teams = [];
-  for (var i = 0; i < controller.teams.length; i++) {
-    var team = controller.teams[i];
-    var person = controller.findPerson(team.ownerId);
-    teams.push({ name: team.name, wins: team.wins, losses: team.losses, person: person ? person.name : "" });
+  var container = [];
+  var teams = controller.teams.slice();
+  teams.sort(function(a, b){ return b.pct - a.pct; });
+  for (var i = 0; i < teams.length; i++) {
+    var team = teams[i];
+    var owner = team.owner;
+    container.push({ name: team.name, wins: team.wins, losses: team.losses, 
+                    pct: ui.formatWinningPercent(team.pct), owner: owner ? owner.name : "" });
   }
-  return teams;
+  return container;
 }
 
 var createTeamsByOwner = function(controller) {
   var tbos = [];
-  for (var i = 0; i < controller.people.length; i++) {
-    var person = controller.people[i];
+  for (var i = 0; i < controller.owners.length; i++) {
+    var owner = controller.owners[i];
     var tbo = {};
-    tbo.name = person.name;
-    tbo.person = person;
+    tbo.name = owner.name;
+    tbo.person = owner;
     tbo.ownerteams = [];
     for (var j = 0; j < controller.teams.length; j++) {
       var team = controller.teams[j];
-      if (team.ownerId == person.id) {
-        // console.log(tbo.name + " owns " + team.name);
+      if (team.ownerId == owner.id) {
         tbo.ownerteams.push(team);
       }
     }
@@ -74,17 +128,23 @@ var createTeamsByOwner = function(controller) {
 }
 
 var home = function(req, res) {
+  var scores = createScores(controller);
+  var winningImage = getWinningImage(controller);
+  var vsTop = createVsTop(controller);
+  var vsRows = createVsRows(controller);
   var todaysgames = createTodaysGames(controller);
-  var games = createGames(controller);
+  var yesterdaysgames = createYesterdaysGames(controller);
   var teams = createTeams(controller);
   var tbo = createTeamsByOwner(controller);
   
   var obj = { 
-    score: controller.people,
+    score: scores,
+    vstop: vsTop,
+    vsrows: vsRows,
     todaysgames: todaysgames,
-    games: games,
+    yesterdaysgames: yesterdaysgames,
     teams: teams,
-    image: controller.people[0].image,
+    image: winningImage,
     teamsbyowner: tbo,
   };
   var text = new layout.LayoutEngine(

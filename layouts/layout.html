@@ -2,6 +2,8 @@
 <html>
 <head>
 <title>2015 NBA Pick'em</title>
+<link rel="icon" type="image/ico" href="favicon.ico"/>
+<link rel="manifest" href="static/manifest.json">
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 </head>
 
@@ -13,12 +15,33 @@
 <div id='scores'>
 <img id='winningimage' src="##image##" title="Current Winner's Image" width=300>
 <table id='scoretable' border=0 cellpadding=5 cellspacing=1 align=center>
-<tr><th align=left>Name</th><th align=left>Score</th></tr>
+<tr><th align=left>Name</th><th align=left>Score</th><th align=left>Pct</th></tr>
 ##score-begin##
-<tr><td>##name##</td><td>##wins##</td></tr>
+<tr><td>##name##</td><td><span class="bold">##wins##</span></td><td>##pct##</td></tr>
 ##score-end##
 </table>
+<br/><br/>
+
+<h2 align=center>Vs. Table</h2>
+<table id='vstable' border=0 cellpadding=5 cellspacing=3 align=center>
+<tr id='vstablerow'>
+<th></th>
+##vstop-begin##
+<th>##initial##</th>
+##vstop-end##
+</tr>
+##vsrows-begin##
+<tr>
+<td><span class="bold">##first##</span></td>
+##vsrow-begin##
+<td class="alignRight">##wins##</td>
+##vsrow-end##
+</tr>
+##vsrows-end##
+</table>
+<div class="normalText" style="padding:5px;">Find your name on left and follow row to see your wins against other owners.</div>
 </div>
+
 
 <div id='wrapper'>
 

@@ -1,7 +1,7 @@
 var games = require('./games').games,
     util = require('./util');
 
-var people = [
+var owners = [
   { id: 'MM', name: 'Mark Mullings', first: "Mark", initial: "M", img: "images/noimage.gif" },
   { id: 'WT', name: 'Wesley Thompson', first: "Wesley", initial: "W", img: "/images/noimage.gif" },
   { id: 'CS', name: 'Chris Seiler', first: "Chris", initial: "C", img: "images/cs.jpg" },
@@ -45,22 +45,16 @@ var teams = [
 ];
 
 exports.injectData = function(controller) {
-  for(var i = 0; i < people.length; i++) {
-    var person = people[i];
-    controller.addPerson(person.id, person.name, person.img);
+  for(var i = 0; i < owners.length; i++) {
+    var owner = owners[i];
+    controller.addOwner(owner.id, owner.name, owner.first, owner.initial, owner.img);
   }
   for(var i = 0; i < teams.length; i++) {
     var team = teams[i];
     controller.addTeam(team.id, team.name, team.owner);
   }
-  var todaysDate = util.getDateString();
   for(var i = 0; i < games.length; i++) {
     var game = games[i];
-    if (game.awayScore && game.homeScore) {
-      controller.addGame(game.date, game.time, game.awayId, game.homeId, game.awayScore, game.homeScore);
-    }
-    if (game.date == todaysDate) {
-      controller.addTodaysGame(game.awayId, game.homeId, game.time);
-    }
+    controller.addGame(game.date, game.time, game.awayId, game.homeId, game.awayScore, game.homeScore);
   }
 }

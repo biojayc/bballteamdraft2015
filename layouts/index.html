@@ -10,23 +10,24 @@
 </div>
 <br><br><br>
 
-<div id='recentgames'>
-<h2 align=center>Recent Games</h2>
-<table id='recentgamestable' border=0 cellpadding=5 cellspacing=1 align=center>
-<tr><th>Date</th><th>Away</th><th>Home</th><th>Winning Owner</th></tr>
-##games-begin##
-<tr><td>##date##</td><td class="##awayClass##">##away##</td><td class ="##homeClass##">##home##</td><td>##person##</td></tr>
-##games-end##
+<div id='yesterdaysgames'>
+<h2 align=center>Yesterday's Games</h2>
+<table id='yesterdaysgamestable' border=0 cellpadding=5 cellspacing=1 align=center>
+<tr><th>Time</th><th>Away</th><th>Home</th><th>Winning Owner</th></tr>
+##yesterdaysgames-begin##
+<tr><td>##time##</td><td class="##awayClass##">##away##</td><td class ="##homeClass##">##home##</td><td>##owner##</td></tr>
+##yesterdaysgames-end##
 </table>
+* Times are PST.  
 </div>
 <br><br><br>
 
 <div id='teams'>
 <h2 align=center>Teams</h2>
 <table id='teamstable' border=0 cellpadding=5 cellspacing=1 align=center width=80%>
-<tr><th align=left>Team</th><th align=left>Wins</th><th align=left>Losses</th><th align=left>Owner</th></tr>
+<tr><th align=left>Team</th><th align=left>Wins</th><th align=left>Losses</th><th align=left>Pct</th><th align=left>Owner</th></tr>
 ##teams-begin##
-<tr><td>##name##</td><td>##wins##</td><td>##losses##</td><td>##person##</td></tr>
+<tr><td>##name##</td><td>##wins##</td><td>##losses##</td><td>##pct##</td><td>##owner##</td></tr>
 ##teams-end##
 </table>
 </div>
