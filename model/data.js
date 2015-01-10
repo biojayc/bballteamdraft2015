@@ -2,13 +2,14 @@ var games = require('./games').games,
     util = require('./util');
 
 var people = [
-  { id: 'MM', name: 'Mark Mullings', img: "static/images/noimage.gif"},
-  { id: 'WT', name: 'Wesley Thompson', img: "static/images/noimage.gif"},
-  { id: 'CS', name: 'Chris Seiler', img: "static/images/cs.jpg"},
-  { id: 'BT', name: 'Brian Turley', img: "static/images/noimage.gif"},
-  { id: 'AK', name: 'Aaron Knoles', img: "static/images/noimage.gif"},
-  { id: 'JS', name: 'Jerry Seiler', img: "static/images/noimage.gif"},
-  { id: 'JRS', name: 'Jamie Smith', img: "static/images/jrs.jpg"}
+  { id: 'MM', name: 'Mark Mullings', first: "Mark", initial: "M", img: "static/images/noimage.gif" },
+  { id: 'WT', name: 'Wesley Thompson', first: "Wesley", initial: "W", img: "static/images/noimage.gif" },
+  { id: 'CS', name: 'Chris Seiler', first: "Chris", initial: "C", img: "static/images/cs.jpg" },
+  { id: 'BT', name: 'Brian Turley', first: "Brian", initial: "Br", img: "static/images/bt.gif" },
+  { id: 'AK', name: 'Aaron Knoles', first: "Aaron", initial: "A", img: "static/images/ak.gif" },
+  { id: 'JS', name: 'Jerry Seiler', first: "Jerry", initial: "Je", img: "static/images/js.jpg" },
+  { id: 'JRS', name: 'Jamie Smith', first: "Jamie", initial: "Ja", img: "static/images/jrs.jpg" },
+  { id: 'BS', name: 'Blake Smith', first: "Blake", initial: "Bl", img: "static/images/noimage.gif" }
 ];
 var teams = [
   { id: 'CLE', name: 'Cleveland Cavaliers', owner: 'MM' },
@@ -18,8 +19,8 @@ var teams = [
   { id: 'CHI', name: 'Chicago Bulls', owner: 'AK' },
   { id: 'OKC', name: 'Oklahoma City Thunder', owner: 'JS' },
   { id: 'HOU', name: 'Houston Rockets', owner: 'JRS' },
-  { id: 'GST', name: 'Golden State Warriors', owner: 'JRS' },
-  { id: 'MEG', name: 'Memphis Grizzlies', owner: 'JS' },
+  { id: 'GSW', name: 'Golden State Warriors', owner: 'JRS' },
+  { id: 'MEM', name: 'Memphis Grizzlies', owner: 'JS' },
   { id: 'POR', name: 'Portland Trailblazers', owner: 'AK' },
   { id: 'TOR', name: 'Toronto Raptors', owner: 'BT' },
   { id: 'WAS', name: 'Washington Wizards', owner: 'CS' },
@@ -27,7 +28,7 @@ var teams = [
   { id: 'CHA', name: 'Charlotte Hornets', owner: 'MM' },
   { id: 'PHX', name: 'Pheonix Suns', owner: 'BT' },
   { id: 'MIA', name: 'Miami Heat', owner: 'AK' },
-  { id: 'NOK', name: 'New Orleans Pelicans', owner: 'JRS' },
+  { id: 'NOP', name: 'New Orleans Pelicans', owner: 'JRS' },
   { id: 'ATL', name: 'Atlanta Hawks', owner: 'JS' },
   { id: 'DET', name: 'Detroit Pistons', owner: 'CS' },
   { id: 'NYK', name: 'New York Knicks', owner: 'WT' },
@@ -35,12 +36,12 @@ var teams = [
   { id: 'LAL', name: 'LA Lakers', owner: 'MM' },
   { id: 'MIN', name: 'Minnesota Timberwolves', owner: 'WT' },
   { id: 'DEN', name: 'Denver Nuggets', owner: 'CS' },
-  { id: 'NYN', name: 'New York Nets', owner: 'JS' },
+  { id: 'BKN', name: 'Brooklyn Nets', owner: 'JS' },
   { id: 'SAC', name: 'Sacramento Kings', owner: 'JRS' },
   { id: 'MIL', name: 'Milwaukee Bucks', owner: 'AK' },
   { id: 'UTA', name: 'Utah Jazz', owner: 'BT' },
-  { id: 'PHI', name: 'Philadelphia 76ers'},
-  { id: 'BOS', name: 'Boston Celtics'}
+  { id: 'PHI', name: 'Philadelphia 76ers', owner: 'BS'  },
+  { id: 'BOS', name: 'Boston Celtics', owner: 'BS'  }
 ];
 
 exports.injectData = function(controller) {
