@@ -47,13 +47,19 @@ var registerRoute = function(route, method, handler) {
   }
 };
 
-var registerStatic = function(path) {
+var registerStatic = function(path, realpath) {
   console.log("Registering static path: " + path);
   routes.push({ 
     route: path, 
     method: "GET", 
     handler: function(req, res) {
-      var raw = fs.createReadStream("." + req.url);
+      var filename = req.url;
+      if (realpath) {
+        filename = filename.replace(path.replace(".*", ""), realpath);
+        
+      }
+      console.log("Returning " + filename);
+      var raw = fs.createReadStream("." + filename);
       var acceptEncoding = req.headers['accept-encoding'];
       if (!acceptEncoding) {
         acceptEncoding = '';
