@@ -2,14 +2,14 @@ var games = require('./games').games,
     util = require('./util');
 
 var people = [
-  { id: 'MM', name: 'Mark Mullings', first: "Mark", initial: "M", img: "static/images/noimage.gif" },
-  { id: 'WT', name: 'Wesley Thompson', first: "Wesley", initial: "W", img: "static/images/noimage.gif" },
-  { id: 'CS', name: 'Chris Seiler', first: "Chris", initial: "C", img: "static/images/cs.jpg" },
-  { id: 'BT', name: 'Brian Turley', first: "Brian", initial: "Br", img: "static/images/bt.gif" },
-  { id: 'AK', name: 'Aaron Knoles', first: "Aaron", initial: "A", img: "static/images/ak.gif" },
-  { id: 'JS', name: 'Jerry Seiler', first: "Jerry", initial: "Je", img: "static/images/js.jpg" },
-  { id: 'JRS', name: 'Jamie Smith', first: "Jamie", initial: "Ja", img: "static/images/jrs.jpg" },
-  { id: 'BS', name: 'Blake Smith', first: "Blake", initial: "Bl", img: "static/images/noimage.gif" }
+  { id: 'MM', name: 'Mark Mullings', first: "Mark", initial: "M", img: "images/noimage.gif" },
+  { id: 'WT', name: 'Wesley Thompson', first: "Wesley", initial: "W", img: "/images/noimage.gif" },
+  { id: 'CS', name: 'Chris Seiler', first: "Chris", initial: "C", img: "images/cs.jpg" },
+  { id: 'BT', name: 'Brian Turley', first: "Brian", initial: "Br", img: "images/bt.gif" },
+  { id: 'AK', name: 'Aaron Knoles', first: "Aaron", initial: "A", img: "images/ak.gif" },
+  { id: 'JS', name: 'Jerry Seiler', first: "Jerry", initial: "Je", img: "images/js.jpg" },
+  { id: 'JRS', name: 'Jamie Smith', first: "Jamie", initial: "Ja", img: "images/jrs.jpg" },
+  { id: 'BS', name: 'Blake Smith', first: "Blake", initial: "Bl", img: "images/noimage.gif" }
 ];
 var teams = [
   { id: 'CLE', name: 'Cleveland Cavaliers', owner: 'MM' },
