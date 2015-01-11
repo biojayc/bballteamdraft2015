@@ -1,14 +1,15 @@
 var fs = require("fs"),
     readline = require('readline'),
-    url = require('url');
+    url = require('url'), 
+    CacheManager = require('./cache').CacheManager;
 
-var fileCache = {};
+var cache = new CacheManager();
 
 function readFile(file) {
-  if (!fileCache[file]) {
-    fileCache[file] = fs.readFileSync(file, "utf8");
-  }
-  return fileCache[file];
+  return cache.get(file, function() {
+    console.log("Loading " + file + " into cache.");
+    return fs.readFileSync(file, "utf8");
+  }, 3600);
 }
 
 var getLayoutText = function(bodyFile, layoutFile) {

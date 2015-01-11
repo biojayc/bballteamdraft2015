@@ -1,7 +1,3 @@
 * Add watchers on layout files to remove cache.
-* Update RegisterStatic to support directory mapping.
-* Add a CacheManager that can support
-  * key:value cache pairs.
-  * cache timeouts (keep cached for 30 minutes...)
-  * check to see if value is in cache.  If so, use it, if not recalculate.
 * Rework the in memory game data to be updateable from the game_scraper.
+* Implement other pages that are present on static version of site.
