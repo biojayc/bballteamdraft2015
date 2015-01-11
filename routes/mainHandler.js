@@ -2,8 +2,17 @@ var layout = require('../layout'),
     url = require('url'),
     requestUtils = require('../requestUtils'),
     qs = require('querystring'),
-    controller = require('../model/pickem').controller,
-    ui = require('../model/ui');
+    controller = require('../model/controller').controller;
+
+var formatWinningPercent = function(pct) {
+  var winningPercent = Math.round(pct * 1000);
+  if (winningPercent == 0) {
+    winningPercent = "000";
+  } else if (winningPercent < 100) {
+    winningPercent = "0" + winningPercent;
+  }
+  return "." + winningPercent;
+}
 
 var createScores = function(controller) {
   var scores = [];
@@ -11,7 +20,7 @@ var createScores = function(controller) {
   owners.sort(function(a, b){return b.pct-a.pct});
   for (var i = 0; i < owners.length; i++) {
     var owner = owners[i];
-    scores.push({ name: owner.name, wins: owner.wins, pct: ui.formatWinningPercent(owner.pct) });
+    scores.push({ name: owner.name, wins: owner.wins, pct: formatWinningPercent(owner.pct) });
   }
   return scores;
 }
@@ -103,7 +112,7 @@ var createTeams = function(controller) {
     var team = teams[i];
     var owner = team.owner;
     container.push({ name: team.name, wins: team.wins, losses: team.losses, 
-                    pct: ui.formatWinningPercent(team.pct), owner: owner ? owner.name : "" });
+                    pct: formatWinningPercent(team.pct), owner: owner ? owner.name : "" });
   }
   return container;
 }

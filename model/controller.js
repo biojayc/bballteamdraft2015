@@ -1,55 +1,6 @@
 var data = require('./data'),
-    util = require('./util');
-
-var Owner = function(i,n,f,ini,im) {
-  this.id = i;
-  this.name = n;
-  this.first = f;
-  this.initial = ini;
-  this.image = im
-  
-  //calculated data
-  this.wins = 0;
-  this.losses = 0;
-  this.gamesPlayed = 0;
-  this.pct = 0;
-  this.teams = [];
-  this.teamsHash = {};
-  this.games = [];
-  this.gamesHash = {};
-  this.otherOwnersDataHash = {};  // used to store wins and losses vs other owners.  Owner Ids as keys
-};
-
-var Team = function(i,n,o) {
-  this.id = i;
-  this.name = n;
-  this.ownerId = o;
-
-  //calculated data
-  this.wins = 0;
-  this.losses = 0;
-  this.gamesPlayed = 0;
-  this.pct = 0;
-  this.owner;
-  this.games = [];
-  this.gamesHash = {};
-  this.otherTeamsDataHash = {};  // used to store wins and losses vs other teams.  Team Ids as keys
-};
-
-var Game = function(date, time, awayId, homeId, awayScore, homeScore) {
-  this.date = date;
-  this.time = time;
-  this.awayId = awayId;
-  this.homeId = homeId;
-  this.awayScore = awayScore;
-  this.homeScore = homeScore;
-
-  //calculated data
-  this.awayTeam;
-  this.hometeam;
-  this.winningTeam;
-  this.losingTeam;
-};
+    util = require('./util'),
+    models = require('./models');
 
 // Controller
 var Controller = function() {
@@ -62,13 +13,13 @@ var Controller = function() {
 };
 // Add an owner before adding any of his teams or games.
 Controller.prototype.addOwner = function(i,n,f,ini,im) {
-  var owner = new Owner(i,n,f,ini,im);
+  var owner = new models.Owner(i,n,f,ini,im);
   this.ownersHash[i] = owner;
   this.owners.push(owner);
 }
 // Be sure the owner of the team has already been added.
 Controller.prototype.addTeam = function(i,n,o) {
-  var team = new Team(i,n,o);
+  var team = new models.Team(i,n,o);
   var owner = this.ownersHash[team.ownerId];
   if (owner) {
     owner.teams.push(team);
@@ -81,7 +32,7 @@ Controller.prototype.addTeam = function(i,n,o) {
 // Be sure the teams that are in the game have already been added.
 Controller.prototype.addGame = 
     function(date, time, awayId, homeId, awayScore, homeScore) {
-  var game = new Game(date, time, awayId, homeId, awayScore, homeScore);
+  var game = new models.Game(date, time, awayId, homeId, awayScore, homeScore);
   this._calculateStatsForGame(game);
   if (!this.gamesHash[game.date]) {
     this.gamesHash[game.date] = [];
