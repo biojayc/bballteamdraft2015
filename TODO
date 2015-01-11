@@ -1,4 +1,5 @@
 * Add watchers on layout files to remove cache.
 * Rework the in memory game data to be updateable from the game_scraper.
 * Implement other pages that are present on static version of site.
-* cache the controller, and recalculate every hour or so.
+* Ponder making CacheManager be proactive rather than lazy, and support auto caching/auto updating.
+  Could be used for automatically updating the Controller data.

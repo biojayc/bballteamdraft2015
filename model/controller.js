@@ -162,6 +162,4 @@ Controller.prototype.getGamesByDateOffset = function(offset) {
   return this.gamesHash[util.getDateString(offset)] || [];
 }
 
-var controller = new Controller();
-data.injectData(controller);
-exports.controller = controller;
+exports.Controller = Controller;

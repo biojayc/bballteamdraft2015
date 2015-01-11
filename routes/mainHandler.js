@@ -2,65 +2,7 @@ var layout = require('../layout'),
     url = require('url'),
     requestUtils = require('../requestUtils'),
     qs = require('querystring'),
-    controller = require('../model/controller').controller;
-
-var formatWinningPercent = function(pct) {
-  var winningPercent = Math.round(pct * 1000);
-  if (winningPercent == 0) {
-    winningPercent = "000";
-  } else if (winningPercent < 100) {
-    winningPercent = "0" + winningPercent;
-  }
-  return "." + winningPercent;
-}
-
-var createScores = function(controller) {
-  var scores = [];
-  var owners = controller.owners.slice();
-  owners.sort(function(a, b){return b.pct-a.pct});
-  for (var i = 0; i < owners.length; i++) {
-    var owner = owners[i];
-    scores.push({ name: owner.name, wins: owner.wins, pct: formatWinningPercent(owner.pct) });
-  }
-  return scores;
-}
-
-var getWinningImage = function(controller) {
-  var owners = controller.owners.slice();
-  owners.sort(function(a, b){return b.pct-a.pct});
-  return owners[0].image;
-}
-
-var createVsTop = function(controller) {
-  var container = [];
-  for (var i = 0; i < controller.owners.length; i++) {
-    container.push({ initial: controller.owners[i].initial });
-  }
-  return container;
-}
-
-var createVsRows = function(controller) {
-  var container = [];
-  var owners = controller.owners;
-  for (var i = 0; i < owners.length; i++) {
-    var owner1 = owners[i];
-    
-    var cols = [];
-    for (var j = 0; j < owners.length; j++) {
-      var owner2 = owners[j];
-      var wins;
-      // This if is needed to prevent an owner with no teams from causing issues.
-      if (owner1.otherOwnersDataHash[owner2.id]) {
-        wins = owner1.otherOwnersDataHash[owner2.id].wins;
-      } else {
-        wins = 0;
-      }
-      cols.push({ wins: wins });
-    }
-    container.push({ first: owner1.first, vsrow: cols });
-  }
-  return container;
-}
+    shared = require('./shared');
 
 var createTodaysGames = function(controller) {
   var todaysgames = [];
@@ -112,7 +54,7 @@ var createTeams = function(controller) {
     var team = teams[i];
     var owner = team.owner;
     container.push({ name: team.name, wins: team.wins, losses: team.losses, 
-                    pct: formatWinningPercent(team.pct), owner: owner ? owner.name : "" });
+                    pct: shared.formatWinningPercent(team.pct), owner: owner ? owner.name : "" });
   }
   return container;
 }
@@ -137,10 +79,11 @@ var createTeamsByOwner = function(controller) {
 }
 
 var home = function(req, res) {
-  var scores = createScores(controller);
-  var winningImage = getWinningImage(controller);
-  var vsTop = createVsTop(controller);
-  var vsRows = createVsRows(controller);
+  var controller = shared.controller();
+  var scores = shared.createScores(controller);
+  var winningImage = shared.getWinningImage(controller);
+  var vsTop = shared.createVsTop(controller);
+  var vsRows = shared.createVsRows(controller);
   var todaysgames = createTodaysGames(controller);
   var yesterdaysgames = createYesterdaysGames(controller);
   var teams = createTeams(controller);
