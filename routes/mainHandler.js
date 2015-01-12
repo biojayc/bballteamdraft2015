@@ -100,7 +100,7 @@ var home = function(req, res) {
     teamsbyowner: tbo,
   };
   var text = new layout.LayoutEngine(
-      "index.html", "layout.html", obj).Render();
+      "index.html", "layout.html", obj).render();
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.end(text);
 }

@@ -81,7 +81,7 @@ var LayoutEngine = function(bodyFile, layoutFile, vars) {
   this.layoutFile = layoutFile;
   this.vars = vars;
 }
-LayoutEngine.prototype.Render = function() {
+LayoutEngine.prototype.render = function() {
   var html = getLayoutText(this.bodyFile, this.layoutFile);
   
   html = processRepeatedRegions(html, this.vars);
