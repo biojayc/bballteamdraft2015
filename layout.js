@@ -1,13 +1,14 @@
 var fs = require("fs"),
     readline = require('readline'),
     url = require('url'), 
-    CacheManager = require('./cache').CacheManager;
+    CacheManager = require('./cache').CacheManager,
+    log = require('./log');
 
 var cache = new CacheManager();
 
 function readFile(file) {
   return cache.get(file, function() {
-    console.log("Loading " + file + " into cache.");
+    log.info("Loading " + file + " into cache.");
     return fs.readFileSync(file, "utf8");
   }, 3600);
 }

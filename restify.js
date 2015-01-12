@@ -1,7 +1,8 @@
 var fs = require("fs"),
     http = require('http'),
     url = require('url'),
-    zlib = require('zlib');
+    zlib = require('zlib'),
+    log = require('./log');
 
 var routes = [];
 var errorHandler = {};
@@ -10,12 +11,12 @@ var findRoute = function(path, method) {
   for (var i = 0; i < routes.length; i++) {
     if (path.match("^" + routes[i].route + "$") && 
         (method == routes[i].method || routes[i].method == "*")) {
-      console.log("Route found: " + routes[i].method + " " + routes[i].route);
+      log.info("Route found: " + routes[i].method + " " + routes[i].route);
       return routes[i].handler;
     }
   }
   if (errorHandler) {
-    console.log("No Route found, returning 404 error handler");
+    log.info("No Route found, returning 404 error handler");
     return errorHandler;
   }
 };
@@ -23,23 +24,22 @@ var findRoute = function(path, method) {
 var startWebServer = function(port, ip) {
   var server = http.createServer(function (req, res) {
     var path = url.parse(req.url).pathname;
-    console.log("Incoming Request for: " + req.method + " " + path);
+    log.info("Incoming Request for: " + req.method + " " + path);
     var handler = findRoute(path, req.method);
     handler(req, res);
     
   })
   if (ip) {
     server.listen(port, ip);
-    console.log("Webserver running on " + ip + ":" + port);
+    log.info("Webserver running on " + ip + ":" + port);
   } else {
     server.listen(port);
-    console.log("Webserver running on port " + port);
+    log.info("Webserver running on port " + port);
   }
-  
 }
 
 var registerRoute = function(route, method, handler) {
-  console.log("Registering Route: " + method + " " + route);
+  log.info("Registering Route: " + method + " " + route);
   if (route == "404") {
     errorHandler = handler;
   } else {
@@ -48,7 +48,7 @@ var registerRoute = function(route, method, handler) {
 };
 
 var registerStatic = function(path, realpath) {
-  console.log("Registering static path: " + path);
+  log.info("Registering static path: " + path);
   routes.push({ 
     route: path, 
     method: "GET", 
@@ -58,7 +58,7 @@ var registerStatic = function(path, realpath) {
         filename = filename.replace(path.replace(".*", ""), realpath);
         
       }
-      console.log("Returning " + filename);
+      log.info("Returning " + filename);
       var raw = fs.createReadStream("." + filename);
       var acceptEncoding = req.headers['accept-encoding'];
       if (!acceptEncoding) {

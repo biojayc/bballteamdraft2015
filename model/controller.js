@@ -1,6 +1,7 @@
 var data = require('./data'),
     util = require('./util'),
-    models = require('./models');
+    models = require('./models'),
+    log = require('../log');
 
 // Controller
 var Controller = function() {
@@ -46,9 +47,9 @@ Controller.prototype._calculateStatsForGame = function(game) {
   game.awayTeam = this.teamsHash[game.awayId];
   game.homeTeam = this.teamsHash[game.homeId];
   if (!game.awayTeam) {
-    alert('Could not find away team for game: ' + game.date + ' ' + game.time + ' ' + game.awayId + ' vs. ' + game.homeId);
+    log.info('Could not find away team for game: ' + game.date + ' ' + game.time + ' ' + game.awayId + ' vs. ' + game.homeId);
   } else if (!game.homeTeam) {
-    alert('Could not find home team for game: ' + game.date + ' ' + game.time + ' ' + game.awayId + ' vs. ' + game.homeId);
+    log.info('Could not find home team for game: ' + game.date + ' ' + game.time + ' ' + game.awayId + ' vs. ' + game.homeId);
   }
   game.awayTeam.games.push(game);
   if (!game.awayTeam.gamesHash[game.date]) {
@@ -88,7 +89,7 @@ Controller.prototype._calculateStatsForGame = function(game) {
         vsStats.pct = vsStats.wins / vsStats.gamesPlayed;
       }
     } else {
-      alert("could not find winner: " + game.date + " " + game.time);
+      log.info("could not find winner: " + game.date + " " + game.time);
     }
     if (game.losingTeam) {
       game.losingTeam.losses++;
