@@ -20,16 +20,22 @@ var getDateString = function() {
   return MM+'/'+dd+'/'+yyyy + ":" + hh + ":" + mm + ":" + ss + ":" + ms;
 }
 
-var info = function(msg) {
-  var time = getDateString();
-
-  console.log("I " + time + ": " + msg);
+var info = function(msg, sessionId) {
+  log("I", msg, sessionId);
 }
 
-var error = function(msg) {
+var error = function(msg, sessionId) {
+  log("E", msg, sessionId);
+}
+
+var log = function(type, msg, sessionId) {
   var time = getDateString();
 
-  console.log("E " + time + ": " + msg);
+  var prefix = type + " " + time;
+  if(sessionId) {
+    prefix += " (" + sessionId + ")";
+  }
+  console.log(prefix + ": " + msg);
 }
 
 exports.info = info;
