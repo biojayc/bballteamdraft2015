@@ -1,45 +1,47 @@
-var http = require('http'),
-    url = require('url'),
-    fs = require('fs'),
+var fs = require('fs'),
     parse_game_scores = require('./parse_game_scores');
 
-var headers = { 
-    'Content-Length': 0, 
-    'Content-Type': 'text/html'
-};
-var options = {
-    hostname: 'scores.espn.go.com', 
-    port: 80,
-    path: '/nba/scoreboard',
-    method: 'GET',
-    //headers: headers
-};
 
-var req = http.request(options, function(res) {
-  console.log('STATUS: ' + res.statusCode);
-  console.log('HEADERS: ' + JSON.stringify(res.headers));
-  res.setEncoding('utf8');
-  var responseString = '';
-  res.on('data', function (data) {
-    responseString += data;
-  });
-  
-  res.on('end', function() {
-    var games = parse_game_scores.parse(responseString);
-    
-    var result = "";
-    for (var i = 0; i < games.length; i++) {
-      var game = games[i];
-      result += game.away_team + "\t" + game.home_team + "\t" +
-                game.away_score + "\t" + game.home_score + "\n";
+var formatDate = function(dateStr) {
+  var year = dateStr.substr(0, 4);
+  var month = dateStr.substr(4, 2);
+  var day = dateStr.substr(6, 2);
+  var newDate = month + '/' + day + '/' + year;
+  return newDate;
+}
+
+var files = fs.readdirSync('cache');
+for (var i = 0; i < files.length; i++) {
+  var filename = files[i];
+  var cachefile = 'cache/' + filename;
+  var datafile = 'data/' + filename;
+  if (filename.indexOf('after') > -1 || filename.indexOf('before') > -1) {
+    if (!fs.existsSync(datafile)) {
+      var date = filename.substr(0, 8);
+      var html = fs.readFileSync(cachefile, 'utf8');
+      // console.log(html);
+      if (filename.indexOf('after') > -1) {
+        var games = parse_game_scores.parseAfter(html);
+      } else if (filename.indexOf('before') > -1) {
+        var games = parse_game_scores.parseBefore(html);
+      }
+      var result = "";
+      for (var j = 0; j < games.length; j++) {
+        var game = games[j];
+        result += formatDate(date) + "\t" + (game.time ? game.time : '') + "\t" + game.away_team + "\t" + game.home_team + "\t" +
+                  (game.away_score ? game.away_score : '') + "\t" + (game.home_score ? game.home_score : '');
+        if (j+1 < games.length) {
+          result+= "\n";
+        }
+      }
+      console.log(result);
+      fs.writeFileSync(datafile, result);
     }
-    fs.appendFileSync('scores', result);
-  });
-});
-
-
-req.on('error', function(e) {
-  console.log('problem with request: ' + e.message);
-});
-
-req.end();
+  } else if (filename == '1seed') {
+    if (!fs.existsSync(datafile)) {
+      console.log('Copying seed file.');
+      var data = fs.readFileSync(cachefile, 'utf8');
+      fs.writeFileSync(datafile, data);
+    }
+  }
+}

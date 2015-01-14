@@ -2,9 +2,9 @@ var fs = require("fs"),
     readline = require('readline'),
     parse_game_scores = require('./parse_game_scores');
 
-var html = fs.readFileSync("./testdata/scoreboard", "utf8");
+var html = fs.readFileSync("./testdata/after", "utf8");
 
-var games = parse_game_scores.parse(html);
+var games = parse_game_scores.parseAfter(html);
 
 var results = 
 [ { away_team: 'CHI',
@@ -25,7 +25,7 @@ var results =
     home_score: '114' },
   { away_team: 'MIA',
     away_score: '95',
-    home_team: 'NYN',
+    home_team: 'BKN',
     home_score: '83' },
   { away_team: 'ORL',
     away_score: '107',
@@ -33,13 +33,13 @@ var results =
     home_score: '93' },
   { away_team: 'HOU',
     away_score: '93',
-    home_team: 'MEG',
+    home_team: 'MEM',
     home_score: '119' },
   { away_team: 'PHI',
     away_score: '75',
     home_team: 'SAS',
     home_score: '100' },
-  { away_team: 'NOK',
+  { away_team: 'NOP',
     away_score: '93',
     home_team: 'POR',
     home_score: '102' } ];
@@ -63,3 +63,43 @@ if (pass) {
   console.log("fail");
 }
 
+
+var html = fs.readFileSync('./testdata/before', 'utf8');
+var games = parse_game_scores.parseBefore(html);
+
+var results = 
+[ { away_team: 'NOP',
+    home_team: 'BOS',
+    time: '7:30 PM ET',
+  },
+  { away_team: 'HOU',
+    home_team: 'BKN',
+    time: '7:30 PM ET',
+  },
+  { away_team: 'DET',
+    home_team: 'TOR',
+    time: '7:30 PM ET',
+  },
+  { away_team: 'ORL',
+    home_team: 'CHI',
+    time: '8:00 PM ET',
+  },
+];
+
+var pass = true;
+for (var i = 0; i < games.length; i++) {
+  var game = games[i];
+  var result = results[i];
+  if (game.away_team != result.away_team ||
+      game.home_team != result.home_team ||
+      game.time != result.time) {
+    pass = false;
+    break;
+  }
+}
+
+if (pass) {
+  console.log("pass");
+} else {
+  console.log("fail");
+}
