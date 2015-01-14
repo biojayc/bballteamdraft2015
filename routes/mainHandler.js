@@ -9,6 +9,7 @@ var createTodaysGames = function(controller) {
   var games = controller.getGamesByDateOffset(0);
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
+    var time = game.time.replace(" ET", "");
     var awayTeam = game.awayTeam;
     var homeTeam = game.homeTeam
     var awayOwner = awayTeam.owner;
@@ -18,7 +19,7 @@ var createTodaysGames = function(controller) {
     if (awayOwner) { awayOwnerName = " (" + awayOwner.name + ")"; }
     if (homeOwner) { homeOwnerName = " (" + homeOwner.name + ")"; }
     todaysgames.push(
-        { time: game.time, away: awayTeam.name + awayOwnerName, home: homeTeam.name + homeOwnerName});
+        { time: time, away: awayTeam.name + awayOwnerName, home: homeTeam.name + homeOwnerName});
   }
   return todaysgames;
 }
@@ -28,17 +29,18 @@ var createYesterdaysGames = function(controller) {
   var games = controller.getGamesByDateOffset(-1);
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
+    var time = game.time.replace(" ET", "");
     var awayTeamName = game.awayTeam.name + " (" + game.awayScore + ")";
     var homeTeamName = game.homeTeam.name + " (" + game.homeScore + ")";
     if (game.winningTeam) {
       var owner = game.winningTeam.owner;
       if (game.winningTeam.id == game.awayId) {
         yesterdaysgames.push(
-            { time: game.time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
+            { time: time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
               awayClass: "winner" });
       } else {
         yesterdaysgames.push(
-            { time: game.time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
+            { time: time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
               homeClass: "winner" });
       }
     }
