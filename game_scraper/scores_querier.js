@@ -1,7 +1,5 @@
 var http = require('http'),
-    url = require('url'),
-    fs = require('fs'),
-    parse_game_scores = require('./parse_game_scores');
+    fs = require('fs');
 
 var getDateString = function(date) {
   var dd = date.getDate();
@@ -54,36 +52,39 @@ var queryScores = function(date, path) {
   req.end();
 }
 
-var date = new Date('10/28/2014');
-var today = new Date();
-today.setDate(today.getDate());
-var tomorrow = new Date();
-tomorrow.setDate(today.getDate() + 1);
-while (date < today) {
-  console.log(getDateString(date) + '-after');
-  var filename = 'cache/' + getDateString(date) + "-after";
-  var list = [];
+var run = function() {
+  var date = new Date('10/28/2014');
+  var today = new Date();
+  today.setDate(today.getDate());
+  var tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+  while (date < today) {
+    console.log(getDateString(date) + '-after');
+    var filename = 'cache/' + getDateString(date) + "-after";
+    var list = [];
+    if (!fs.existsSync(filename)) {
+      console.log(filename + " does not exists.");
+      list.push({ 
+        date: date, 
+        func: function() {
+          queryScores(date, filename);
+        }
+      });
+    }
+
+    for (var i = 0; i < list.length; i++) {
+      var obj = list[i];
+      console.log('Downloading ' + getDateString(obj.date));
+      obj.func();
+      
+    }
+    date.setDate(new Date(date.getDate() + 1));
+  }
+
+  var filename = 'cache/' + getDateString(tomorrow) + "-before";
+  console.log(getDateString(tomorrow) + "-before");
   if (!fs.existsSync(filename)) {
-    console.log(filename + " does not exists.");
-    list.push({ 
-      date: date, 
-      func: function() {
-        queryScores(date, filename);
-      }
-    });
+    queryScores(tomorrow, filename);
   }
-
-  for (var i = 0; i < list.length; i++) {
-    var obj = list[i];
-    console.log('Downloading ' + getDateString(obj.date));
-    obj.func();
-    
-  }
-  date.setDate(new Date(date.getDate() + 1));
 }
-
-var filename = 'cache/' + getDateString(tomorrow) + "-before";
-console.log(getDateString(tomorrow) + "-before");
-if (!fs.existsSync(filename)) {
-  queryScores(tomorrow, filename);
-}
+exports.run = run;
