@@ -55,9 +55,6 @@ var queryScores = function(date, path) {
 var run = function() {
   var date = new Date('10/28/2014');
   var today = new Date();
-  // today.setDate(today.getDate());
-  /*var tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);*/
   var yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
   while (date < yesterday) {
