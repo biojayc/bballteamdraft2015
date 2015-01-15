@@ -18,6 +18,7 @@ var run = function() {
     var datafile = 'data/' + filename;
     if (filename.indexOf('after') > -1 || filename.indexOf('before') > -1) {
       if (!fs.existsSync(datafile)) {
+        console.log("processing " + datafile);
         var date = filename.substr(0, 8);
         var html = fs.readFileSync(cachefile, 'utf8');
         // console.log(html);

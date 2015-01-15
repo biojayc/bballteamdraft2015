@@ -41,6 +41,9 @@ var parseBefore = function(h) {
     html = html.substr(html.search(game_re) + 50, html.length);
     game.time = html.match(time_re)[1];
     html = html.substr(html.search(time_re)[1] + 10, html.length);
+    if (!html.match(team_re)) { // this gets us passed the allstar game, which would cause problems
+      continue;
+    }
     game.away_team = teams[html.match(team_re)[1]];
     html = html.substr(html.search(team_re) + 10, html.length);
     game.home_team = teams[html.match(team_re)[1]];
@@ -60,6 +63,9 @@ var parseAfter = function(h) {
   while(html.match(game_re)) {
     var game = {};
     html = html.substr(html.search(game_re) + 50, html.length);
+    if (!html.match(team_re)) { // this gets us passed the allstar game, which would cause problems
+      continue;
+    }
     game.away_team = teams[html.match(team_re)[1]];
     html = html.substr(html.search(team_re) + 10, html.length);
     game.away_score = html.match(score_re)[1];
