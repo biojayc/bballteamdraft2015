@@ -1,11 +1,13 @@
 var Controller = require('../model/controller').Controller,
     cache = require('../cache'),
-    data = require('../model/data');
+    data = require('../model/data'),
+    log = require('../log');
 
 var cache = new cache.CacheManager();
 
 var controller = function() {
   return cache.get('controller', function() {
+    log.info("Reloading controller into cache.");
     var c = new Controller();
     data.injectData(c);
     return c;
