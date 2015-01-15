@@ -29,5 +29,5 @@ var run = function() {
   }
 }
 
-run();
+// run();
 timers.setInterval(run, tenMinutes); //every 10 minutes
