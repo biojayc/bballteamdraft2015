@@ -89,7 +89,7 @@ var home = function(req, res) {
   var todaysgames = createTodaysGames(controller);
   var yesterdaysgames = createYesterdaysGames(controller);
   var teams = createTeams(controller);
-  var tbo = createTeamsByOwner(controller);
+  // var tbo = createTeamsByOwner(controller);
   
   var obj = { 
     score: scores,
@@ -99,7 +99,7 @@ var home = function(req, res) {
     yesterdaysgames: yesterdaysgames,
     teams: teams,
     image: winningImage,
-    teamsbyowner: tbo,
+    // teamsbyowner: tbo,
   };
   var text = new layout.LayoutEngine(
       "index.html", "layout.html", obj).render();
