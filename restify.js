@@ -75,24 +75,36 @@ var registerStatic = function(path, realpath) {
       var filename = req.url;
       if (realpath) {
         filename = filename.replace(path.replace(".*", ""), realpath);
-        
       }
-      log.info("Returning " + filename, session.id);
-      var raw = fs.createReadStream("." + filename);
-      var acceptEncoding = req.headers['accept-encoding'];
-      if (!acceptEncoding) {
-        acceptEncoding = '';
-      }
-      if (acceptEncoding.match(/\bdeflat\b/)) {
-        res.writeHead(200, { 'content-encoding': 'deflate' });
-        raw.pipe(zlib.createDeflate()).pipe(res);
-      } else if (acceptEncoding.match(/\bgzip\b/)) {
-        res.writeHead(200, { 'content-encoding' : 'gzip' });
-        raw.pipe(zlib.createGzip()).pipe(res);
-      } else {
-        res.writeHead(200, {});
-        raw.pipe(res);
-      }
+      
+      fs.exists('.' + filename, function(exists) {
+        if (exists) {
+          log.info("Returning " + filename, session.id);
+          var raw = fs.createReadStream("." + filename);
+          var acceptEncoding = req.headers['accept-encoding'];
+          if (!acceptEncoding) {
+            acceptEncoding = '';
+          }
+          if (acceptEncoding.match(/\bdeflat\b/)) {
+            res.writeHead(200, { 'content-encoding': 'deflate' });
+            raw.pipe(zlib.createDeflate()).pipe(res);
+          } else if (acceptEncoding.match(/\bgzip\b/)) {
+            res.writeHead(200, { 'content-encoding' : 'gzip' });
+            raw.pipe(zlib.createGzip()).pipe(res);
+          } else {
+            res.writeHead(200, {});
+            raw.pipe(res);
+          }
+        } else {
+          log.info(filename + ' not found.');
+          if (errorHandler) {
+            errorHandler(req, res, session);
+          } else {
+            res.writeHead(404);
+            res.end();
+          }
+        }
+      });
     }
   });
 }
