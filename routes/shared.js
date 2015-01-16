@@ -33,7 +33,7 @@ exports.createScores = function(controller) {
   owners.sort(function(a, b){return b.pct-a.pct});
   for (var i = 0; i < owners.length; i++) {
     var owner = owners[i];
-    scores.push({ name: owner.name, wins: owner.wins, pct: formatWinningPercent(owner.pct) });
+    scores.push({ name: owner.name, wins: owner.wins, pct: formatWinningPercent(owner.pct), id: owner.id });
   }
   return scores;
 }

@@ -1,0 +1,49 @@
+  <div class='smallText' id='loadingtime'></div>
+  <a href="/">< back</a>
+  
+  <div id='ownerinfo'>
+    <h1 id='ownerheader'>##ownername##</h1>
+    <div id='ownerrecord'>record: ##wins## - ##losses##</div>
+  </div>
+  
+  <div id='ownerteams'>
+    <h2 align=center>Teams</h2>
+    <table id='ownerteamstable' border=0 cellpadding=5 cellspacing=1 align=center width=50%>
+      <tr><th align=left>Team</th><th align=left>Record</th><th align=left>Pct</th></tr>
+      ##teams-begin##
+      <tr><td>##name##</td><td>##wins## - ##losses##</td><td>##pct##</td</tr>
+      ##teams-end##
+    </table>
+
+  </div>
+  <br/><br/><br/>
+  
+  <div id='ownervs'>
+    <h2 align=center>Vs Owners</h2>
+    <table id='ownervstable' border=0 cellpadding=5 cellspacing=1 align=center width=50%>
+      <tr><th align=left>Vs</th><th align=left>Record</th><th align=left>Pct</th></tr>
+      ##vsOwners-begin##
+      <tr><td>##name##</td><td>##wins## - ##losses##</td><td>##pct##</td</tr>
+      ##vsOwners-end##
+    </table>
+    * The data shown here is ##ownername##'s record against each owner.
+  </div>
+  <br/><br/><br/>
+  
+  <div id='ownergames'>
+    <h2 align=center>Games</h2>
+    <table id='ownergamestable' border=0 cellpadding=5 cellspacing=1 align=center>
+      <tr><th>Date</th><th>Team</th><th>Opp</th><th>Result</th><th>W/L</th><th>Winning Owner</th></tr>
+      ##games-begin##
+      <tr>
+        <td>##date##</td>
+        <td>##name##</td>
+        <td>##oppName##</td>
+        <td class='##scoreClass##'>##score##</td>
+        <td>##wl##</td>
+        <td class='##ownerClass##'>##ownerName##</td>
+      </tr>
+      ##games-end##
+    </table>
+  </div>
+  <br><br><br>

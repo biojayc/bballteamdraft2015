@@ -1,11 +1,13 @@
 var restify = require('./restify'),
     mainHandler = require('./routes/mainHandler'),
+    ownerHandler = require('./routes/ownerHandler'),
     testHandler = require('./routes/testHandler'),
     errorHandler = require('./routes/errorHandler');
 
 restify.startWebServer(1337);
 
 restify.registerRoute("/", "*", mainHandler.home);
+restify.registerRoute("/owner", "*", ownerHandler.home);
 restify.registerRoute("/other.*", "GET", testHandler.otherGet);
 restify.registerRoute("/other.*", "POST", testHandler.otherPost);
 restify.registerRoute("/test.*", "GET", testHandler.main);
