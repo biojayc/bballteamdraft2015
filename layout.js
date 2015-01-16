@@ -9,6 +9,7 @@ var cache = new CacheManager();
 function readFile(file) {
   return cache.get(file, function() {
     log.info("Loading " + file + " into cache.");
+    //TODO get rid of sync method here.
     return fs.readFileSync(file, "utf8");
   }, 3600);
 }
@@ -26,10 +27,22 @@ var getLayoutText = function(bodyFile, layoutFile) {
 }
 
 var substituteVars = function(html, vars) {
-  for(var key in vars) {
-    html = html.replace("##" + key + "##", vars[key]);
+  var re = /##(\w+)##/;
+  var done = false;
+  while (!done) {
+    var match = html.match(re);
+    if (match) {
+      var key = match[1];
+      if (vars[key]) {
+        html = html.replace("##" + key + '##', vars[key]);
+      } else {
+        html = html.replace("##" + key + '##', '');
+      }
+    } else  {
+      done = true;
+    }
   }
-  return html.replace(/##\w+##/g,"");
+  return html;
 }
 
 var getRepeatedRegions = function(html) {
