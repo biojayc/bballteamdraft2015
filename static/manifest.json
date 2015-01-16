@@ -2,31 +2,31 @@
   "name": "NBA Pick'em 2015",
   "icons": [
     {
-      "src": "/u/9851625/pickem/images/sizes/pickem-36.png",
+      "src": "/images/sizes/pickem-36.png",
       "sizes": "36x36",
       "type": "image/png",
       "density": "0.75"
     },
     {
-      "src": "/u/9851625/pickem/images/sizes/pickem-48.png",
+      "src": "/images/sizes/pickem-48.png",
       "sizes": "48x48",
       "type": "image/png",
       "density": "1.0"
     },
     {
-      "src": "/u/9851625/pickem/images/sizes/pickem-72.png",
+      "src": "/images/sizes/pickem-72.png",
       "sizes": "72x72",
       "type": "image/png",
       "density": "1.5"
     },
     {
-      "src": "/u/9851625/pickem/images/sizes/pickem-96.png",
+      "src": "/images/sizes/pickem-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "density": "2.0"
     }
   ],
-  "start_url": "index.html",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait"
 }
