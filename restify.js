@@ -46,6 +46,15 @@ var findRoute = function(path, method, session) {
   }
 }
 
+var returnError = function(req, res, session) {
+  if (errorHandler) {
+    errorHandler(req, res, session);
+  } else {
+    res.writeHead(404);
+    res.end();
+  }
+}
+
 var startWebServer = function(port, ip) {
   var server = http.createServer(handleRequest);
   if (ip) {
@@ -81,6 +90,9 @@ var registerStatic = function(path, realpath) {
         if (exists) {
           log.info("Returning " + filename, session.id);
           var raw = fs.createReadStream("." + filename);
+          raw.on('error', function(err) {
+            returnError(req, res, session);
+          });
           var acceptEncoding = req.headers['accept-encoding'];
           if (!acceptEncoding) {
             acceptEncoding = '';
@@ -97,12 +109,7 @@ var registerStatic = function(path, realpath) {
           }
         } else {
           log.info(filename + ' not found.');
-          if (errorHandler) {
-            errorHandler(req, res, session);
-          } else {
-            res.writeHead(404);
-            res.end();
-          }
+          returnError(req, res, session);
         }
       });
     }
