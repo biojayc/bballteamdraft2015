@@ -4,48 +4,56 @@ var layout = require('../layout'),
     qs = require('querystring'),
     shared = require('./shared');
 
-var createTodaysGames = function(controller) {
-  var todaysgames = [];
-  var games = controller.getGamesByDateOffset(0);
+var createGames = function(games) {
+  var container = [];
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
     var time = game.time.replace(" ET", "");
-    var awayTeam = game.awayTeam;
-    var homeTeam = game.homeTeam
-    var awayOwner = awayTeam.owner;
-    var homeOwner = homeTeam.owner;
+    var awayTeamName = (game.awayScore ? '(' + game.awayScore + ') ' : '') + game.awayTeam.name;
+    var homeTeamName = game.homeTeam.name + (game.homeScore ? ' (' + game.homeScore + ')' : '');
+    var awayOwner = game.awayTeam.owner;
+    var homeOwner = game.homeTeam.owner;
+    var awayOwnerId = "";
+    var homeOwnerId = "";
     var awayOwnerName = "";
     var homeOwnerName = "";
-    if (awayOwner) { awayOwnerName = " (" + awayOwner.name + ")"; }
-    if (homeOwner) { homeOwnerName = " (" + homeOwner.name + ")"; }
-    todaysgames.push(
-        { time: time, away: awayTeam.name + awayOwnerName, home: homeTeam.name + homeOwnerName});
-  }
-  return todaysgames;
-}
-
-var createYesterdaysGames = function(controller) {
-  var yesterdaysgames = [];
-  var games = controller.getGamesByDateOffset(-1);
-  for (var i = 0; i < games.length; i++) {
-    var game = games[i];
-    var time = game.time.replace(" ET", "");
-    var awayTeamName = game.awayTeam.name + " (" + game.awayScore + ")";
-    var homeTeamName = game.homeTeam.name + " (" + game.homeScore + ")";
+    var awayOwnerColor = "";
+    var homeOwnerColor = "";
+    var awayClass = "";
+    var homeClass = "";
+    if (awayOwner) {
+      awayOwnerName = awayOwner.name;
+      awayOwnerColor = awayOwner.color;
+      awayOwnerId = awayOwner.id;
+    }
+    if (homeOwner) {
+      homeOwnerName = homeOwner.name;
+      homeOwnerColor = homeOwner.color;
+      homeOwnerId = homeOwner.id;
+    }
     if (game.winningTeam) {
-      var owner = game.winningTeam.owner;
-      if (game.winningTeam.id == game.awayId) {
-        yesterdaysgames.push(
-            { time: time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
-              awayClass: "winner" });
+      if (game.winningTeam.id === game.awayTeam.id) {
+        awayClass = 'bold';
       } else {
-        yesterdaysgames.push(
-            { time: time, away: awayTeamName, home: homeTeamName, owner: owner ? owner.name : "",
-              homeClass: "winner" });
+        homeClass = 'bold';
       }
     }
+    container.push(
+        { time: time, 
+          awayTeam: awayTeamName, 
+          awayOwner: awayOwnerName, 
+          awayOwnerColor: awayOwnerColor, 
+          awayOwnerId: awayOwnerId,
+          awayClass: awayClass,
+          homeTeam: homeTeamName, 
+          homeOwner: homeOwnerName, 
+          homeOwnerColor: homeOwnerColor, 
+          homeOwnerId: homeOwnerId,
+          homeClass: homeClass,
+        }
+    );
   }
-  return yesterdaysgames;
+  return container;
 }
 
 var createTeams = function(controller) {
@@ -55,29 +63,17 @@ var createTeams = function(controller) {
   for (var i = 0; i < teams.length; i++) {
     var team = teams[i];
     var owner = team.owner;
-    container.push({ name: team.name, wins: team.wins, losses: team.losses, 
-                    pct: shared.formatWinningPercent(team.pct), owner: owner ? owner.name : "" });
+    container.push({ 
+      name: team.name, 
+      wins: team.wins, 
+      losses: team.losses, 
+      pct: shared.formatWinningPercent(team.pct), 
+      ownerName: owner ? owner.name : "",
+      ownerId: owner ? owner.id : "",
+      ownerColor: owner ? owner.color : "",
+    });
   }
   return container;
-}
-
-var createTeamsByOwner = function(controller) {
-  var tbos = [];
-  for (var i = 0; i < controller.owners.length; i++) {
-    var owner = controller.owners[i];
-    var tbo = {};
-    tbo.name = owner.name;
-    tbo.person = owner;
-    tbo.ownerteams = [];
-    for (var j = 0; j < controller.teams.length; j++) {
-      var team = controller.teams[j];
-      if (team.ownerId == owner.id) {
-        tbo.ownerteams.push(team);
-      }
-    }
-    tbos.push(tbo);
-  }
-  return tbos;
 }
 
 var home = function(req, res) {
@@ -86,10 +82,9 @@ var home = function(req, res) {
   var winningImage = shared.getWinningImage(controller);
   var vsTop = shared.createVsTop(controller);
   var vsRows = shared.createVsRows(controller);
-  var todaysgames = createTodaysGames(controller);
-  var yesterdaysgames = createYesterdaysGames(controller);
+  var todaysgames = createGames(controller.getGamesByDateOffset(0));
+  var yesterdaysgames = createGames(controller.getGamesByDateOffset(-1));
   var teams = createTeams(controller);
-  // var tbo = createTeamsByOwner(controller);
   
   var obj = { 
     score: scores,
@@ -99,7 +94,6 @@ var home = function(req, res) {
     yesterdaysgames: yesterdaysgames,
     teams: teams,
     image: winningImage,
-    // teamsbyowner: tbo,
   };
   var text = new layout.LayoutEngine(
       "index.html", "layout.html", obj).render();

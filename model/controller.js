@@ -13,8 +13,8 @@ var Controller = function() {
   this.gamesHash = {};  // keyed by date.  value is array of games.
 };
 // Add an owner before adding any of his teams or games.
-Controller.prototype.addOwner = function(i,n,f,ini,im) {
-  var owner = new models.Owner(i,n,f,ini,im);
+Controller.prototype.addOwner = function(i,n,f,ini,im,c) {
+  var owner = new models.Owner(i,n,f,ini,im,c);
   this.ownersHash[i] = owner;
   this.owners.push(owner);
 }

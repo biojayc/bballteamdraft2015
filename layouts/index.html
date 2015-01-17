@@ -1,33 +1,46 @@
-<div id='todaysgames'>
-<h2 align=center>Today's Games</h2>
-<table id='todaysgamestable' border=0 cellpadding=5 cellspacing=1 align=center>
-<tr><th>Time</th><th>Away</th><th>Home</th></tr>
+<div>
+<table id='todaysgamestable' border=0 cellpadding=5 cellspacing=1 align=left width='100%'>
+<tr><td colspan=7><h2 align=center>Today's Games</h2></td></tr>
+<tr><th></th><th></th><th class='alignRight'>Away</th><th></th><th class='alignLeft'>Home</th><th></th><th>&nbsp;</th></tr>
 ##todaysgames-begin##
-<tr><td>##time##</td><td>##away##</td><td>##home##</td></tr>
+<tr>
+  <td>##time##</td>
+  <td class='alignRight'><a href='/owner?id=##awayOwnerId##' style="color:##awayOwnerColor##">##awayOwner##</a></td>
+  <td class='alignRight ##awayClass##'>##awayTeam##</td>
+  <td>vs.</td>
+  <td class='##homeClass##'>##homeTeam##</td>
+  <td><a href='/owner?id=##homeOwnerId##' style="color:##homeOwnerColor##">##homeOwner##</a></td>
+</tr>
 ##todaysgames-end##
-</table>
-* Times are ET.
-</div>
-<br><br><br>
-
-<div id='yesterdaysgames'>
-<h2 align=center>Yesterday's Games</h2>
-<table id='yesterdaysgamestable' border=0 cellpadding=5 cellspacing=1 align=center>
-<tr><th>Time</th><th>Away</th><th>Home</th><th>Winning Owner</th></tr>
+<tr><td colspan=7>* Times are ET.</td></tr>
+<tr><td colspan=7><h2 align=center>Yesterday's Games</h2></td></tr>
+<tr><th></th><th></th><th class='alignRight'>Away</th><th></th><th class='alignLeft'>Home</th><th></th></tr>
 ##yesterdaysgames-begin##
-<tr><td>##time##</td><td class="##awayClass##">##away##</td><td class ="##homeClass##">##home##</td><td>##owner##</td></tr>
+<tr>
+  <td>##time##</td>
+  <td class='alignRight'><a href='/owner?id=##awayOwnerId##' style="color:##awayOwnerColor##">##awayOwner##</a></td>
+  <td class='alignRight ##awayClass##'>##awayTeam##</td>
+  <td>vs.</td>
+  <td class='##homeClass##'>##homeTeam##</td>
+  <td><a href='/owner?id=##homeOwnerId##' style="color:##homeOwnerColor##">##homeOwner##</a></td>
+</tr>
 ##yesterdaysgames-end##
+<tr><td colspan=7>* Times are ET.</td></tr>
 </table>
-* Times are ET.  
 </div>
-<br><br><br>
+<br/><br/><br/>
 
 <div id='teams'>
 <h2 align=center>Teams</h2>
 <table id='teamstable' border=0 cellpadding=5 cellspacing=1 align=center width=80%>
-<tr><th align=left>Team</th><th align=left>Wins</th><th align=left>Losses</th><th align=left>Pct</th><th align=left>Owner</th></tr>
+<tr><th align=left>Team</th><th align=left>Record</th><th align=left>Pct</th><th align=left>Owner</th></tr>
 ##teams-begin##
-<tr><td>##name##</td><td>##wins##</td><td>##losses##</td><td>##pct##</td><td>##owner##</td></tr>
+<tr>
+  <td>##name##</td>
+  <td>##wins## - ##losses##</td>
+  <td>##pct##</td>
+  <td><a href='owner?id=##ownerId##' style='color:##ownerColor##;'>##ownerName##</a></td>
+</tr>
 ##teams-end##
 </table>
 </div>
