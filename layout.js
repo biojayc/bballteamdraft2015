@@ -33,7 +33,7 @@ var substituteVars = function(html, vars) {
     var match = html.match(re);
     if (match) {
       var key = match[1];
-      if (vars[key]) {
+      if (vars[key] || vars[key] === 0) {
         html = html.replace("##" + key + '##', vars[key]);
       } else {
         html = html.replace("##" + key + '##', '');
