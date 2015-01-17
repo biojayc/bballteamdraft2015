@@ -33,7 +33,9 @@ var getVsOwners = function(controller, owner) {
       var pct = vsOwnerData.pct;
       var record = wins + " - " + losses;
       container.push({
-        name: vsOwner.name, 
+        id: vsOwner.id,
+        name: vsOwner.name,
+        color: vsOwner.color,
         wins: wins,
         losses: losses,
         pct: shared.formatWinningPercent(pct),
@@ -52,16 +54,27 @@ var getGames = function(controller, owner) {
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
     if (game.winningTeam) {
+      var oppOwnerName = '', oppOwnerColor = '', oppOwnerId = '';
       if (game.awayTeam.ownerId == owner.id) {
         var oppTeamScore = game.homeScore;
         var teamScore = game.awayScore;
         var teamName = game.awayTeam.name;
         var oppTeamName = "@ " + game.homeTeam.name;
+        if (game.homeTeam.owner) {
+          oppOwnerName = game.homeTeam.owner.name;
+          oppOwnerColor = game.homeTeam.owner.color;
+          oppOwnerId = game.homeTeam.owner.id;
+        }
       } else {
         var oppTeamScore = game.awayScore;
         var teamScore = game.homeScore;
         var teamName = game.homeTeam.name;
         var oppTeamName = "vs " + game.awayTeam.name;
+        if (game.awayTeam.owner) {
+          oppOwnerName = game.awayTeam.owner.name;
+          oppOwnerColor = game.awayTeam.owner.color;
+          oppOwnerId = game.awayTeam.owner.id;
+        }
       }
       var winningOwner = game.winningTeam.owner;
       if (game.winningTeam.ownerId == owner.id && game.losingTeam.ownerId == owner.id) {
@@ -69,20 +82,17 @@ var getGames = function(controller, owner) {
         var scoreClass = "winloss";
         wins++;
         losses++;
-        var ownerName = winningOwner ? winningOwner.name : "";
-        var ownerClass = "bold";
+        // var ownerName = winningOwner ? winningOwner.name : "";
       } else if (game.winningTeam.ownerId == owner.id) {
         var score = "W " + teamScore + " - " + oppTeamScore
         var scoreClass = 'win';
         wins++;
-        var ownerName = winningOwner ? winningOwner.name : "";
-        var ownerClass = "bold";
+        // var ownerName = winningOwner ? winningOwner.name : "";
       } else {
         var score = "L " + oppTeamScore + " - " + teamScore
         var scoreClass = 'loss';
         losses++;
-        var ownerName = winningOwner ? winningOwner.name : "";
-        var ownerClass = "";
+        // var ownerName = winningOwner ? winningOwner.name : "";
       }
       var wl = wins + " - " + losses;
       container.push({
@@ -92,8 +102,9 @@ var getGames = function(controller, owner) {
         score: score,
         scoreClass: scoreClass,
         wl: wl,
-        ownerName: ownerName,
-        ownerClass: ownerClass,
+        oppOwnerName: oppOwnerName,
+        oppOwnerColor: oppOwnerColor,
+        oppOwnerId: oppOwnerId,
       });
     }
   }
