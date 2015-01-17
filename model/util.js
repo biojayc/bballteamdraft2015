@@ -2,6 +2,7 @@ exports.getCurrentTime = function() {
   return new Date().getTime();
 }
 
+// Deprecated
 exports.getDateString = function(offset) {
   var newDate = new Date();
   newDate.setDate(newDate.getDate() + offset);

@@ -162,5 +162,9 @@ Controller.prototype._calculateStatsForGame = function(game) {
 Controller.prototype.getGamesByDateOffset = function(offset) {
   return this.gamesHash[util.getDateString(offset)] || [];
 }
+// use mm/dd/yyyy
+Controller.prototype.getGamesByDate = function(date) {
+  return this.gamesHash[date] || [];
+}
 
 exports.Controller = Controller;

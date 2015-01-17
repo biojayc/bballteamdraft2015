@@ -4,58 +4,6 @@ var layout = require('../layout'),
     qs = require('querystring'),
     shared = require('./shared');
 
-var createGames = function(games) {
-  var container = [];
-  for (var i = 0; i < games.length; i++) {
-    var game = games[i];
-    var time = game.time.replace(" ET", "");
-    var awayTeamName = (game.awayScore ? '(' + game.awayScore + ') ' : '') + game.awayTeam.name;
-    var homeTeamName = game.homeTeam.name + (game.homeScore ? ' (' + game.homeScore + ')' : '');
-    var awayOwner = game.awayTeam.owner;
-    var homeOwner = game.homeTeam.owner;
-    var awayOwnerId = "";
-    var homeOwnerId = "";
-    var awayOwnerName = "";
-    var homeOwnerName = "";
-    var awayOwnerColor = "";
-    var homeOwnerColor = "";
-    var awayClass = "";
-    var homeClass = "";
-    if (awayOwner) {
-      awayOwnerName = awayOwner.name;
-      awayOwnerColor = awayOwner.color;
-      awayOwnerId = awayOwner.id;
-    }
-    if (homeOwner) {
-      homeOwnerName = homeOwner.name;
-      homeOwnerColor = homeOwner.color;
-      homeOwnerId = homeOwner.id;
-    }
-    if (game.winningTeam) {
-      if (game.winningTeam.id === game.awayTeam.id) {
-        awayClass = 'bold';
-      } else {
-        homeClass = 'bold';
-      }
-    }
-    container.push(
-        { time: time, 
-          awayTeam: awayTeamName, 
-          awayOwner: awayOwnerName, 
-          awayOwnerColor: awayOwnerColor, 
-          awayOwnerId: awayOwnerId,
-          awayClass: awayClass,
-          homeTeam: homeTeamName, 
-          homeOwner: homeOwnerName, 
-          homeOwnerColor: homeOwnerColor, 
-          homeOwnerId: homeOwnerId,
-          homeClass: homeClass,
-        }
-    );
-  }
-  return container;
-}
-
 var createTeams = function(controller) {
   var container = [];
   var teams = controller.teams.slice();
@@ -82,16 +30,17 @@ var home = function(req, res) {
   var winningImage = shared.getWinningImage(controller);
   var vsTop = shared.createVsTop(controller);
   var vsRows = shared.createVsRows(controller);
-  var todaysgames = createGames(controller.getGamesByDateOffset(0));
-  var yesterdaysgames = createGames(controller.getGamesByDateOffset(-1));
+  var todaysgames = shared.createGames(controller.getGamesByDateOffset(0));
+  var yesterdaysgames = shared.createGames(controller.getGamesByDateOffset(-1));
   var teams = createTeams(controller);
-  
+  var moreDate = shared.getDateByOffset(new Date(), -2);
   var obj = { 
     score: scores,
     vstop: vsTop,
     vsrows: vsRows,
     todaysgames: todaysgames,
     yesterdaysgames: yesterdaysgames,
+    moreDate: moreDate,
     teams: teams,
     image: winningImage,
   };
