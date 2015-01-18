@@ -55,27 +55,30 @@ var makeGame = function(cols) {
 }
 
 //TODO: get rid of the sync methods here.  We shouldn't use any sync methods on the web server.
-var getGames = function() {
+var getGames = function(cb) {
   var games = [];
-  var files = fs.readdirSync('./game_scraper/final/');
-  //get newest file
-  if (files.length > 0) {
-    var file = files[files.length-1];
-    var path = './game_scraper/final/' + file;
-    var data = fs.readFileSync(path, 'utf8');
-    var rows = data.split('\n');
-    for (var i = 0; i < rows.length; i++) {
-      var row = rows[i];
-      var cols = row.split('\t');
-      if (cols.length == 6) {
-        games.push(makeGame(cols));
-      }
+  fs.readdir('./game_scraper/final/', function(err, files) {
+    //get newest file
+    if (files.length > 0) {
+      var file = files[files.length-1];
+      var path = './game_scraper/final/' + file;
+      fs.readFile(path, 'utf8', function(err, data) {
+        var rows = data.split('\n');
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          var cols = row.split('\t');
+          if (cols.length == 6) {
+            games.push(makeGame(cols));
+          }
+        }
+        cb(games);
+      });
+
     }
-  }
-  return games;
+  });
 }
 
-exports.injectData = function(controller) {
+exports.injectData = function(controller, cb) {
   for(var i = 0; i < owners.length; i++) {
     var owner = owners[i];
     controller.addOwner(owner.id, owner.name, owner.first, owner.initial, owner.img, owner.color);
@@ -84,9 +87,12 @@ exports.injectData = function(controller) {
     var team = teams[i];
     controller.addTeam(team.id, team.name, team.owner);
   }
-  var games = getGames();
-  for(var i = 0; i < games.length; i++) {
-    var game = games[i];
-    controller.addGame(game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore), parseInt(game.homeScore));
-  }
+  getGames(function(games) {
+    for(var i = 0; i < games.length; i++) {
+      var game = games[i];
+      controller.addGame(game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore), parseInt(game.homeScore));
+    }
+    cb();
+  });
+  
 }

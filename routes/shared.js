@@ -1,18 +1,19 @@
 var Controller = require('../model/controller').Controller,
-    cache = require('../cache'),
+    CacheManager = require('../cache2').CacheManager,
     data = require('../model/data'),
     log = require('../log');
 
-var cache = new cache.CacheManager();
+var cache = new CacheManager();
+cache.add('controller', function(cb) {
+  log.info("Reloading controller into cache.");
+  var c = new Controller();
+  data.injectData(c, function() {
+    cb(c);
+  });
+}, 30 * 60 * 1000);
 
-// TODO: rework to not block.  Probably can't use cachemanager here.
 var controller = function() {
-  return cache.get('controller', function() {
-    log.info("Reloading controller into cache.");
-    var c = new Controller();
-    data.injectData(c);
-    return c;
-  }, 3600);
+  return cache.get('controller');
 }
 
 exports.controller = controller;
