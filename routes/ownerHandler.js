@@ -147,10 +147,12 @@ var home = function(req, res) {
     vsOwners: vsOwners,
     games: games,
   };
-  var text = new layout.LayoutEngine(
-      "owner.html", "layout.html", obj).render();
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end(text);
+  new layout.LayoutEngine(
+      "owner.html", "layout.html", obj).render(function(html) {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end(html);
+      });
+  
 }
 
 exports.home = home;

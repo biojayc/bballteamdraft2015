@@ -1,29 +1,38 @@
 var fs = require("fs"),
     readline = require('readline'),
     url = require('url'), 
-    CacheManager = require('./cache').CacheManager,
+    CacheManager = require('./cache2').CacheManager,
     log = require('./log');
 
 var cache = new CacheManager();
 
-function readFile(file) {
-  return cache.get(file, function() {
-    log.info("Loading " + file + " into cache.");
-    //TODO get rid of sync method here.
-    return fs.readFileSync(file, "utf8");
-  }, 3600);
+function readFile(file, callback) {
+  if (cache.get(file)) {
+    if (cache.get(file)) {
+      callback(cache.get(file));
+    } else {
+      callback('');
+    }
+  } else {
+    cache.add(file, function(cb) {
+      log.info("Loading " + file + " into cache.");
+      fs.readFile(file, "utf8", function(err, body) {
+        cb(body, function() { callback(body); });
+      });
+    });
+  }
 }
 
-var getLayoutText = function(bodyFile, layoutFile) {
-  var body = readFile("layouts/" + bodyFile);
-  if (layoutFile && layoutFile != "") {
-    var layout = readFile("layouts/" + layoutFile);
-    var html = layout.replace("##BODYTEXT##", body);
-  } else {
-    var html = body;
-  }
-  
-  return html;
+var getLayoutText = function(callback, bodyFile, layoutFile) {
+  readFile("layouts/" + bodyFile, function(body) {
+    if (layoutFile && layoutFile != "") {
+      var layout = readFile("layouts/" + layoutFile, function(layout) {
+        callback(layout.replace("##BODYTEXT##", body));
+      });
+    } else {
+      callback(body);
+    }
+  });
 }
 
 var substituteVars = function(html, vars) {
@@ -94,12 +103,16 @@ var LayoutEngine = function(bodyFile, layoutFile, vars) {
   this.layoutFile = layoutFile;
   this.vars = vars;
 }
-LayoutEngine.prototype.render = function() {
-  var html = getLayoutText(this.bodyFile, this.layoutFile);
-  
-  html = processRepeatedRegions(html, this.vars);
-  html = substituteVars(html, this.vars);
-  return html;
+LayoutEngine.prototype.render = function(callback) {
+  var vars = this.vars;
+  var html = getLayoutText(
+    function(html) {
+      html = processRepeatedRegions(html, vars);
+      html = substituteVars(html, vars);
+      if (callback) {
+        callback(html);
+      }
+    }, this.bodyFile, this.layoutFile);
 }
 
 exports.LayoutEngine = LayoutEngine;

@@ -1,5 +1,19 @@
-* Implement other pages that are present on static version of site.
+PAGES/INFO
+* Implement owner vs owner page.
+* Implement team page.
+
+
+
+INFRASTRUCTURE
+* Update cache manager to have an 'add' and 'get' and have get accept a callback for after loaded.
+* Make layout manager not use Sync methods.
+* Make controller reload not use sync method.
+* build framework for handling multiple callbacks.
 * Rework logging to log to a file.
+* Implement a cookie with session id.
+
+
+
 * Add watchers on layout files to remove cache.
 * Ponder making CacheManager be proactive rather than lazy, and support auto caching/auto updating.
   Could be used for automatically updating the Controller data.
