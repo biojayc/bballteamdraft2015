@@ -4,19 +4,19 @@ var Controller = require('../model/controller').Controller,
     log = require('../log');
 
 var cache = new CacheManager();
-cache.add('controller', function(cb) {
-  log.info("Reloading controller into cache.");
-  var c = new Controller();
-  data.injectData(c, function() {
-    cb(c);
-  });
-}, 30 * 60 * 1000);
-
-var controller = function() {
-  return cache.get('controller');
+exports.init = function() {
+  cache.add('controller', function(cb) {
+    log.info("Reloading controller into cache.");
+    var c = new Controller();
+    data.injectData(c, function() {
+      cb(c);
+    });
+  }, 30 * 60 * 1000);
 }
 
-exports.controller = controller;
+exports.controller = function() {
+  return cache.get('controller');
+}
 
 var formatWinningPercent = function(pct) {
   var winningPercent = Math.round(pct * 1000);

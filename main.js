@@ -3,7 +3,12 @@ var restify = require('./restify'),
     ownerHandler = require('./routes/ownerHandler'),
     gamesHandler = require('./routes/gamesHandler'),
     testHandler = require('./routes/testHandler'),
-    errorHandler = require('./routes/errorHandler');
+    errorHandler = require('./routes/errorHandler'),
+    shared = require('./routes/shared'),
+    log = require('./log');
+
+log.init();
+shared.init();
 
 restify.startWebServer(1337);
 

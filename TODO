@@ -1,11 +1,11 @@
 PAGES/INFO
 * Implement owner vs owner page.
 * Implement team page.
-
+* Implement a chart to show winning percentage throughout season for all owners.
 
 
 INFRASTRUCTURE
-* build framework for handling multiple callbacks.
+* build framework for handling multiple callbacks. (like async.js)
 * Rework logging to log to a file.
 * Implement a cookie with session id.
 
