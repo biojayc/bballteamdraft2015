@@ -6,7 +6,6 @@ PAGES/INFO
 
 INFRASTRUCTURE
 * build framework for handling multiple callbacks. (like async.js)
-* Rework logging to log to a file.
 * Implement a cookie with session id.
 
 

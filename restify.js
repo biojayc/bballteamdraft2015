@@ -28,6 +28,7 @@ var handleRequest = function(req, res) {
   var path = url.parse(req.url).pathname;
   log.info("Incoming Request for: " + req.method + " " + path, session.id);
   log.info("User-agent: " + req.headers['user-agent'], session.id);
+  log.info("IPAddress: " + req.connection.remoteAddress, session.id);
   var handler = findRoute(path, req.method, session);
   handler(req, res, session);
 }
