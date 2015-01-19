@@ -1,0 +1,35 @@
+  <div class='smallText' id='loadingtime'></div>
+  <a href="/">&lt; back to home</a>
+  
+  <div id='ownerinfo'>
+    <h1 id='ownerheader'>##teamName##</h1>
+    <div id='ownerrecord'>record: ##wins## - ##losses##</div>
+  </div>
+  
+  <div id='teamvs'>
+    <h2 align=center>Vs Teams</h2>
+    <table id='teamvstable' border=0 cellpadding=5 cellspacing=1 align=center>
+      <tr><th align=left>Team</th><th align=left>Record</th><th align=left>Pct</th></tr>
+      ##vsTeams-begin##
+      <tr><td><a href='/team?id=##id##'>##name##</a></td><td>##wins## - ##losses##</td><td>##pct##</td</tr>
+      ##vsTeams-end##
+    </table>
+  </div>
+  <div style='clear:both;'></div>
+  
+  <div id='ownergames'>
+    <h2 align=center>Games</h2>
+    <table id='ownergamestable' border=0 cellpadding=5 cellspacing=1 align=center>
+      <tr><th>Date</th><th>Opp</th><th>Result</th><th>W/L</th><th>Other Owner</th></tr>
+      ##games-begin##
+      <tr>
+        <td>##date##</td>
+        <td>##oppName##</td>
+        <td class='##scoreClass##'>##score##</td>
+        <td>##wl##</td>
+        <td><a href='/owner?id=##oppOwnerId##' style='color:##oppOwnerColor##;'>##oppOwnerName##</a></td>
+      </tr>
+      ##games-end##
+    </table>
+  </div>
+  <br><br><br>

@@ -11,11 +11,12 @@ var createTeams = function(controller) {
   for (var i = 0; i < teams.length; i++) {
     var team = teams[i];
     var owner = team.owner;
-    container.push({ 
-      name: team.name, 
-      wins: team.wins, 
-      losses: team.losses, 
-      pct: shared.formatWinningPercent(team.pct), 
+    container.push({
+      id: team.id,
+      name: team.name,
+      wins: team.wins,
+      losses: team.losses,
+      pct: shared.formatWinningPercent(team.pct),
       ownerName: owner ? owner.name : "",
       ownerId: owner ? owner.id : "",
       ownerColor: owner ? owner.color : "",
