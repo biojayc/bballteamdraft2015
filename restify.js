@@ -20,15 +20,15 @@ var createGuid = (function() {
 })();
 
 var Session = function() {
-  this.id = createGuid();
+  this.requestId = createGuid();
 }
 
 var handleRequest = function(req, res) {
   var session = new Session();
   var path = url.parse(req.url).pathname;
-  log.info("Incoming Request for: " + req.method + " " + path, session.id);
-  log.info("User-agent: " + req.headers['user-agent'], session.id);
-  log.info("IPAddress: " + req.connection.remoteAddress, session.id);
+  log.info("Incoming Request for: " + req.method + " " + path, session.requestId);
+  log.info("User-agent: " + req.headers['user-agent'], session.requestId);
+  log.info("IPAddress: " + req.connection.remoteAddress, session.requestId);
   var handler = findRoute(path, req.method, session);
   handler(req, res, session);
 }
@@ -37,12 +37,12 @@ var findRoute = function(path, method, session) {
   for (var i = 0; i < routes.length; i++) {
     if (path.match("^" + routes[i].route + "$") && 
         (method == routes[i].method || routes[i].method == "*")) {
-      log.info("Route found: " + routes[i].method + " " + routes[i].route, session.id);
+      log.info("Route found: " + routes[i].method + " " + routes[i].route, session.requestId);
       return routes[i].handler;
     }
   }
   if (errorHandler) {
-    log.info("No Route found, returning 404 error handler", session.id);
+    log.info("No Route found, returning 404 error handler", session.requestId);
     return errorHandler;
   }
 }
@@ -89,7 +89,7 @@ var registerStatic = function(path, realpath) {
       
       fs.exists('.' + filename, function(exists) {
         if (exists) {
-          log.info("Returning " + filename, session.id);
+          log.info("Returning " + filename, session.requestId);
           var raw = fs.createReadStream("." + filename);
           raw.on('error', function(err) {
             returnError(req, res, session);
