@@ -12,12 +12,12 @@ shared.init();
 
 restify.startWebServer(1337);
 
-restify.registerRoute("/", "*", mainHandler.home);
-restify.registerRoute("/owner", "*", ownerHandler.home);
-restify.registerRoute("/games", "*", gamesHandler.home);
-restify.registerRoute("/other.*", "GET", testHandler.otherGet);
-restify.registerRoute("/other.*", "POST", testHandler.otherPost);
-restify.registerRoute("/test.*", "GET", testHandler.main);
+restify.registerRoute("/", "GET", mainHandler.home);
+restify.registerRoute("/owner", "GET", ownerHandler.home);
+restify.registerRoute("/games", "GET", gamesHandler.home);
+// restify.registerRoute("/other.*", "GET", testHandler.otherGet);
+// restify.registerRoute("/other.*", "POST", testHandler.otherPost);
+// restify.registerRoute("/test.*", "GET", testHandler.main);
 restify.registerRoute("404", "GET", errorHandler.error);
 
 restify.registerStatic("/static.*");
