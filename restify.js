@@ -5,7 +5,7 @@ var fs = require("fs"),
     log = require('./log');
 
 var routes = [];
-var errorHandler = {};
+var errorHandler;
 
 var createGuid = (function() {
   function s4() {
@@ -44,6 +44,13 @@ var findRoute = function(path, method, session) {
   if (errorHandler) {
     log.info("No Route found, returning 404 error handler", session.requestId);
     return errorHandler;
+  }
+
+  // If 404 and no 404 handler.
+  return function(req, res) {
+    log.info("No Route found, and no 404 handler.  Returning default error handler.", session.requestId);
+    res.writeHead(404, {'Content-Type': 'text/html'});
+    res.end("Sorry, the page you are looking for doesn't exist.");
   }
 }
 
