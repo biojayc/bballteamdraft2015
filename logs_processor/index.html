@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2015 NBA Pick'em: Log Dashboard</title>
+<style rel="stylesheet">
+td {
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+  <div><a href="/">Home</a></div>
+  <table border=2 cellpadding=3>
+    <tr>
+      <th>RequestId</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Method</th>
+      <th>Url</th>
+      <th>IP</th>
+      <th>UserAgent</th>
+    </tr>
+    ##requests-begin##
+    <tr>
+      <td>##request_id##</td>
+      <td>##date##</td>
+      <td>##time##</td>
+      <td>##method##</td>
+      <td>##url##</td>
+      <td><a href="ip?ip=##ip_address##">##ip_address##</a></td>
+      <td>##user_agent##</td>
+    </tr>
+    ##requests-end##
+  </table>
+
+  <div id ='footer'>&copy; 2014 Jamie Smith</div>
+</body>
+</html>
