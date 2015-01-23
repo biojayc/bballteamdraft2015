@@ -24,9 +24,9 @@ function readFile(file, callback) {
 }
 
 var getLayoutText = function(callback, bodyFile, layoutFile) {
-  readFile("layouts/" + bodyFile, function(body) {
+  readFile(bodyFile, function(body) {
     if (layoutFile && layoutFile != "") {
-      var layout = readFile("layouts/" + layoutFile, function(layout) {
+      var layout = readFile(layoutFile, function(layout) {
         callback(layout.replace("##BODYTEXT##", body));
       });
     } else {

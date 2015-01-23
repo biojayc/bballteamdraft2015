@@ -29,13 +29,13 @@ var main = function(req, res) {
   };
   
   var text = new layout.LayoutEngine(
-      "test.html", "layout.html", obj).render();
+      "layouts/test.html", "layouts/layout.html", obj).render();
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.end(text);
 }
 
 var otherGet = function(req, res) {
-  var text = new layout.LayoutEngine("other.html", "layout.html", {}).render();
+  var text = new layout.LayoutEngine("layouts/other.html", "layouts/layout.html", {}).render();
   res.writeHead(200, {'Content-Type': 'text/html'});
   res.end(text);
 }
@@ -43,7 +43,7 @@ var otherGet = function(req, res) {
 var otherPost = function(req, res) {
   requestUtils.getPostObj(req, function(body) {
     var title = "Thanks " + body.name + " age " + body.age;
-    var text = new layout.LayoutEngine("generic.html", "layout.html",
+    var text = new layout.LayoutEngine("layouts/generic.html", "layouts/layout.html",
         { title: title, body: "Thanks for posting."}).render();
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(text);

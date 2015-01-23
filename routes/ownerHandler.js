@@ -148,7 +148,7 @@ var home = function(req, res) {
     games: games,
   };
   new layout.LayoutEngine(
-      "owner.html", "layout.html", obj).render(function(html) {
+      "layouts/owner.html", "layouts/layout.html", obj).render(function(html) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end(html);
       });

@@ -42,7 +42,7 @@ var home = function(req, res) {
     nextDate: nextDate,
   };
   new layout.LayoutEngine(
-      "games.html", "layout.html", obj).render(
+      "layouts/games.html", "layouts/layout.html", obj).render(
         function (html) {
           res.writeHead(200, {'Content-Type': 'text/html'});
           res.end(html);

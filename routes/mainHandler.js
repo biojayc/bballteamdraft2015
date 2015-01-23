@@ -46,7 +46,7 @@ var home = function(req, res) {
     image: winningImage,
   };
   new layout.LayoutEngine(
-      "index.html", "layout.html", obj).render(
+      "layouts/index.html", "layouts/layout.html", obj).render(
         function(html) {
           res.writeHead(200, {'Content-Type': 'text/html'});
           res.end(html);
