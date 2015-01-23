@@ -44,7 +44,9 @@ var getLogName = function() {
   return yyyy + '' + MM + '' + dd + '' + hh + '' + mm + '' + ss + '' + ms;
 }
 
-var state = {};
+var state = {
+  log: '',
+};
 
 var init = function() {
   state.filename = getLogName();
