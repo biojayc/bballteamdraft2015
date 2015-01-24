@@ -91,9 +91,10 @@ var processRepeatedRegions = function(html, vars) {
       var tempHTML = processRepeatedRegions(regionHTML, obj);
       newHTML += substituteVars(tempHTML, obj);
     }
-    var re = eval("/##" + regionName + "-begin##[.\\W\\w\\s\\r\\n]*" +
-        "##" + regionName + "-end##/");
-    html = html.replace(re, newHTML);
+    var start = html.indexOf('##' + regionName + '-begin##');
+    var end = html.indexOf('##' + regionName + '-end##') + 8 + regionName.length;
+    var subhtml = html.substr(start, end-start);
+    html = html.replace(subhtml, newHTML);
   }
   return html;
 }
