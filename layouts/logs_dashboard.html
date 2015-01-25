@@ -2,15 +2,29 @@
 <html>
 <head>
 <title>2015 NBA Pick'em: Log Dashboard</title>
+<script type="text/javascript" src="/scripts/logs_ui.js"></script>
 <style rel="stylesheet">
 td {
   font-size: 12px;
+}
+a {
+  color:black;
+  text-decoration:none;
+}
+a:hover {
+  color:blue;
+  text-decoration:underline;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
-  <div><a href="/">Home</a> | <a id='filter'>filter static</a></div>
+  <div><a href="/">Home</a></div>
+  <div>
+    Filter Type: <select id='filtertype' onchange='ui.updateFilterType();'><option value="1">WHITE</option><option value="2">BLACK</option></select> | 
+    <a id='filter' onclick="ui.clearFilters();">clear filters</a>
+  </div>
   <div>&nbsp;</div>
   <table id='logtable' border=2 cellpadding=3>
     <tr>
@@ -26,7 +40,8 @@ td {
   <div id ='footer'>&copy; 2014 Jamie Smith</div>
 </body>
 <script>
-var logs = [
+var local = local || {};
+local.logs = [
 ##requests-begin##
 {
   request_id: '##request_id##',
@@ -39,51 +54,10 @@ var logs = [
 },
 ##requests-end##
 ];
-var rows = [];
 
-var makeTD = function(text, link, click) {
-  var td = document.createElement("TD");
-  var textNode= document.createTextNode(text);
-  if (link) {
-    var a = document.createElement("A");
-    a.href = link;
-    if (click) {
-      a.onclick += click;
-    }
-    a.appendChild(textNode);
-    td.appendChild(a);
-  } else {
-    td.appendChild(textNode);
-  }
-  return td;
-}
-
-var makeRowFromLog = function(log) {
-  var tr = document.createElement("TR");
-  console.log(log + ' ' + log.date);
-  tr.appendChild(makeTD(log.date));
-  tr.appendChild(makeTD(log.time));
-  tr.appendChild(makeTD(log.method));
-  tr.appendChild(makeTD(log.url));
-  tr.appendChild(makeTD(log.ip_address));
-  tr.appendChild(makeTD(log.user_agent));
-  return tr;
-}
 
 window.onload = function(event) {
-  for (var i = 0; i < logs.length; i++) {
-    var log = logs[i];
-    var tr = makeRowFromLog(log);
-    rows.push({
-      tr: tr,
-      log: logs
-    });
-  }
-
-  var table = document.getElementById('logtable');
-  for (var i = 0; i < rows.length; i++) {
-    table.appendChild(rows[i].tr);
-  }
+  ui.init(local.logs);
 }
 </script>
 </html>

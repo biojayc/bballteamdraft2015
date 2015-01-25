@@ -24,5 +24,6 @@ restify.registerRoute("404", "GET", errorHandler.error);
 
 restify.registerStatic("/static.*");
 restify.registerStatic("/css.*", "/static/css");
+restify.registerStatic("/scripts.*", "/static/scripts");
 restify.registerStatic("/images.*", "/static/images");
 restify.registerStatic("/favicon.ico", "/static/images/favicon.ico");
