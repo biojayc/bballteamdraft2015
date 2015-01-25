@@ -3,6 +3,7 @@ var restify = require('./restify'),
     ownerHandler = require('./routes/ownerHandler'),
     gamesHandler = require('./routes/gamesHandler'),
     teamHandler = require('./routes/teamHandler'),
+    logsHandler = require('./routes/logsHandler'),
     testHandler = require('./routes/testHandler'),
     errorHandler = require('./routes/errorHandler'),
     shared = require('./routes/shared'),
@@ -10,6 +11,7 @@ var restify = require('./restify'),
 
 log.init();
 shared.init();
+logsHandler.init();
 
 restify.startWebServer(1337);
 
@@ -17,9 +19,7 @@ restify.registerRoute("/", "GET", mainHandler.home);
 restify.registerRoute("/owner", "GET", ownerHandler.home);
 restify.registerRoute("/games", "GET", gamesHandler.home);
 restify.registerRoute("/team", "GET", teamHandler.home);
-// restify.registerRoute("/other.*", "GET", testHandler.otherGet);
-// restify.registerRoute("/other.*", "POST", testHandler.otherPost);
-// restify.registerRoute("/test.*", "GET", testHandler.main);
+restify.registerRoute("/logs", "GET", logsHandler.home);
 restify.registerRoute("404", "GET", errorHandler.error);
 
 restify.registerStatic("/static.*");
