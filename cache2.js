@@ -6,7 +6,7 @@
 // 
 // sample usage:
 // var cache = new CacheManager();
-// var value = cache.add('mykey', function(callabck) {
+// var value = cache.add('mykey', function(callback) {
 //   ... some calculation
 //   callback(value);
 // }, 3600000);  // cache for an hour.
