@@ -105,14 +105,24 @@ var registerStatic = function(path, realpath) {
           if (!acceptEncoding) {
             acceptEncoding = '';
           }
+          var contentType = 'text/html';
+          if (filename.indexOf('.js') === filename.length - 3) {
+            contentType = 'application/javascript';
+          } else if (filename.indexOf('.png') === filename.length - 4) {
+            contentType = 'image/png';
+          } else if (filename.indexOf('.jpg') === filename.length - 4) {
+            contentType = 'image/jpeg';
+          } else if (filename.indexOf('.css') === filename.length - 4) {
+            contentType = 'text/css';
+          }
           if (acceptEncoding.match(/\bdeflat\b/)) {
-            res.writeHead(200, { 'content-encoding': 'deflate' });
+            res.writeHead(200, { 'content-encoding': 'deflate', 'Content-Type': contentType });
             raw.pipe(zlib.createDeflate()).pipe(res);
           } else if (acceptEncoding.match(/\bgzip\b/)) {
-            res.writeHead(200, { 'content-encoding' : 'gzip' });
+            res.writeHead(200, { 'content-encoding' : 'gzip', 'Content-Type': contentType });
             raw.pipe(zlib.createGzip()).pipe(res);
           } else {
-            res.writeHead(200, {});
+            res.writeHead(200, { 'Content-Type': contentType });
             raw.pipe(res);
           }
         } else {
