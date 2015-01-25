@@ -25,8 +25,10 @@ ui.init = function(logs) {
   ui.eventDiv = document.createElement("DIV");
   document.body.appendChild(ui.eventDiv);
   ui.eventDiv.addEventListener('filterEvent', ui.eventHandler, false);
+  window.addEventListener("hashchange", ui.loadFiltersFromHash, false);
 
   ui.loadFiltersFromHash();
+  ui.updateHash();
 }
 
 ui.buildTable = function(logs) {
@@ -91,12 +93,15 @@ ui.clearFilters = function() {
   ui.state.whiteFilters = {};
   ui.state.blackFilters = {};
   ui.fireFilterEvent();
-  window.location.hash = '';
+  updateHash();
 }
 
 ui.eventHandler = function(e) {
-  console.log('eventhandler called');
+  // console.log('eventhandler called');
+
+  // make all visible
   ui.foreach(ui.state.rows, function(row) { ui.showRow(row); });
+
   //now apply white filters.
   ui.applyWhiteFilter(ui.FILTERS.DATE, ui.state.rows, 'date');
   ui.applyWhiteFilter(ui.FILTERS.TIME, ui.state.rows, 'time');
@@ -112,8 +117,12 @@ ui.eventHandler = function(e) {
   ui.applyBlackFilter(ui.FILTERS.URL, ui.state.rows, 'url');
   ui.applyBlackFilter(ui.FILTERS.IP_ADDRESS, ui.state.rows, 'ip_address');
   ui.applyBlackFilter(ui.FILTERS.USER_AGENT, ui.state.rows, 'user_agent');
+
   // update hash
-  //encodeURIComponent
+  ui.updateHash();
+}
+
+ui.updateHash = function() {
   var obj = {
     w: ui.state.whiteFilters,
     b: ui.state.blackFilters,
