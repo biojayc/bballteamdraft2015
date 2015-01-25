@@ -10,9 +10,9 @@ td {
 </head>
 
 <body>
-  <div><a href="/">Home</a> | <a id='filter' href="" onclick="addFilterStatic.bind(this)();">filter static</a></div>
+  <div><a href="/">Home</a> | <a id='filter'>filter static</a></div>
   <div>&nbsp;</div>
-  <table border=2 cellpadding=3>
+  <table id='logtable' border=2 cellpadding=3>
     <tr>
       <th>Date</th>
       <th>Time</th>
@@ -21,30 +21,68 @@ td {
       <th>IP</th>
       <th>UserAgent</th>
     </tr>
-    ##requests-begin##
-    <tr>
-      <td>##date##</td>
-      <td>##time##</td>
-      <td>##method##</td>
-      <td>##url##</td>
-      <td><a href="?ip=##ip_address##">##ip_address##</a></td>
-      <td>##user_agent##</td>
-    </tr>
-    ##requests-end##
   </table>
 
   <div id ='footer'>&copy; 2014 Jamie Smith</div>
 </body>
 <script>
-function addFilterStatic() {
-  var url = window.location.href;
-  if (url.indexOf('?') > -1) {
-    if (url.indexOf('filter=static') == -1) {
-      this.href = url + '&filter=static';
+var logs = [
+##requests-begin##
+{
+  request_id: '##request_id##',
+  date: '##date##',
+  time: '##time##',
+  method: '##method##',
+  url: '##url##',
+  ip_address: '##ip_address##',
+  user_agent: '##user_agent##',
+},
+##requests-end##
+];
+var rows = [];
+
+var makeTD = function(text, link, click) {
+  var td = document.createElement("TD");
+  var textNode= document.createTextNode(text);
+  if (link) {
+    var a = document.createElement("A");
+    a.href = link;
+    if (click) {
+      a.onclick += click;
     }
+    a.appendChild(textNode);
+    td.appendChild(a);
   } else {
-    this.href = url + '?filter=static';
-    return true;
+    td.appendChild(textNode);
+  }
+  return td;
+}
+
+var makeRowFromLog = function(log) {
+  var tr = document.createElement("TR");
+  console.log(log + ' ' + log.date);
+  tr.appendChild(makeTD(log.date));
+  tr.appendChild(makeTD(log.time));
+  tr.appendChild(makeTD(log.method));
+  tr.appendChild(makeTD(log.url));
+  tr.appendChild(makeTD(log.ip_address));
+  tr.appendChild(makeTD(log.user_agent));
+  return tr;
+}
+
+window.onload = function(event) {
+  for (var i = 0; i < logs.length; i++) {
+    var log = logs[i];
+    var tr = makeRowFromLog(log);
+    rows.push({
+      tr: tr,
+      log: logs
+    });
+  }
+
+  var table = document.getElementById('logtable');
+  for (var i = 0; i < rows.length; i++) {
+    table.appendChild(rows[i].tr);
   }
 }
 </script>

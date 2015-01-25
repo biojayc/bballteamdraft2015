@@ -1,14 +1,7 @@
 var fs = require('fs');
 
 var requests = [];  // array of all objs.
-var requestHash = {};  // hash: key is request_id, value is obj.
-var ips = []; // list of ip strings.
-var ipHash = {}; // hash: key is ip string, value is array of obj.
-var urls = [];  // list of url strings
-var urlHash = {} // hash: key is url string, value is array of obj.
-var userAgents = []; // list of user agent strings
-var userAgentHash = {}; // hash: key is user agent string ,value is array of obj;
-
+var requestHash = {};
 
 var addSplits = function(arr, first, last) {
   var result = '';
@@ -22,35 +15,8 @@ var addSplits = function(arr, first, last) {
   return result;
 }
 
-var addToIpHash = function(obj) {
-  var ip = obj.ip_address;
-  if (!ipHash[ip]) {
-    ips.push(ip);
-    ipHash[ip] = [];
-  }
-  ipHash[ip].push(obj);
-}
-
-var addToUrlHash = function(obj) {
-  var url = obj.url;
-  if (!urlHash[url]) {
-    urls.push(url);
-    urlHash[url] = [];
-  }
-  urlHash[url].push(obj);
-}
-
-var addToUserAgentHash = function(obj) {
-  var userAgent = obj.user_agent;
-  if (!userAgentHash[userAgent]) {
-    userAgents.push(userAgent);
-    userAgentHash[userAgent] = [];
-  }
-  userAgentHash[userAgent].push(obj);
-}
-
 var process_logs = function (logs_path) {
-  logs_path = logs_path || '../logs/';
+  logs_path = logs_path || './logs/';
   var complete_logs = '';
   
   if (!fs.existsSync(logs_path)) {
@@ -95,13 +61,10 @@ var process_logs = function (logs_path) {
     if (logType === "Incoming") {
       obj.method = split_log[6];
       obj.url = addSplits(split_log, 7);
-      addToUrlHash(obj);
     } else if (logType === "User-agent:") {
       obj.user_agent = addSplits(split_log, 4);
-      addToUserAgentHash(obj);
     } else if (logType === "IPAddress:") {
       obj.ip_address = addSplits(split_log, 4);
-      addToIpHash(obj);
     } else if (logType === "Route") {
       obj.route = addSplits(split_log, 5);
     } else if (logType === "Returning") {
@@ -109,16 +72,7 @@ var process_logs = function (logs_path) {
     }
   }
 
-  return {
-    requests: requests,
-    requestHash: requestHash,
-    ips: ips,
-    ipHash: ipHash,
-    urls: urls,
-    urlHash: urlHash,
-    userAgents:userAgents,
-    userAgentHash: userAgentHash,
-  };
+  return requests;
 }
 
 // process_logs();
