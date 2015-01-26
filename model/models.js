@@ -34,13 +34,14 @@ exports.Team = function(i,n,o) {
   this.otherTeamsDataHash = {};  // used to store wins and losses vs other teams.  Team Ids as keys
 };
 
-exports.Game = function(date, time, awayId, homeId, awayScore, homeScore) {
+exports.Game = function(date, time, awayId, homeId, awayScore, homeScore, isFinal) {
   this.date = date;
   this.time = time;
   this.awayId = awayId;
   this.homeId = homeId;
   this.awayScore = awayScore;
   this.homeScore = homeScore;
+  this.isFinal = isFinal;
 
   //calculated data
   this.awayTeam;

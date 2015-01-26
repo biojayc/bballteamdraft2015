@@ -29,7 +29,7 @@ teams["Wizards"] = "WAS";
 teams["Raptors"] = "TOR";
 teams["Timberwolves"] = "MIN";
 teams["Warriors"] = "GSW";
-
+/*
 var parseBefore = function(h) {
   var games = [];
   var game_re = /<div\s+id="\d+-gamebox"\s+class=.mod-container\s+mod-no-header-footer\s+mod-scorebox\s+mod-nba-scorebox/;
@@ -53,7 +53,49 @@ var parseBefore = function(h) {
   
   return games;
 }
+*/
+var parse = function(h) {
+  var games = [];
+  var game_re = /<div\s+id="\d+-gamebox"\s+class=.mod-container\s+mod-no-header-footer\s+mod-scorebox\s+mod-nba-scorebox/;
+  var status_re = /<div\s+class="game-status"><p\s+id="\d+-statusLine1">([\w\d:\s\/]+)<\/p><\/div>/
+  var team_re = /<a href="http:\/\/espn.go.com\/nba\/team\/_\/name\/\w+\/[\w-]+">([\w\s]+)<\/a>/;
+  var score_re = /<li id="\d+-\w+\d+" class="finalScore">(\d+)<\/li>/
+  var html = h;
+  while(html.match(game_re)) {
+    var game = {};
+    html = html.substr(html.search(game_re) + 50, html.length);
+    // console.log(html.match(status_re));
+    game.status = html.match(status_re)[1];
+    if (!html.match(team_re)) { // this gets us passed the allstar game, which would cause problems
+      continue;
+    }
+    game.away_team = teams[html.match(team_re)[1]];
+    html = html.substr(html.search(team_re) + 10, html.length);
 
+    if (game.status.indexOf('ET') === -1) {
+      game.away_score = html.match(score_re)[1];
+      html = html.substr(html.search(score_re) + 10, html.length);
+    } else {
+      game.time = game.status;
+    }
+
+    game.home_team = teams[html.match(team_re)[1]];
+    html = html.substr(html.search(team_re) + 10, html.length);
+
+    if (game.status.indexOf('ET') === -1) {
+      game.home_score = html.match(score_re)[1];
+      html = html.substr(html.search(score_re) + 10, html.length);
+    }
+
+    if (game.status.indexOf('Final') > -1) {
+      game.isFinal = true;
+    }
+    games.push(game);
+  }
+
+  return games;
+}
+/*
 var parseAfter = function(h) {
   var games = [];
   var game_re = /<div\s+id="\d+-gamebox"\s+class=.mod-container\s+mod-no-header-footer\s+mod-scorebox\s+mod-nba-scorebox/;
@@ -78,7 +120,8 @@ var parseAfter = function(h) {
   }
   
   return games;
-}
+}*/
 
-exports.parseBefore = parseBefore;
-exports.parseAfter = parseAfter;
+// exports.parseBefore = parseBefore;
+exports.parse = parse;
+// exports.parseAfter = parseAfter;

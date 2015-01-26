@@ -51,10 +51,10 @@ var makeGame = function(cols) {
     homeId: cols[3],
     awayScore: cols[4],
     homeScore: cols[5],
+    isFinal: cols[6],
   }
 }
 
-//TODO: get rid of the sync methods here.  We shouldn't use any sync methods on the web server.
 var getGames = function(cb) {
   var games = [];
   fs.readdir('./game_scraper/final/', function(err, files) {
@@ -67,7 +67,7 @@ var getGames = function(cb) {
         for (var i = 0; i < rows.length; i++) {
           var row = rows[i];
           var cols = row.split('\t');
-          if (cols.length == 6) {
+          if (cols.length == 7) {
             games.push(makeGame(cols));
           }
         }
@@ -90,7 +90,7 @@ exports.injectData = function(controller, cb) {
   getGames(function(games) {
     for(var i = 0; i < games.length; i++) {
       var game = games[i];
-      controller.addGame(game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore), parseInt(game.homeScore));
+      controller.addGame(game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore), parseInt(game.homeScore), game.isFinal == 'true');
     }
     cb();
   });

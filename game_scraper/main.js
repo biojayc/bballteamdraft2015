@@ -3,31 +3,53 @@ var timers = require('timers'),
     game_scraper = require('./game_scraper'),
     combiner = require('./combiner');
 
-var needsToRun = true;
+var getDateString = function() {
+  var newDate = new Date();
+  
+  var dd = newDate.getDate();
+  var MM = newDate.getMonth()+1; //January is 0!
+  var yyyy = newDate.getFullYear();
+  var hh = newDate.getHours();
+  var mm = newDate.getMinutes();
+  var ss = newDate.getSeconds();
+  var ms = newDate.getMilliseconds();
+
+  if(dd<10) {
+    dd='0'+dd
+  } 
+
+  if(MM<10) {
+    MM='0'+MM
+  } 
+
+  return MM+'/'+dd+'/'+yyyy + ":" + hh + ":" + mm + ":" + ss + ":" + ms;
+}
+
+// var needsToRun = true;
 var oneMinute = 1000 * 60 * 1;
-var tenMinutes = oneMinute * 10;
+var thirtyMinutes = oneMinute * 30;
 
 var run = function() {
-  var hours = new Date().getHours();
-  console.log("Woke up.  Hours: " + hours + "  NeedsToRun: " + (needsToRun ? 'true' : 'false'));
-  if (hours == 0) {
-    if (needsToRun) {
-      needsToRun = false;
-      console.log("Running scores_querier");
+  // var hours = new Date().getHours();
+  // console.log("Woke up.  Hours: " + hours + "  NeedsToRun: " + (needsToRun ? 'true' : 'false'));
+  // if (hours == 0) {
+  //   if (needsToRun) {
+  //    needsToRun = false;
+      console.log(getDateString() + ": Running scores_querier");
       scores_querier.run();
       timers.setTimeout(function() {
-        console.log("Running game_scraper");
+        console.log(getDateString() + ": Running game_scraper");
         game_scraper.run();
         timers.setTimeout(function() {
-          console.log("Running combiner");
+          console.log(getDateString() + ": Running combiner");
           combiner.run();
         }, oneMinute);
       }, oneMinute);
-    }
-  } else {
-    needsToRun = true;
-  }
+  //   }
+  // } else {
+  //   needsToRun = true;
+  // }
 }
 
-// run();
-timers.setInterval(run, tenMinutes); //every 10 minutes
+run();
+timers.setInterval(run, thirtyMinutes); //every 30 minutes

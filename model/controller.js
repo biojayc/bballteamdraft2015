@@ -32,8 +32,8 @@ Controller.prototype.addTeam = function(i,n,o) {
 }
 // Be sure the teams that are in the game have already been added.
 Controller.prototype.addGame = 
-    function(date, time, awayId, homeId, awayScore, homeScore) {
-  var game = new models.Game(date, time, awayId, homeId, awayScore, homeScore);
+    function(date, time, awayId, homeId, awayScore, homeScore, isFinal) {
+  var game = new models.Game(date, time, awayId, homeId, awayScore, homeScore, isFinal);
   this._calculateStatsForGame(game);
   if (!this.gamesHash[game.date]) {
     this.gamesHash[game.date] = [];
@@ -63,7 +63,7 @@ Controller.prototype._calculateStatsForGame = function(game) {
   game.homeTeam.gamesHash[game.date].push(game);
   
   //Calculating wins and losses for teams and owners
-  if (game.awayScore && game.homeScore) {
+  if (game.isFinal) {
     if (game.awayScore > game.homeScore) {
       game.winningTeam = game.awayTeam;
       game.losingTeam = game.homeTeam;

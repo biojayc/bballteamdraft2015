@@ -20,14 +20,15 @@ var getDateString = function(date) {
 var queryScores = function(date, path) {
   var headers = { 
       'Content-Length': 0, 
-      'Content-Type': 'text/html'
+      'Content-Type': 'text/html',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
   };
   var options = {
       hostname: 'scores.espn.go.com', 
       port: 80,
       path: '/nba/scoreboard?date=' + getDateString(date),
       method: 'GET',
-      //headers: headers
+      headers: headers
   };
 
   var req = http.request(options, function(res) {
@@ -58,7 +59,7 @@ var run = function() {
   var yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
   while (date < yesterday) {
-    console.log(getDateString(date) + '-after');
+    // console.log(getDateString(date) + '-after');
     var filename = 'cache/' + getDateString(date) + "-after";
     if (!fs.existsSync(filename)) {
       console.log(filename + " does not exists.");
@@ -67,10 +68,14 @@ var run = function() {
     date.setDate(new Date(date.getDate() + 1));
   }
 
+  //during
+  console.log(getDateString(date) + '-during');
+  var filename = 'cache/' + getDateString(date) + "-during";
+  queryScores(date, filename);
 
   var finalDate = new Date('04/16/2015');
   while(date < finalDate) {
-    console.log(getDateString(date) + "-before");
+    // console.log(getDateString(date) + "-before");
     var filename = 'cache/' + getDateString(date) + "-before";
     if (!fs.existsSync(filename)) {
       console.log(filename + " does not exists.");

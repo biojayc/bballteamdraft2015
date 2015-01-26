@@ -35,6 +35,7 @@ var makeGame = function(cols) {
     homeTeam: cols[3],
     awayScore: cols[4],
     homeScore: cols[5],
+    isFinal: cols[6],
   }
 }
 
@@ -59,7 +60,7 @@ var run = function() {
       var row = rows[j];
 
       var cols = row.split('\t');
-      if (cols.length == 6) {
+      if (cols.length == 7) {
         var tempGame = makeGame(cols);
         // if we already have the game and are just updating, add new data.
         if (gameHash[makeKey(tempGame)]) {
@@ -69,6 +70,9 @@ var run = function() {
           }
           if (tempGame.homeScore) {
             game.homeScore = tempGame.homeScore;
+          }
+          if (tempGame.isFinal === 'true') {
+            game.isFinal = true;
           }
           if (tempGame.time) {
             game.time = tempGame.time;
@@ -86,7 +90,8 @@ var run = function() {
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
     result += game.date + "\t" + game.time + "\t" + game.awayTeam + "\t" + 
-              game.homeTeam + "\t" + game.awayScore + "\t" + game.homeScore;
+              game.homeTeam + "\t" + game.awayScore + "\t" + game.homeScore +
+              "\t" + game.isFinal;
     if (i+1 < games.length) {
       result += "\n";
     }
