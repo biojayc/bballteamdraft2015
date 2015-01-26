@@ -4,15 +4,16 @@
 <tr><td colspan=7><h2 align=center>Games for ##date##</h2></td></tr>
 <tr><td colspan=7><a href="/games?date=##previousDate##">previous day</a>
     <div style="float:right;"><a href="/games?date=##nextDate##">next day</a></div></td></tr>
-<tr><th></th><th></th><th class='alignRight'>Away</th><th></th><th class='alignLeft'>Home</th><th></th><th>&nbsp;</th></tr>
+
 ##games-begin##
 <tr>
   <td>##time##</td>
   <td class='alignRight'><a href='/owner?id=##awayOwnerId##' style="color:##awayOwnerColor##">##awayOwner##</a></td>
   <td class='alignRight ##awayClass##'>##awayTeam##</td>
-  <td>vs.</td>
+  <td>@</td>
   <td class='##homeClass##'>##homeTeam##</td>
   <td><a href='/owner?id=##homeOwnerId##' style="color:##homeOwnerColor##">##homeOwner##</a></td>
+  <td>&nbsp;</td>
 </tr>
 ##games-end##
 <tr><td colspan=7>* Times are ET.</td></tr>
