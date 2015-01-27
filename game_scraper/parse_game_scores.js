@@ -72,7 +72,7 @@ var parse = function(h) {
     game.away_team = teams[html.match(team_re)[1]];
     html = html.substr(html.search(team_re) + 10, html.length);
 
-    if (game.status.indexOf('ET') === -1) {
+    if (game.status.indexOf('ET') === -1 && game.status.indexOf('Postponed') === -1) {
       game.away_score = html.match(score_re)[1];
       html = html.substr(html.search(score_re) + 10, html.length);
     } else {
@@ -82,7 +82,7 @@ var parse = function(h) {
     game.home_team = teams[html.match(team_re)[1]];
     html = html.substr(html.search(team_re) + 10, html.length);
 
-    if (game.status.indexOf('ET') === -1) {
+    if (game.status.indexOf('ET') === -1 && game.status.indexOf('Postponed') === -1) {
       game.home_score = html.match(score_re)[1];
       html = html.substr(html.search(score_re) + 10, html.length);
     }
