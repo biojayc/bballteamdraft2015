@@ -16,17 +16,6 @@ var getDateString = function(date) {
   return "" + yyyy + mm + dd;
 }
 
-var makeGame = function(date, time, awayTeam, homeTeam, awayScore, homeScore) {
-	return {
-		date: date,
-		time: time,
-    awayTeam: awayTeam,
-    homeTeam: homeTeam,
-    awayScore: awayScore,
-    homeScore: homeScore,
-	};
-}
-
 var makeGame = function(cols) {
   return {
     date: cols[0],
@@ -58,17 +47,16 @@ var run = function() {
     var rows = data.split('\n');
     for (var j = 0; j < rows.length; j++) {
       var row = rows[j];
-
       var cols = row.split('\t');
       if (cols.length == 7) {
         var tempGame = makeGame(cols);
         // if we already have the game and are just updating, add new data.
         if (gameHash[makeKey(tempGame)]) {
           var game = gameHash[makeKey(tempGame)];
-          if (tempGame.awayScore) {
+          if (game.awayScore.length == 0 || parseInt(tempGame.awayScore) > parseInt(game.awayScore)) {
             game.awayScore = tempGame.awayScore;
           }
-          if (tempGame.homeScore) {
+          if (game.homeScore.length == 0 || parseInt(tempGame.homeScore) > parseInt(game.homeScore)) {
             game.homeScore = tempGame.homeScore;
           }
           if (tempGame.isFinal === 'true') {
