@@ -109,7 +109,7 @@ Controller.prototype._calculateStatsForGame = function(game) {
         vsStats.pct = vsStats.wins / vsStats.gamesPlayed;
       }
     } else {
-      alert("could not find loser: " + game.date + " " + game.time);
+      log.info("could not find loser: " + game.date + " " + game.time);
     }
     var winningOwner = game.winningTeam.owner;
     var losingOwner = game.losingTeam.owner;
