@@ -27,7 +27,7 @@ var getDateString = function() {
 
 // var needsToRun = true;
 var oneMinute = 1000 * 60 * 1;
-var thirtyMinutes = oneMinute * 30;
+var tenMinutes = oneMinute * 10;
 
 var run = function() {
   // var hours = new Date().getHours();
@@ -52,4 +52,4 @@ var run = function() {
 }
 
 run();
-timers.setInterval(run, thirtyMinutes); //every 30 minutes
+timers.setInterval(run, tenMinutes); //every 30 minutes

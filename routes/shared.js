@@ -11,7 +11,7 @@ exports.init = function() {
     data.injectData(c, function() {
       cb(c);
     });
-  }, 30 * 60 * 1000);
+  }, 5 * 60 * 1000);
 }
 
 exports.controller = function() {
