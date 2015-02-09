@@ -15,6 +15,10 @@ var addSplits = function(arr, first, last) {
   return result;
 }
 
+var addslashes = function ( str ) {
+  return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+}
+
 var process_logs = function (logs_path, callback) {
   logs_path = logs_path || './logs/';
   var complete_logs = '';
@@ -60,7 +64,7 @@ var process_logs = function (logs_path, callback) {
           obj.method = split_log[6];
           obj.url = addSplits(split_log, 7);
         } else if (logType === "User-agent:") {
-          obj.user_agent = addSplits(split_log, 4);
+          obj.user_agent = addslashes(addSplits(split_log, 4));
         } else if (logType === "IPAddress:") {
           obj.ip_address = addSplits(split_log, 4);
         } else if (logType === "Route") {
