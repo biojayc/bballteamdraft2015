@@ -11,36 +11,44 @@ var owners = [
   { id: 'BS', name: 'Blake Smith', first: "Blake", initial: "Bl", color: "yellow", img: "/images/noimage.gif" }
 ];
 var teams = [
-  { id: 'CLE', name: 'Cleveland Cavaliers', owner: 'MM', conference: 'E' },
-  { id: 'DAL', name: 'Dallas Mavericks', owner: 'WT', conference: 'W' },
-  { id: 'SAS', name: 'San Antonio Spurs', owner: 'CS', conference: 'W' },
-  { id: 'LAC', name: 'LA Clippers', owner: 'BT', conference: 'W' },
-  { id: 'CHI', name: 'Chicago Bulls', owner: 'AK', conference: 'E' },
-  { id: 'OKC', name: 'Oklahoma City Thunder', owner: 'JS', conference: 'W' },
-  { id: 'HOU', name: 'Houston Rockets', owner: 'JRS', conference: 'W' },
-  { id: 'GSW', name: 'Golden State Warriors', owner: 'JRS', conference: 'W' },
-  { id: 'MEM', name: 'Memphis Grizzlies', owner: 'JS', conference: 'W' },
-  { id: 'POR', name: 'Portland Trailblazers', owner: 'AK', conference: 'W' },
-  { id: 'TOR', name: 'Toronto Raptors', owner: 'BT', conference: 'E' },
-  { id: 'WAS', name: 'Washington Wizards', owner: 'CS', conference: 'E' },
-  { id: 'IND', name: 'Indiana Pacers', owner: 'WT', conference: 'E' },
-  { id: 'CHA', name: 'Charlotte Hornets', owner: 'MM', conference: 'E' },
-  { id: 'PHX', name: 'Pheonix Suns', owner: 'BT', conference: 'W' },
-  { id: 'MIA', name: 'Miami Heat', owner: 'AK', conference: 'E' },
-  { id: 'NOP', name: 'New Orleans Pelicans', owner: 'JRS', conference: 'W' },
-  { id: 'ATL', name: 'Atlanta Hawks', owner: 'JS', conference: 'E' },
-  { id: 'DET', name: 'Detroit Pistons', owner: 'CS', conference: 'E' },
-  { id: 'NYK', name: 'New York Knicks', owner: 'WT', conference: 'E' },
-  { id: 'ORL', name: 'Orlando Magic', owner: 'MM', conference: 'E' },
-  { id: 'LAL', name: 'LA Lakers', owner: 'MM', conference: 'W' },
-  { id: 'MIN', name: 'Minnesota Timberwolves', owner: 'WT', conference: 'W' },
-  { id: 'DEN', name: 'Denver Nuggets', owner: 'CS', conference: 'W' },
-  { id: 'BKN', name: 'Brooklyn Nets', owner: 'JS', conference: 'E' },
-  { id: 'SAC', name: 'Sacramento Kings', owner: 'JRS', conference: 'W' },
-  { id: 'MIL', name: 'Milwaukee Bucks', owner: 'AK', conference: 'E' },
-  { id: 'UTA', name: 'Utah Jazz', owner: 'BT', conference: 'W' },
-  { id: 'PHI', name: 'Philadelphia 76ers', owner: 'BS', conference: 'E' },
-  { id: 'BOS', name: 'Boston Celtics', owner: 'BS', conference: 'E' },
+  { id: 'CLE', name: 'Cleveland Cavaliers', owner: 'MM', conference: 'E', division: 'C' },
+  { id: 'DAL', name: 'Dallas Mavericks', owner: 'WT', conference: 'W', division: 'SW' },
+  { id: 'SAS', name: 'San Antonio Spurs', owner: 'CS', conference: 'W', division: 'SW' },
+  { id: 'LAC', name: 'LA Clippers', owner: 'BT', conference: 'W', division: 'P' },
+  { id: 'CHI', name: 'Chicago Bulls', owner: 'AK', conference: 'E', division: 'C' },
+  { id: 'OKC', name: 'Oklahoma City Thunder', owner: 'JS', conference: 'W', division: 'NW' },
+  { id: 'HOU', name: 'Houston Rockets', owner: 'JRS', conference: 'W', division: 'SW' },
+  { id: 'GSW', name: 'Golden State Warriors', owner: 'JRS', conference: 'W', division: 'P' },
+  { id: 'MEM', name: 'Memphis Grizzlies', owner: 'JS', conference: 'W', division: 'SW' },
+  { id: 'POR', name: 'Portland Trailblazers', owner: 'AK', conference: 'W', division: 'NW' },
+  { id: 'TOR', name: 'Toronto Raptors', owner: 'BT', conference: 'E', division: 'A' },
+  { id: 'WAS', name: 'Washington Wizards', owner: 'CS', conference: 'E', division: 'SE' },
+  { id: 'IND', name: 'Indiana Pacers', owner: 'WT', conference: 'E', division: 'C' },
+  { id: 'CHA', name: 'Charlotte Hornets', owner: 'MM', conference: 'E', division: 'SE' },
+  { id: 'PHX', name: 'Pheonix Suns', owner: 'BT', conference: 'W', division: 'P' },
+  { id: 'MIA', name: 'Miami Heat', owner: 'AK', conference: 'E', division: 'SE' },
+  { id: 'NOP', name: 'New Orleans Pelicans', owner: 'JRS', conference: 'W', division: 'SW' },
+  { id: 'ATL', name: 'Atlanta Hawks', owner: 'JS', conference: 'E', division: 'SE' },
+  { id: 'DET', name: 'Detroit Pistons', owner: 'CS', conference: 'E', division: 'C' },
+  { id: 'NYK', name: 'New York Knicks', owner: 'WT', conference: 'E', division: 'A' },
+  { id: 'ORL', name: 'Orlando Magic', owner: 'MM', conference: 'E', division: 'SE' },
+  { id: 'LAL', name: 'LA Lakers', owner: 'MM', conference: 'W', division: 'P' },
+  { id: 'MIN', name: 'Minnesota Timberwolves', owner: 'WT', conference: 'W', division: 'NW' },
+  { id: 'DEN', name: 'Denver Nuggets', owner: 'CS', conference: 'W', division: 'NW' },
+  { id: 'BKN', name: 'Brooklyn Nets', owner: 'JS', conference: 'E', division: 'A' },
+  { id: 'SAC', name: 'Sacramento Kings', owner: 'JRS', conference: 'W', division: 'P' },
+  { id: 'MIL', name: 'Milwaukee Bucks', owner: 'AK', conference: 'E', division: 'C' },
+  { id: 'UTA', name: 'Utah Jazz', owner: 'BT', conference: 'W', division: 'NW' },
+  { id: 'PHI', name: 'Philadelphia 76ers', owner: 'BS', conference: 'E', division: 'A' },
+  { id: 'BOS', name: 'Boston Celtics', owner: 'BS', conference: 'E', division: 'A' },
+];
+var divisions = [
+  { id: 'A', name: 'Atlantic', conference: 'E' },
+  { id: 'C', name: 'Central', conference: 'E' },
+  { id: 'SE', name: 'Southeast', conference: 'E' },
+  { id: 'NW', name: 'Northwest', conference: 'W' },
+  { id: 'P', name: 'Pacific', conference: 'W' },
+  { id: 'SW', name: 'Southwest', conference: 'W' },
 ];
 
 var makeGame = function(cols) {
@@ -85,7 +93,7 @@ exports.injectData = function(controller, cb) {
   }
   for(var i = 0; i < teams.length; i++) {
     var team = teams[i];
-    controller.addTeam(team.id, team.name, team.owner, team.conference);
+    controller.addTeam(team.id, team.name, team.owner, team.conference, team.division);
   }
   getGames(function(games) {
     for(var i = 0; i < games.length; i++) {

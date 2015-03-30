@@ -18,11 +18,12 @@ exports.Owner = function(i,n,f,ini,im,c) {
   this.otherOwnersDataHash = {};  // used to store wins and losses vs other owners.  Owner Ids as keys
 };
 
-exports.Team = function(i,n,o,c) {
+exports.Team = function(i,n,o,c,d) {
   this.id = i;
   this.name = n;
   this.ownerId = o;
   this.conference = c;
+  this.division = d;
 
   //calculated data
   this.wins = 0;
