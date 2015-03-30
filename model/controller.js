@@ -19,8 +19,8 @@ Controller.prototype.addOwner = function(i,n,f,ini,im,c) {
   this.owners.push(owner);
 }
 // Be sure the owner of the team has already been added.
-Controller.prototype.addTeam = function(i,n,o) {
-  var team = new models.Team(i,n,o);
+Controller.prototype.addTeam = function(i,n,o,c) {
+  var team = new models.Team(i,n,o,c);
   var owner = this.ownersHash[team.ownerId];
   if (owner) {
     owner.teams.push(team);

@@ -11,36 +11,36 @@ var owners = [
   { id: 'BS', name: 'Blake Smith', first: "Blake", initial: "Bl", color: "yellow", img: "/images/noimage.gif" }
 ];
 var teams = [
-  { id: 'CLE', name: 'Cleveland Cavaliers', owner: 'MM' },
-  { id: 'DAL', name: 'Dallas Mavericks', owner: 'WT' },
-  { id: 'SAS', name: 'San Antonio Spurs', owner: 'CS' },
-  { id: 'LAC', name: 'LA Clippers', owner: 'BT' },
-  { id: 'CHI', name: 'Chicago Bulls', owner: 'AK' },
-  { id: 'OKC', name: 'Oklahoma City Thunder', owner: 'JS' },
-  { id: 'HOU', name: 'Houston Rockets', owner: 'JRS' },
-  { id: 'GSW', name: 'Golden State Warriors', owner: 'JRS' },
-  { id: 'MEM', name: 'Memphis Grizzlies', owner: 'JS' },
-  { id: 'POR', name: 'Portland Trailblazers', owner: 'AK' },
-  { id: 'TOR', name: 'Toronto Raptors', owner: 'BT' },
-  { id: 'WAS', name: 'Washington Wizards', owner: 'CS' },
-  { id: 'IND', name: 'Indiana Pacers', owner: 'WT' },
-  { id: 'CHA', name: 'Charlotte Hornets', owner: 'MM' },
-  { id: 'PHX', name: 'Pheonix Suns', owner: 'BT' },
-  { id: 'MIA', name: 'Miami Heat', owner: 'AK' },
-  { id: 'NOP', name: 'New Orleans Pelicans', owner: 'JRS' },
-  { id: 'ATL', name: 'Atlanta Hawks', owner: 'JS' },
-  { id: 'DET', name: 'Detroit Pistons', owner: 'CS' },
-  { id: 'NYK', name: 'New York Knicks', owner: 'WT' },
-  { id: 'ORL', name: 'Orlando Magic', owner: 'MM' },
-  { id: 'LAL', name: 'LA Lakers', owner: 'MM' },
-  { id: 'MIN', name: 'Minnesota Timberwolves', owner: 'WT' },
-  { id: 'DEN', name: 'Denver Nuggets', owner: 'CS' },
-  { id: 'BKN', name: 'Brooklyn Nets', owner: 'JS' },
-  { id: 'SAC', name: 'Sacramento Kings', owner: 'JRS' },
-  { id: 'MIL', name: 'Milwaukee Bucks', owner: 'AK' },
-  { id: 'UTA', name: 'Utah Jazz', owner: 'BT' },
-  { id: 'PHI', name: 'Philadelphia 76ers', owner: 'BS'  },
-  { id: 'BOS', name: 'Boston Celtics', owner: 'BS'  }
+  { id: 'CLE', name: 'Cleveland Cavaliers', owner: 'MM', conference: 'E' },
+  { id: 'DAL', name: 'Dallas Mavericks', owner: 'WT', conference: 'W' },
+  { id: 'SAS', name: 'San Antonio Spurs', owner: 'CS', conference: 'W' },
+  { id: 'LAC', name: 'LA Clippers', owner: 'BT', conference: 'W' },
+  { id: 'CHI', name: 'Chicago Bulls', owner: 'AK', conference: 'E' },
+  { id: 'OKC', name: 'Oklahoma City Thunder', owner: 'JS', conference: 'W' },
+  { id: 'HOU', name: 'Houston Rockets', owner: 'JRS', conference: 'W' },
+  { id: 'GSW', name: 'Golden State Warriors', owner: 'JRS', conference: 'W' },
+  { id: 'MEM', name: 'Memphis Grizzlies', owner: 'JS', conference: 'W' },
+  { id: 'POR', name: 'Portland Trailblazers', owner: 'AK', conference: 'W' },
+  { id: 'TOR', name: 'Toronto Raptors', owner: 'BT', conference: 'E' },
+  { id: 'WAS', name: 'Washington Wizards', owner: 'CS', conference: 'E' },
+  { id: 'IND', name: 'Indiana Pacers', owner: 'WT', conference: 'E' },
+  { id: 'CHA', name: 'Charlotte Hornets', owner: 'MM', conference: 'E' },
+  { id: 'PHX', name: 'Pheonix Suns', owner: 'BT', conference: 'W' },
+  { id: 'MIA', name: 'Miami Heat', owner: 'AK', conference: 'E' },
+  { id: 'NOP', name: 'New Orleans Pelicans', owner: 'JRS', conference: 'W' },
+  { id: 'ATL', name: 'Atlanta Hawks', owner: 'JS', conference: 'E' },
+  { id: 'DET', name: 'Detroit Pistons', owner: 'CS', conference: 'E' },
+  { id: 'NYK', name: 'New York Knicks', owner: 'WT', conference: 'E' },
+  { id: 'ORL', name: 'Orlando Magic', owner: 'MM', conference: 'E' },
+  { id: 'LAL', name: 'LA Lakers', owner: 'MM', conference: 'W' },
+  { id: 'MIN', name: 'Minnesota Timberwolves', owner: 'WT', conference: 'W' },
+  { id: 'DEN', name: 'Denver Nuggets', owner: 'CS', conference: 'W' },
+  { id: 'BKN', name: 'Brooklyn Nets', owner: 'JS', conference: 'E' },
+  { id: 'SAC', name: 'Sacramento Kings', owner: 'JRS', conference: 'W' },
+  { id: 'MIL', name: 'Milwaukee Bucks', owner: 'AK', conference: 'E' },
+  { id: 'UTA', name: 'Utah Jazz', owner: 'BT', conference: 'W' },
+  { id: 'PHI', name: 'Philadelphia 76ers', owner: 'BS', conference: 'E' },
+  { id: 'BOS', name: 'Boston Celtics', owner: 'BS', conference: 'E' },
 ];
 
 var makeGame = function(cols) {
@@ -85,7 +85,7 @@ exports.injectData = function(controller, cb) {
   }
   for(var i = 0; i < teams.length; i++) {
     var team = teams[i];
-    controller.addTeam(team.id, team.name, team.owner);
+    controller.addTeam(team.id, team.name, team.owner, team.conference);
   }
   getGames(function(games) {
     for(var i = 0; i < games.length; i++) {
