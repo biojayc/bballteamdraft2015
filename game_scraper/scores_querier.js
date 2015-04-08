@@ -24,9 +24,9 @@ var queryScores = function(date, path) {
       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
   };
   var options = {
-      hostname: 'scores.espn.go.com', 
+      hostname: 'site.api.espn.com', 
       port: 80,
-      path: '/nba/scoreboard?date=' + getDateString(date),
+      path: '/apis/site/v2/sports/basketball/nba/scoreboard?calendartype=blacklist&dates=' + getDateString(date),
       method: 'GET',
       headers: headers
   };

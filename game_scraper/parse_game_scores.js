@@ -29,31 +29,7 @@ teams["Wizards"] = "WAS";
 teams["Raptors"] = "TOR";
 teams["Timberwolves"] = "MIN";
 teams["Warriors"] = "GSW";
-/*
-var parseBefore = function(h) {
-  var games = [];
-  var game_re = /<div\s+id="\d+-gamebox"\s+class=.mod-container\s+mod-no-header-footer\s+mod-scorebox\s+mod-nba-scorebox/;
-  var time_re = /<div\sclass="game-status"><p id="\d+-statusLine1">([\w\s:]+)<\/p><\/div>/;
-  var team_re = /<a href="http:\/\/espn.go.com\/nba\/team\/_\/name\/\w+\/[\w-]+">([\w\s]+)<\/a>/;
-  var html = h;
-  while(html.match(game_re)) {
-    var game = {};
-    html = html.substr(html.search(game_re) + 50, html.length);
-    game.time = html.match(time_re)[1];
-    html = html.substr(html.search(time_re)[1] + 10, html.length);
-    if (!html.match(team_re)) { // this gets us passed the allstar game, which would cause problems
-      continue;
-    }
-    game.away_team = teams[html.match(team_re)[1]];
-    html = html.substr(html.search(team_re) + 10, html.length);
-    game.home_team = teams[html.match(team_re)[1]];
-    html = html.substr(html.search(team_re) + 10, html.length);
-    games.push(game);
-  }
-  
-  return games;
-}
-*/
+
 var parse = function(h) {
   var games = [];
   var game_re = /<div\s+id="\d+-gamebox"\s+class=.mod-container\s+mod-no-header-footer\s+mod-scorebox\s+mod-nba-scorebox/;
@@ -93,34 +69,46 @@ var parse = function(h) {
     games.push(game);
   }
 
-  return games;
-}
-/*
-var parseAfter = function(h) {
-  var games = [];
-  var game_re = /<div\s+id="\d+-gamebox"\s+class=.mod-container\s+mod-no-header-footer\s+mod-scorebox\s+mod-nba-scorebox/;
-  var team_re = /<a href="http:\/\/espn.go.com\/nba\/team\/_\/name\/\w+\/[\w-]+">([\w\s]+)<\/a>/;
-  var score_re = /<li id="\d+-\w+\d+" class="finalScore">(\d+)<\/li>/
-  var html = h;
-  while(html.match(game_re)) {
-    var game = {};
-    html = html.substr(html.search(game_re) + 50, html.length);
-    if (!html.match(team_re)) { // this gets us passed the allstar game, which would cause problems
-      continue;
+  if (games.length == 0) {
+    // For new espn page
+    try {
+      var game_data = JSON.parse(h);
+      for (var i = 0; i < game_data.events.length; i++) {
+        var gevent = game_data.events[i];
+        var game = {};
+        for (var j = 0; j < gevent.competitions.length; j++) {
+          var competition = gevent.competitions[j];
+
+          // interpret data to get time.
+          // TODO(jamiesmith) finish this.  For now, we already have all
+          // dates for all games so I don't care about completing this.
+          // Will need for next season.
+          var date = competition.date;  // e.g. 2015-04-03T23:00Z
+
+
+          for (var k = 0; k < competition.competitors.length; k++) {
+            var competitor = competition.competitors[k];
+            if (competitor.homeAway == "home") {
+              game.home_team = teams[competitor.team.name];
+              game.home_score = competitor.score;
+            } else {
+              game.away_team = teams[competitor.team.name];
+              game.away_score = competitor.score;
+            }
+          }
+          if (competition.status.type.state == "post") {
+            game.isFinal = true;
+          }
+        }
+        games.push(game);
+      }
+    } catch(e) {
+      console.log("Wasn't able to parse file.");
     }
-    game.away_team = teams[html.match(team_re)[1]];
-    html = html.substr(html.search(team_re) + 10, html.length);
-    game.away_score = html.match(score_re)[1];
-    html = html.substr(html.search(score_re) + 10, html.length);
-    game.home_team = teams[html.match(team_re)[1]];
-    html = html.substr(html.search(team_re) + 10, html.length);
-    game.home_score = html.match(score_re)[1];
-    html = html.substr(html.search(score_re) + 10, html.length);
-    games.push(game);
   }
   
   return games;
-}*/
+}
 
 // exports.parseBefore = parseBefore;
 exports.parse = parse;
