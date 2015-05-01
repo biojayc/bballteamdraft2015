@@ -57,8 +57,9 @@ var run = function() {
   var date = new Date('10/28/2014');
   var today = new Date();
   var yesterday = new Date();
+  var finalDate = new Date('04/16/2015');
   yesterday.setDate(today.getDate() - 1);
-  while (date < yesterday) {
+  while (date < yesterday && date < finalDate) {
     // console.log(getDateString(date) + '-after');
     var filename = 'cache/' + getDateString(date) + "-after";
     if (!fs.existsSync(filename)) {
@@ -69,11 +70,12 @@ var run = function() {
   }
 
   //during
-  console.log(getDateString(date) + '-during');
-  var filename = 'cache/' + getDateString(date) + "-during";
-  queryScores(date, filename);
+  if (date < finalDate) {
+    console.log(getDateString(date) + '-during');
+    var filename = 'cache/' + getDateString(date) + "-during";
+    queryScores(date, filename);
+  }
 
-  var finalDate = new Date('04/16/2015');
   while(date < finalDate) {
     // console.log(getDateString(date) + "-before");
     var filename = 'cache/' + getDateString(date) + "-before";
