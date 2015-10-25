@@ -68,7 +68,9 @@ var parse = function(h) {
           game.isFinal = true;
         }
       }
-      games.push(game);
+      
+      if (game.home_team != undefined) // prevent the allstar game from crashing front end
+        games.push(game);
     }
   } catch(e) {
     console.log("Wasn't able to parse file.");
