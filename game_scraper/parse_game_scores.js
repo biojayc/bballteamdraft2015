@@ -83,9 +83,16 @@ var parse = function(h) {
           // TODO(jamiesmith) finish this.  For now, we already have all
           // dates for all games so I don't care about completing this.
           // Will need for next season.
-          var date = competition.date;  // e.g. 2015-04-03T23:00Z
+          /*var date = competition.date.substr(
+               competition.date.indexOf('T')+1, 5);  // e.g. 2015-04-03T23:00Z
 
-
+          var hour = date.substr(0, date.indexOf(':'));
+          var hour = hour - 5;
+          var hour = hour < 0 ? hour + 24 : hour;
+          var hour = hour > 12 ? hour - 12 : hour;
+          console.log(hour);
+          */
+          game.time = competition.date;
           for (var k = 0; k < competition.competitors.length; k++) {
             var competitor = competition.competitors[k];
             if (competitor.homeAway == "home") {
@@ -110,6 +117,4 @@ var parse = function(h) {
   return games;
 }
 
-// exports.parseBefore = parseBefore;
 exports.parse = parse;
-// exports.parseAfter = parseAfter;

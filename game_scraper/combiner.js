@@ -38,7 +38,7 @@ var run = function() {
   var gameHash = {};
   for (var i = 0; i < files.length; i++) {
     var filename = files[i];
-    var date = filename.substr(0, filename.indexOf('-'));
+    var date = filename;
     // console.log(date);
 
     var data = fs.readFileSync('data/' + filename, 'utf8');

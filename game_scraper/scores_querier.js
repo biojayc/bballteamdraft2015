@@ -54,14 +54,15 @@ var queryScores = function(date, path) {
 }
 
 var run = function() {
-  var date = new Date('10/28/2014');
+  var startdate = new Date('10/27/2015');
+  var date = new Date('10/27/2015');
   var today = new Date();
   var yesterday = new Date();
-  var finalDate = new Date('04/16/2015');
+  var finalDate = new Date('04/14/2016');
   yesterday.setDate(today.getDate() - 1);
   while (date < yesterday && date < finalDate) {
     // console.log(getDateString(date) + '-after');
-    var filename = 'cache/' + getDateString(date) + "-after";
+    var filename = 'cache/' + getDateString(date) + "-postgame";
     if (!fs.existsSync(filename)) {
       console.log(filename + " does not exists.");
       queryScores(date, filename);
@@ -70,15 +71,15 @@ var run = function() {
   }
 
   //during
-  if (date < finalDate) {
-    console.log(getDateString(date) + '-during');
-    var filename = 'cache/' + getDateString(date) + "-during";
+  if (date > startdate && date < finalDate) {
+    // console.log(getDateString(date) + '-during');
+    var filename = 'cache/live';
     queryScores(date, filename);
   }
 
   while(date < finalDate) {
     // console.log(getDateString(date) + "-before");
-    var filename = 'cache/' + getDateString(date) + "-before";
+    var filename = 'cache/' + getDateString(date);
     if (!fs.existsSync(filename)) {
       console.log(filename + " does not exists.");
       queryScores(date, filename);

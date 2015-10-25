@@ -26,8 +26,8 @@ var getDateString = function() {
 }
 
 // var needsToRun = true;
-var oneMinute = 1000 * 60 * 1;
-var tenMinutes = oneMinute * 10;
+var thirtySec = 1000 * 30 * 1;
+var fiveMinutes = thirtySec * 10;
 
 var run = function() {
   // var hours = new Date().getHours();
@@ -43,8 +43,8 @@ var run = function() {
         timers.setTimeout(function() {
           console.log(getDateString() + ": Running combiner");
           combiner.run();
-        }, oneMinute);
-      }, oneMinute);
+        }, thirtySec);
+      }, thirtySec);
   //   }
   // } else {
   //   needsToRun = true;
@@ -52,4 +52,4 @@ var run = function() {
 }
 
 run();
-timers.setInterval(run, tenMinutes); //every 30 minutes
+timers.setInterval(run, fiveMinutes);

@@ -16,34 +16,25 @@ var run = function() {
     var filename = files[i];
     var cachefile = 'cache/' + filename;
     var datafile = 'data/' + filename;
-    if (filename.indexOf('after') > -1 || filename.indexOf('before') > -1 ||
-        filename.indexOf('during') > -1) {
-      if (filename.indexOf('during') > -1 || !fs.existsSync(datafile)) {
-        console.log("processing " + datafile);
-        var date = filename.substr(0, 8);
-        var html = fs.readFileSync(cachefile, 'utf8');
-        // console.log(html);
-        var games = [];
-        var games = parse_game_scores.parse(html);
-        var result = "";
-        for (var j = 0; j < games.length; j++) {
-          var game = games[j];
-          result += formatDate(date) + "\t" + (game.time ? game.time : '') + "\t" + game.away_team + "\t" + game.home_team + "\t" +
-                    (game.away_score ? game.away_score : '') + "\t" + (game.home_score ? game.home_score : '') + "\t" + 
-                    (game.isFinal ? 'true' : 'false');
-          if (j+1 < games.length) {
-            result+= "\n";
-          }
+    if (filename.indexOf('live') > -1 || !fs.existsSync(datafile)) {
+      console.log("processing " + datafile);
+      var date = filename.substr(0, 8);
+      var html = fs.readFileSync(cachefile, 'utf8');
+      // console.log(html);
+      var games = [];
+      var games = parse_game_scores.parse(html);
+      var result = "";
+      for (var j = 0; j < games.length; j++) {
+        var game = games[j];
+        result += formatDate(date) + "\t" + (game.time ? game.time : '') + "\t" + game.away_team + "\t" + game.home_team + "\t" +
+                  (game.away_score ? game.away_score : '') + "\t" + (game.home_score ? game.home_score : '') + "\t" + 
+                  (game.isFinal ? 'true' : 'false');
+        if (j+1 < games.length) {
+          result+= "\n";
         }
-        console.log(result);
-        fs.writeFileSync(datafile, result);
       }
-    } else if (filename == '1seed') {
-      if (!fs.existsSync(datafile)) {
-        console.log('Copying seed file.');
-        var data = fs.readFileSync(cachefile, 'utf8');
-        fs.writeFileSync(datafile, data);
-      }
+      // console.log(result);
+      fs.writeFileSync(datafile, result);
     }
   }
 }
