@@ -71,7 +71,7 @@ var run = function() {
   }
 
   //during
-  if (date > startdate && date < finalDate) {
+  if (today > startdate && today < finalDate) {
     // console.log(getDateString(date) + '-during');
     var filename = 'cache/live';
     queryScores(date, filename);
