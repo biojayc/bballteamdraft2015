@@ -39,7 +39,6 @@ var formatTimeZone = function(tz, t) {
        t.indexOf('T')+1, 5);  // e.g. 2015-04-03T23:00Z
   var month = Number(t.substr(5, 2));
   var day = Number(t.substr(8, 2));
-  console.log(month + "/" + day);
   var hour = time.substr(0, time.indexOf(':'));
   var m = "am";
   var hour = Number(hour) + tz; // add timezone offset
