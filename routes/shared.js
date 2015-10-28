@@ -1,5 +1,5 @@
 var Controller = require('../model/controller').Controller,
-    CacheManager = require('../cache2').CacheManager,
+    CacheManager = require('../cache').CacheManager,
     data = require('../model/data'),
     log = require('../log');
 

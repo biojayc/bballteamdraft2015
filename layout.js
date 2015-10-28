@@ -1,7 +1,7 @@
 var fs = require("fs"),
     readline = require('readline'),
     url = require('url'), 
-    CacheManager = require('./cache2').CacheManager,
+    CacheManager = require('./cache').CacheManager,
     log = require('./log');
 
 var cache = new CacheManager();

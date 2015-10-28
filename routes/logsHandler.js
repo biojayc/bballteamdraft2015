@@ -1,6 +1,6 @@
 var layout = require('../layout'),
     url = require('url'),
-    CacheManager = require('../cache2').CacheManager,
+    CacheManager = require('../cache').CacheManager,
     requestUtils = require('../requestUtils'),
     qs = require('querystring'),
     logs_processor = require('../logs_processor'),
