@@ -49,7 +49,7 @@ var formatTimeZone = function(tz, t) {
   }
 
   if (month < 11 || (month == 11 && day == 1)) {
-    hour++;
+    hour++; // dst
   }
 
   if (hour > 12) {
