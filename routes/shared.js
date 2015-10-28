@@ -29,6 +29,38 @@ var formatWinningPercent = function(pct) {
 }
 exports.formatWinningPercent = formatWinningPercent;
 
+var timezones = {};
+timezones.EASTERN = -5;
+timezones.CENTRAL = -6;
+timezones.MOUNTAIN = -7;
+timezones.PACIFIC = -8;
+var formatTimeZone = function(tz, t) {
+  var time = t.substr(
+       t.indexOf('T')+1, 5);  // e.g. 2015-04-03T23:00Z
+  var month = Number(t.substr(5, 2));
+  var day = Number(t.substr(8, 2));
+  console.log(month + "/" + day);
+  var hour = time.substr(0, time.indexOf(':'));
+  var m = "am";
+  var hour = Number(hour) + tz; // add timezone offset
+
+  if (hour < 0) {
+    hour += 24;
+    day--;
+  }
+
+  if (month < 11 || (month == 11 && day == 1)) {
+    hour++;
+  }
+
+  if (hour > 12) {
+    hour -= 12;
+    m = "pm";
+  }
+  var minute = time.substr(time.indexOf(':') + 1, 2);
+  return hour + ":" + minute + m;
+}
+
 exports.createScores = function(controller) {
   var scores = [];
   var owners = controller.owners.slice();
@@ -82,7 +114,7 @@ exports.createGames = function(games) {
   var container = [];
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
-    var time = game.time.replace(" ET", "");
+    var time = formatTimeZone(timezones.EASTERN, game.time);
     var awayTeamName = (game.awayScore ? '(' + game.awayScore + ') ' : '') + game.awayTeam.name;
     var homeTeamName = game.homeTeam.name + (game.homeScore ? ' (' + game.homeScore + ')' : '');
     var awayOwner = game.awayTeam.owner;
