@@ -24,6 +24,8 @@ var formatWinningPercent = function(pct) {
     winningPercent = "000";
   } else if (winningPercent < 100) {
     winningPercent = "0" + winningPercent;
+  } else if (winningPercent == 1000) {
+    return "1.00";
   }
   return "." + winningPercent;
 }
