@@ -64,7 +64,8 @@ var parse = function(h) {
             game.away_score = competitor.score;
           }
         }
-        if (competition.status.type.state == "post") {
+        if (competition.status.type.state == "post" &&
+            competition.status.type.name != "STATUS_POSTPONED") {
           game.isFinal = true;
         }
       }
