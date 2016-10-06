@@ -54,11 +54,11 @@ var queryScores = function(date, path) {
 }
 
 var run = function() {
-  var startdate = new Date('10/27/2015');
-  var date = new Date('10/27/2015');
+  var startdate = new Date('10/25/2016');
+  var date = new Date('10/25/2016');
   var today = new Date();
   var yesterday = new Date();
-  var finalDate = new Date('04/14/2016');
+  var finalDate = new Date('04/13/2017');
   yesterday.setDate(today.getDate() - 1);
   while (date < yesterday && date < finalDate) {
     // console.log(getDateString(date) + '-after');
