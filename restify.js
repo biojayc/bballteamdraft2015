@@ -7,28 +7,28 @@ var fs = require("fs"),
 var routes = [];
 var errorHandler;
 
-var createGuid = (function() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-               .toString(16)
-               .substring(1);
-  }
-  return function() {
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-           s4() + '-' + s4() + s4() + s4();
-  };
-})();
+function parseCookies (request) {
+  var list = {},
+    rc = request.headers.cookie;
 
-var Session = function() {
-  this.requestId = createGuid();
+  rc && rc.split(';').forEach(function( cookie ) {
+    var parts = cookie.split('=');
+    list[parts.shift().trim()] = decodeURI(parts.join('='));
+  });
+
+  return list;
+}
+
+var Session = function(req) {
+  this.sessionId = parseCookies(req)["SessionId"];
 }
 
 var handleRequest = function(req, res) {
-  var session = new Session();
+  var session = new Session(req);
   var path = url.parse(req.url).pathname;
-  log.info("Incoming Request for: " + req.method + " " + path, session.requestId);
-  log.info("User-agent: " + req.headers['user-agent'], session.requestId);
-  log.info("IPAddress: " + req.connection.remoteAddress, session.requestId);
+  log.info("Incoming Request for: " + req.method + " " + path, session.sessionId);
+  log.info("User-agent: " + req.headers['user-agent'], session.sessionId);
+  log.info("IPAddress: " + req.connection.remoteAddress, session.sessionId);
   var handler = findRoute(path, req.method, session);
   handler(req, res, session);
 }
@@ -37,18 +37,18 @@ var findRoute = function(path, method, session) {
   for (var i = 0; i < routes.length; i++) {
     if (path.match("^" + routes[i].route + "$") && 
         (method == routes[i].method || routes[i].method == "*")) {
-      log.info("Route found: " + routes[i].method + " " + routes[i].route, session.requestId);
+      log.info("Route found: " + routes[i].method + " " + routes[i].route, session.sessionId);
       return routes[i].handler;
     }
   }
   if (errorHandler) {
-    log.info("No Route found, returning 404 error handler", session.requestId);
+    log.info("No Route found, returning 404 error handler", session.sessionId);
     return errorHandler;
   }
 
   // If 404 and no 404 handler.
   return function(req, res) {
-    log.info("No Route found, and no 404 handler.  Returning default error handler.", session.requestId);
+    log.info("No Route found, and no 404 handler.  Returning default error handler.", session.sessionId);
     res.writeHead(404, {'Content-Type': 'text/html'});
     res.end("Sorry, the page you are looking for doesn't exist.");
   }
@@ -96,7 +96,7 @@ var registerStatic = function(path, realpath) {
       
       fs.exists('.' + filename, function(exists) {
         if (exists) {
-          log.info("Returning " + filename, session.requestId);
+          log.info("Returning " + filename, session.sessionId);
           var raw = fs.createReadStream("." + filename);
           raw.on('error', function(err) {
             returnError(req, res, session);

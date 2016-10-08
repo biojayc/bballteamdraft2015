@@ -18,7 +18,8 @@ logsHandler.init();
 restify.startWebServer(1337);
 
 restify.registerRoute("/", "GET", mainHandler.home);
-restify.registerRoute("/login", "GET", loginHandler.home);
+restify.registerRoute("/login", "GET", loginHandler.login);
+restify.registerRoute("/logout", "GET", loginHandler.logout);
 restify.registerRoute("/owner", "GET", ownerHandler.home);
 restify.registerRoute("/games", "GET", gamesHandler.home);
 restify.registerRoute("/team", "GET", teamHandler.home);

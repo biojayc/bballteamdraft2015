@@ -5,7 +5,7 @@ PAGES/INFO
 
 
 INFRASTRUCTURE
-* Implement a cookie with session id.
+* Move the session id to server side instead of client side.
 * Rework layout engine to not require newing.
 * Build log processor with dashboard.  Maybe overhall logging.
 * Add support to layouts for an include section.  Used to include the games html.

@@ -21,7 +21,7 @@ var createOwners = function(controller) {
   return container;
 }
 
-var home = function(req, res) {
+var login = function(req, res) {
   var controller = shared.controller();
   var scores = shared.createScores(controller);
   var winningImage = shared.getWinningImage(controller);
@@ -44,4 +44,10 @@ var home = function(req, res) {
         });
 }
 
-exports.home = home;
+var logout = function(req, res) {
+  res.writeHead(302, {'Location': '/', 'Set-Cookie': 'owner='});
+  res.end("");
+}
+
+exports.login = login;
+exports.logout = logout;

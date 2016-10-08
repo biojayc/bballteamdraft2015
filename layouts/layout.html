@@ -49,7 +49,7 @@
 	<li><a href='/'>Home</a></li><li>|</li>
 	<li><a href='/conference?c=W'>Western Conference</a></li><li>|</li>
 	<li><a href='/conference?c=E'>Eastern Conference</a></li><li>|</li>
-	<li><a style="cursor:pointer;" onClick="setCookie('owner', '', 120);window.location='/'">Log out</a></li>
+	<li><a href='/logout'>Log out</a></li>
 </ul>
 
 ##BODYTEXT##
@@ -59,7 +59,8 @@
 <div id ='footer'>&copy; 2016 Jamie Smith</div>
 </div>
 <script lang="javascript">
-checkCookie();
+generateSession();
+checkOwner();
 </script>
 </body>
 </html>
