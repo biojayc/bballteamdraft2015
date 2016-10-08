@@ -1,5 +1,6 @@
 var restify = require('./restify'),
     mainHandler = require('./routes/mainHandler'),
+    loginHandler = require('./routes/loginHandler'),
     ownerHandler = require('./routes/ownerHandler'),
     gamesHandler = require('./routes/gamesHandler'),
     teamHandler = require('./routes/teamHandler'),
@@ -17,6 +18,7 @@ logsHandler.init();
 restify.startWebServer(1337);
 
 restify.registerRoute("/", "GET", mainHandler.home);
+restify.registerRoute("/login", "GET", loginHandler.home);
 restify.registerRoute("/owner", "GET", ownerHandler.home);
 restify.registerRoute("/games", "GET", gamesHandler.home);
 restify.registerRoute("/team", "GET", teamHandler.home);
