@@ -10,6 +10,10 @@ var formatDate = function(dateStr) {
   return newDate;
 }
 
+var formatKey = function(dateStr, away, home) {
+  return dateStr + away + home;
+}
+
 var run = function() {
   var files = fs.readdirSync('cache');
   for (var i = 0; i < files.length; i++) {
@@ -26,7 +30,8 @@ var run = function() {
       var result = "";
       for (var j = 0; j < games.length; j++) {
         var game = games[j];
-        result += formatDate(date) + "\t" + (game.time ? game.time : '') + "\t" + game.away_team + "\t" + game.home_team + "\t" +
+        result += formatKey(date, game.away_team, game.home_team) + "\t" + formatDate(date) + "\t" + 
+                  (game.time ? game.time : '') + "\t" + game.away_team + "\t" + game.home_team + "\t" +
                   (game.away_score ? game.away_score : '') + "\t" + (game.home_score ? game.home_score : '') + "\t" + 
                   (game.isFinal ? 'true' : 'false');
         if (j+1 < games.length) {
@@ -39,3 +44,4 @@ var run = function() {
   }
 }
 exports.run = run;
+run();

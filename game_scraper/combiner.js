@@ -18,18 +18,15 @@ var getDateString = function(date) {
 
 var makeGame = function(cols) {
   return {
-    date: cols[0],
-    time: cols[1],
-    awayTeam: cols[2],
-    homeTeam: cols[3],
-    awayScore: cols[4],
-    homeScore: cols[5],
-    isFinal: cols[6],
+    key: cols[0],
+    date: cols[1],
+    time: cols[2],
+    awayTeam: cols[3],
+    homeTeam: cols[4],
+    awayScore: cols[5],
+    homeScore: cols[6],
+    isFinal: cols[7],
   }
-}
-
-var makeKey = function(game) {
-  return game.date + "-" + game.homeTeam;
 }
 
 var run = function() {
@@ -48,11 +45,11 @@ var run = function() {
     for (var j = 0; j < rows.length; j++) {
       var row = rows[j];
       var cols = row.split('\t');
-      if (cols.length == 7) {
+      if (cols.length == 8) {
         var tempGame = makeGame(cols);
         // if we already have the game and are just updating, add new data.
-        if (gameHash[makeKey(tempGame)]) {
-          var game = gameHash[makeKey(tempGame)];
+        if (gameHash[tempGame.key]) {
+          var game = gameHash[tempGame.key];
           if (game.awayScore.length == 0 || parseInt(tempGame.awayScore) > parseInt(game.awayScore)) {
             game.awayScore = tempGame.awayScore;
           }
@@ -67,7 +64,7 @@ var run = function() {
           }
         } else {
           // if we don't have the game yet, just make it and add.
-          gameHash[makeKey(tempGame)] = tempGame;
+          gameHash[tempGame.key] = tempGame;
           games.push(tempGame);
         }
       }
@@ -77,7 +74,7 @@ var run = function() {
   var result = "";
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
-    result += game.date + "\t" + game.time + "\t" + game.awayTeam + "\t" + 
+    result += game.key + "\t" + game.date + "\t" + game.time + "\t" + game.awayTeam + "\t" + 
               game.homeTeam + "\t" + game.awayScore + "\t" + game.homeScore +
               "\t" + game.isFinal;
     if (i+1 < games.length) {
@@ -88,3 +85,4 @@ var run = function() {
   fs.writeFileSync('final/' + getDateString(new Date()) + '-final', result);
 }
 exports.run = run;
+run();
