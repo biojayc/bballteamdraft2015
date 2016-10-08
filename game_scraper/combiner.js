@@ -81,8 +81,9 @@ var run = function() {
       result += "\n";
     }
   }
-
-  fs.writeFileSync('final/' + getDateString(new Date()) + '-final', result);
+  var filename = 'final/' + getDateString(new Date()) + '-final';
+  fs.writeFileSync(filename, result);
+  return filename;
 }
 exports.run = run;
 run();

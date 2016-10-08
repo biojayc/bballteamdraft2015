@@ -88,6 +88,21 @@ var getGames = function(cb) {
   });
 }
 
+var getGames2 = function(cb) {
+  var games = [];
+  fs.readFile("./data/games", 'utf8', function(err, data) {
+    var rows = data.split('\n');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var cols = row.split('\t');
+      if (cols.length == 8) {
+        games.push(makeGame(cols));
+      }
+    }
+    cb(games);
+  });
+}
+
 exports.injectData = function(controller, cb) {
   for(var i = 0; i < owners.length; i++) {
     var owner = owners[i];
@@ -97,7 +112,7 @@ exports.injectData = function(controller, cb) {
     var team = teams[i];
     controller.addTeam(team.id, team.name, team.owner, team.conference, team.division);
   }
-  getGames(function(games) {
+  getGames2(function(games) {
     for(var i = 0; i < games.length; i++) {
       var game = games[i];
       controller.addGame(game.key, game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore),
