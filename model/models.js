@@ -36,7 +36,8 @@ exports.Team = function(i,n,o,c,d) {
   this.otherTeamsDataHash = {};  // used to store wins and losses vs other teams.  Team Ids as keys
 };
 
-exports.Game = function(date, time, awayId, homeId, awayScore, homeScore, isFinal) {
+exports.Game = function(key, date, time, awayId, homeId, awayScore, homeScore, isFinal) {
+  this.key = key;
   this.date = date;
   this.time = time;
   this.awayId = awayId;

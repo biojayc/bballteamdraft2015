@@ -32,8 +32,8 @@ Controller.prototype.addTeam = function(i,n,o,c,d) {
 }
 // Be sure the teams that are in the game have already been added.
 Controller.prototype.addGame = 
-    function(date, time, awayId, homeId, awayScore, homeScore, isFinal) {
-  var game = new models.Game(date, time, awayId, homeId, awayScore, homeScore, isFinal);
+    function(key, date, time, awayId, homeId, awayScore, homeScore, isFinal) {
+  var game = new models.Game(key, date, time, awayId, homeId, awayScore, homeScore, isFinal);
   this._calculateStatsForGame(game);
   if (!this.gamesHash[game.date]) {
     this.gamesHash[game.date] = [];

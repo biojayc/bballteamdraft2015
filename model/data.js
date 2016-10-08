@@ -55,13 +55,14 @@ var divisions = [
 
 var makeGame = function(cols) {
   return {
-    date: cols[0],
-    time: cols[1],
-    awayId: cols[2],
-    homeId: cols[3],
-    awayScore: cols[4],
-    homeScore: cols[5],
-    isFinal: cols[6],
+    key: cols[0],
+    date: cols[1],
+    time: cols[2],
+    awayId: cols[3],
+    homeId: cols[4],
+    awayScore: cols[5],
+    homeScore: cols[6],
+    isFinal: cols[7],
   }
 }
 
@@ -77,13 +78,12 @@ var getGames = function(cb) {
         for (var i = 0; i < rows.length; i++) {
           var row = rows[i];
           var cols = row.split('\t');
-          if (cols.length == 7) {
+          if (cols.length == 8) {
             games.push(makeGame(cols));
           }
         }
         cb(games);
       });
-
     }
   });
 }
@@ -100,9 +100,9 @@ exports.injectData = function(controller, cb) {
   getGames(function(games) {
     for(var i = 0; i < games.length; i++) {
       var game = games[i];
-      controller.addGame(game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore), parseInt(game.homeScore), game.isFinal == 'true');
+      controller.addGame(game.key, game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore),
+                         parseInt(game.homeScore), game.isFinal == 'true');
     }
     cb();
   });
-  
 }
