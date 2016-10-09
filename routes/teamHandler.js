@@ -131,12 +131,7 @@ var home = function(req, res) {
     vsTeams: vsTeams,
     games: games,
   };
-  new layout.LayoutEngine(
-      "layouts/team.html", "layouts/layout.html", obj).render(function(html) {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(html);
-      });
-  
+  layout.create("layouts/team.html", "layouts/layout.html", obj).renderResponse(res);  
 }
 
 exports.home = home;

@@ -45,12 +45,7 @@ var home = function(req, res) {
     teams: teams,
     image: winningImage,
   };
-  new layout.LayoutEngine(
-      "layouts/index.html", "layouts/layout.html", obj).render(
-        function(html) {
-          res.writeHead(200, {'Content-Type': 'text/html'});
-          res.end(html);
-        });
+  layout.create("layouts/index.html", "layouts/layout.html", obj).renderResponse(res);
 }
 
 exports.home = home;

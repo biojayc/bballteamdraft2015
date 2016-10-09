@@ -22,10 +22,7 @@ var home = function (req, res) {
     requests: requests,
   };
 
-  new layout.LayoutEngine('layouts/logs_dashboard.html',undefined, vars).render(function(html) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(html);
-  });
+  layout.create("layouts/logs_dashboard.html", undefined, vars).renderResponse(res);
 }
 
 exports.init = init;

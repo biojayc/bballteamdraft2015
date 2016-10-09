@@ -115,5 +115,22 @@ LayoutEngine.prototype.render = function(callback) {
       }
     }, this.bodyFile, this.layoutFile);
 }
+LayoutEngine.prototype.renderResponse = function(res) {
+  this.render(function(html) {this.defaultRenderMethod(res, html)}.bind(this));
+}
+LayoutEngine.prototype.defaultRenderMethod = function(res, html) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(html);
+}
+var create = function(bodyFile, layoutFile, vars) {
+  return new LayoutEngine(bodyFile, layoutFile, vars);
+}
 
-exports.LayoutEngine = LayoutEngine;
+// This method allows you to override the defaultRenderMethod above 
+// with one that does something else if you prefer.
+var registerDefaultRenderMethod = function(funct) {
+  LayoutEngine.prototype.defaultRenderMethod = funct;
+}
+
+exports.create = create;
+exports.registerDefaultRenderMethod = registerDefaultRenderMethod;

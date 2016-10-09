@@ -36,12 +36,7 @@ var login = function(req, res) {
     owners: owners,
   };
 
-  new layout.LayoutEngine(
-      "layouts/login.html", "layouts/layout.html", obj).render(
-        function(html) {
-          res.writeHead(200, {'Content-Type': 'text/html'});
-          res.end(html);
-        });
+  layout.create("layouts/login.html", "layouts/layout.html", obj).renderResponse(res);
 }
 
 var logout = function(req, res) {
