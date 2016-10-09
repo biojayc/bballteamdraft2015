@@ -2,9 +2,11 @@ var layout = require('../layout'),
     url = require('url');
 
 var error = function(req, res) {
-  var text = new layout.LayoutEngine("layouts/error.html").render();
-  res.writeHead(404, {'Content-Type': 'text/html'});
-  res.end(text);
+  new layout.LayoutEngine("layouts/error.html").render(function(html) {
+    res.writeHead(404, {'Content-Type': 'text/html'});
+    res.end(html);	
+  });
+  
 }
 
 exports.error = error;
