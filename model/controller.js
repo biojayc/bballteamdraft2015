@@ -1,7 +1,8 @@
 var data = require('./data'),
     util = require('./util'),
     models = require('./models'),
-    log = require('../log');
+    log = require('../log'),
+    fs = require('fs');
 
 // Controller
 var Controller = function() {
@@ -11,6 +12,8 @@ var Controller = function() {
   this.teamsHash = {};  // keyed by id.  value is team object.
   this.games = [];
   this.gamesHash = {};  // keyed by date.  value is array of games.
+  this.challenges = [];
+  this.challengesHash = {}; // keyed by games key. value is challenge object.
 };
 // Add an owner before adding any of his teams or games.
 Controller.prototype.addOwner = function(i,n,f,ini,im,c) {
@@ -34,13 +37,24 @@ Controller.prototype.addTeam = function(i,n,o,c,d) {
 Controller.prototype.addGame = 
     function(key, date, time, awayId, homeId, awayScore, homeScore, isFinal) {
   var game = new models.Game(key, date, time, awayId, homeId, awayScore, homeScore, isFinal);
-  this._calculateStatsForGame(game);
+  // this._calculateStatsForGame(game);
   if (!this.gamesHash[game.date]) {
     this.gamesHash[game.date] = [];
   }
   this.gamesHash[game.date].push(game);
   this.games.push(game);
   return game;
+}
+Controller.prototype.addChallenge =
+    function(key, acceptedChallenge, newChallenge, awayChallengeBit, homeChallengeBit) {
+  var challenge = new models.Challenge(key, acceptedChallenge, newChallenge, awayChallengeBit, homeChallengeBit);
+  this.challengesHash[key] = challenge;
+  this.challenges.push(challenge);
+}
+Controller.prototype.calculate = function() {
+  for (var i = 0; i < this.games.length; i++) {
+    this._calculateStatsForGame(this.games[i]);
+  }
 }
 Controller.prototype._calculateStatsForGame = function(game) {
   // Joining game and teams.
@@ -114,6 +128,12 @@ Controller.prototype._calculateStatsForGame = function(game) {
     var winningOwner = game.winningTeam.owner;
     var losingOwner = game.losingTeam.owner;
     if (winningOwner) {
+      var challenge = this.challengesHash[game.key];
+      var points = 1;
+      if (challenge) {
+        points += challenge.acceptedChallenge;
+      }
+      winningOwner.points += points;
       winningOwner.wins++;
       winningOwner.gamesPlayed++;
       winningOwner.pct = winningOwner.wins / winningOwner.gamesPlayed;
@@ -134,6 +154,12 @@ Controller.prototype._calculateStatsForGame = function(game) {
       }
     }
     if (losingOwner) {
+      var challenge = this.challengesHash[game.key];
+      var points = 0;
+      if (challenge) {
+        points += challenge.acceptedChallenge;
+      }
+      losingOwner.points -= points;
       losingOwner.losses++;
       losingOwner.gamesPlayed++;
       losingOwner.pct = losingOwner.wins / losingOwner.gamesPlayed;
@@ -165,6 +191,23 @@ Controller.prototype.getGamesByDateOffset = function(offset) {
 // use mm/dd/yyyy
 Controller.prototype.getGamesByDate = function(date) {
   return this.gamesHash[date] || [];
+}
+Controller.prototype.saveChallenges = function(cb) {
+  // save them to disk
+  log.info("Saving challenges...");
+  var data = "";
+  for(var i = 0; i < this.games.length; i++) {
+    var game = this.games[i];
+    var challenge = this.challengesHash[game.key];
+    if (!challenge) {
+      challenge = new models.Challenge(game.key, 0, 0, 0, 0);
+    }
+    data += challenge.key + "\t" + challenge.acceptedChallenge + "\t" + challenge.newChallenge + "\t" +
+            (challenge.awayChallengeBit ? 'true' : 'false') + "\t" + (challenge.homeChallengeBit ? 'true' : 'false') + "\n";
+  }
+  fs.writeFile('./data/challenges', data, 'utf8', function(err) {
+    cb();
+  });
 }
 
 exports.Controller = Controller;

@@ -66,6 +66,16 @@ var makeGame = function(cols) {
   }
 }
 
+var makeChallenge = function(cols) {
+  return {
+    key: cols[0],
+    acceptedChallenge: cols[1],
+    newChallenge: cols[2],
+    awayChallengeBit: cols[3],
+    homeChallengeBit: cols[4],
+  }
+}
+
 var getGames = function(cb) {
   var games = [];
   fs.readdir('./game_scraper/final/', function(err, files) {
@@ -103,6 +113,21 @@ var getGames2 = function(cb) {
   });
 }
 
+var getChallenges = function(cb) {
+  var challenges = [];
+  fs.readFile("./data/challenges", "utf8", function(err, data) {
+    var rows = data.split('\n');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var cols = row.split('\t');
+      if (cols.length == 5) {
+        challenges.push(makeChallenge(cols));
+      }
+    }
+    cb(challenges);
+  });
+}
+
 exports.injectData = function(controller, cb) {
   for(var i = 0; i < owners.length; i++) {
     var owner = owners[i];
@@ -118,6 +143,14 @@ exports.injectData = function(controller, cb) {
       controller.addGame(game.key, game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore),
                          parseInt(game.homeScore), game.isFinal == 'true');
     }
-    cb();
+    getChallenges(function(challenges) {
+      for (var i = 0; i < challenges.length; i++) {
+        var challenge = challenges[i];
+        controller.addChallenge(challenge.key, parseInt(challenge.acceptedChallenge), parseInt(challenge.newChallenge),
+                                challenge.awayChallengeBit == 'true', challenge.homeChallengeBit == 'true');
+      }
+      controller.calculate();
+      cb();
+    })
   });
 }

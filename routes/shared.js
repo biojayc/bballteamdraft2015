@@ -6,11 +6,22 @@ var Controller = require('../model/controller').Controller,
 var cache = new CacheManager();
 exports.init = function() {
   cache.add('controller', function(cb) {
-    log.info("Reloading controller into cache.");
-    var c = new Controller();
-    data.injectData(c, function() {
-      cb(c);
-    });
+    var controller = cache.get('controller');
+    if (controller) {
+      controller.saveChallenges(function() {
+        log.info("Reloading controller into cache.");
+        var c = new Controller();
+        data.injectData(c, function() {
+          cb(c);
+        });
+      });
+    } else {
+      log.info("Reloading controller into cache.");
+      var c = new Controller();
+      data.injectData(c, function() {
+        cb(c);
+      });
+    }
   }, 5 * 60 * 1000);
 }
 
@@ -65,10 +76,10 @@ var formatTimeZone = function(tz, t) {
 exports.createScores = function(controller) {
   var scores = [];
   var owners = controller.owners.slice();
-  owners.sort(function(a, b){return b.pct-a.pct});
+  owners.sort(function(a, b){return b.points-a.points});
   for (var i = 0; i < owners.length; i++) {
     var owner = owners[i];
-    scores.push({ name: owner.name, wins: owner.wins, pct: formatWinningPercent(owner.pct), 
+    scores.push({ name: owner.name, wins: owner.points, pct: formatWinningPercent(owner.pct), 
                 id: owner.id, color: owner.color });
   }
   return scores;

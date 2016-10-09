@@ -7,6 +7,7 @@ exports.Owner = function(i,n,f,ini,im,c) {
   this.color = c;
   
   //calculated data
+  this.points = 0;
   this.wins = 0;
   this.losses = 0;
   this.gamesPlayed = 0;
@@ -52,3 +53,11 @@ exports.Game = function(key, date, time, awayId, homeId, awayScore, homeScore, i
   this.winningTeam;
   this.losingTeam;
 };
+
+exports.Challenge = function(key, acceptedChallenge, newChallenge, awayChallengeBit, homeChallengeBit) {
+  this.key = key;
+  this.acceptedChallenge = acceptedChallenge;
+  this.newChallenge = newChallenge;
+  this.awayChallengeBit = awayChallengeBit;
+  this.homeChallengeBit = homeChallengeBit;
+}

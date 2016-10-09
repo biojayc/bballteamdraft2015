@@ -49,7 +49,7 @@ var getVsOwners = function(controller, owner) {
 
 var getGames = function(controller, owner, games) {
   var container = [];
-  var wins = 0, losses = 0;
+  var wins = 0, losses = 0, totalPoints = 0;
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
     // filter out games that aren't for the current owner.
@@ -78,29 +78,39 @@ var getGames = function(controller, owner, games) {
         oppOwnerId = game.awayTeam.owner.id;
       }
     }
+    var challenge = controller.challengesHash[game.key];
+    var bid = 0;
+    if (challenge) {
+      bid = challenge.acceptedChallenge;
+    }
     var score = "";
     var scoreClass = "";
     var wl = "";
+    var points = "";
     if (game.winningTeam) {
       var winningOwner = game.winningTeam.owner;
       if (game.winningTeam.ownerId == owner.id && game.losingTeam.ownerId == owner.id) {
-        var score = "WL " + teamScore + " - " + oppTeamScore
-        var scoreClass = "winloss";
+        score = "WL " + teamScore + " - " + oppTeamScore
+        scoreClass = "winloss";
+        totalPoints += 1;
         wins++;
         losses++;
         // var ownerName = winningOwner ? winningOwner.name : "";
       } else if (game.winningTeam.ownerId == owner.id) {
-        var score = "W " + teamScore + " - " + oppTeamScore
-        var scoreClass = 'win';
+        score = "W " + teamScore + " - " + oppTeamScore
+        scoreClass = 'win';
+        totalPoints += 1 + bid;
         wins++;
         // var ownerName = winningOwner ? winningOwner.name : "";
       } else {
-        var score = "L " + oppTeamScore + " - " + teamScore
-        var scoreClass = 'loss';
+        score = "L " + oppTeamScore + " - " + teamScore
+        scoreClass = 'loss';
+        totalPoints -= bid;
         losses++;
         // var ownerName = winningOwner ? winningOwner.name : "";
       }
-      var wl = wins + " - " + losses;
+      wl = wins + " - " + losses;
+      points = totalPoints;
     }
     container.push({
       date: game.date,
@@ -108,7 +118,8 @@ var getGames = function(controller, owner, games) {
       oppName: oppTeamName,
       score: score,
       scoreClass: scoreClass,
-      wl: wl,
+      bid: bid > 0 ? bid : "",
+      points: points,
       oppOwnerName: oppOwnerName,
       oppOwnerColor: oppOwnerColor,
       oppOwnerId: oppOwnerId,
