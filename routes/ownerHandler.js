@@ -47,35 +47,41 @@ var getVsOwners = function(controller, owner) {
   return container;
 }
 
-var getGames = function(controller, owner) {
+var getGames = function(controller, owner, games) {
   var container = [];
-  var games = owner.games;
   var wins = 0, losses = 0;
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
-    if (game.winningTeam) {
-      var oppOwnerName = '', oppOwnerColor = '', oppOwnerId = '';
-      if (game.awayTeam.ownerId == owner.id) {
-        var oppTeamScore = game.homeScore;
-        var teamScore = game.awayScore;
-        var teamName = game.awayTeam.name;
-        var oppTeamName = "@ " + game.homeTeam.name;
-        if (game.homeTeam.owner) {
-          oppOwnerName = game.homeTeam.owner.name;
-          oppOwnerColor = game.homeTeam.owner.color;
-          oppOwnerId = game.homeTeam.owner.id;
-        }
-      } else {
-        var oppTeamScore = game.awayScore;
-        var teamScore = game.homeScore;
-        var teamName = game.homeTeam.name;
-        var oppTeamName = "vs " + game.awayTeam.name;
-        if (game.awayTeam.owner) {
-          oppOwnerName = game.awayTeam.owner.name;
-          oppOwnerColor = game.awayTeam.owner.color;
-          oppOwnerId = game.awayTeam.owner.id;
-        }
+    // filter out games that aren't for the current owner.
+    if (owner.id != game.homeTeam.ownerId && owner.id != game.awayTeam.ownerId) {
+      continue;
+    }
+    var oppOwnerName = '', oppOwnerColor = '', oppOwnerId = '';
+    if (game.awayTeam.ownerId == owner.id) {
+      var oppTeamScore = game.homeScore;
+      var teamScore = game.awayScore;
+      var teamName = game.awayTeam.name;
+      var oppTeamName = "@ " + game.homeTeam.name;
+      if (game.homeTeam.owner) {
+        oppOwnerName = game.homeTeam.owner.name;
+        oppOwnerColor = game.homeTeam.owner.color;
+        oppOwnerId = game.homeTeam.owner.id;
       }
+    } else {
+      var oppTeamScore = game.awayScore;
+      var teamScore = game.homeScore;
+      var teamName = game.homeTeam.name;
+      var oppTeamName = "vs " + game.awayTeam.name;
+      if (game.awayTeam.owner) {
+        oppOwnerName = game.awayTeam.owner.name;
+        oppOwnerColor = game.awayTeam.owner.color;
+        oppOwnerId = game.awayTeam.owner.id;
+      }
+    }
+    var score = "";
+    var scoreClass = "";
+    var wl = "";
+    if (game.winningTeam) {
       var winningOwner = game.winningTeam.owner;
       if (game.winningTeam.ownerId == owner.id && game.losingTeam.ownerId == owner.id) {
         var score = "WL " + teamScore + " - " + oppTeamScore
@@ -95,18 +101,18 @@ var getGames = function(controller, owner) {
         // var ownerName = winningOwner ? winningOwner.name : "";
       }
       var wl = wins + " - " + losses;
-      container.push({
-        date: game.date,
-        name: teamName,
-        oppName: oppTeamName,
-        score: score,
-        scoreClass: scoreClass,
-        wl: wl,
-        oppOwnerName: oppOwnerName,
-        oppOwnerColor: oppOwnerColor,
-        oppOwnerId: oppOwnerId,
-      });
     }
+    container.push({
+      date: game.date,
+      name: teamName,
+      oppName: oppTeamName,
+      score: score,
+      scoreClass: scoreClass,
+      wl: wl,
+      oppOwnerName: oppOwnerName,
+      oppOwnerColor: oppOwnerColor,
+      oppOwnerId: oppOwnerId,
+    });
   }
   return container;
 }
@@ -134,7 +140,7 @@ var home = function(req, res) {
 
   var teams = getOwnerTeams(controller, owner);
   var vsOwners = getVsOwners(controller, owner);
-  var games = getGames(controller, owner);
+  var games = getGames(controller, owner, controller.games);
   var obj = { 
     score: scores,
     vstop: vsTop,
