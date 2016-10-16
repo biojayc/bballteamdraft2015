@@ -163,13 +163,13 @@ Controller.prototype._calculateStatsForGame = function(game) {
       losingOwner.losses++;
       losingOwner.gamesPlayed++;
       losingOwner.pct = losingOwner.wins / losingOwner.gamesPlayed;
-      // so that we don't add a game twice if both teams are owned by the same owner,
-      // we need to make sure the winning and losing owner isn't the same.
-      if (winningOwner.id != losingOwner.id) {
-        losingOwner.games.push(game);
-        losingOwner.gamesHash[game.date] = game;
-      }
       if (winningOwner) {
+        // so that we don't add a game twice if both teams are owned by the same owner,
+        // we need to make sure the winning and losing owner isn't the same.
+        if (winningOwner.id != losingOwner.id) {
+          losingOwner.games.push(game);
+          losingOwner.gamesHash[game.date] = game;
+        }
         if (!losingOwner.otherOwnersDataHash[winningOwner.id]) {
           losingOwner.otherOwnersDataHash[winningOwner.id] = {};
           losingOwner.otherOwnersDataHash[winningOwner.id].wins = 0;

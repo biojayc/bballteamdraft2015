@@ -1,4 +1,5 @@
-var fs = require('fs');
+var fs = require('fs'),
+    scheduler = require('../scheduler');
 
 var owners = [
   { id: 'JS', name: 'Jerry Seiler', first: "Jerry", initial: "Je", color: "#cc5500", img: "/images/js.jpg" },
@@ -53,6 +54,17 @@ var divisions = [
   { id: 'SW', name: 'Southwest', conference: 'W' },
 ];
 
+var makeOwner = function(cols) {
+  return {
+    id: cols[0],
+    name: cols[1],
+    first: cols[2],
+    initial: cols[3],
+    color: cols[4],
+    img: cols[5],
+  }
+}
+
 var makeGame = function(cols) {
   return {
     key: cols[0],
@@ -76,29 +88,22 @@ var makeChallenge = function(cols) {
   }
 }
 
-var getGames = function(cb) {
-  var games = [];
-  fs.readdir('./game_scraper/final/', function(err, files) {
-    //get newest file
-    if (files.length > 0) {
-      var file = files[files.length-1];
-      var path = './game_scraper/final/' + file;
-      fs.readFile(path, 'utf8', function(err, data) {
-        var rows = data.split('\n');
-        for (var i = 0; i < rows.length; i++) {
-          var row = rows[i];
-          var cols = row.split('\t');
-          if (cols.length == 8) {
-            games.push(makeGame(cols));
-          }
-        }
-        cb(games);
-      });
+var getOwners = function(cb) {
+  var owners = [];
+  fs.readFile("./data/owners", 'utf8', function(err, data) {
+    var rows = data.split('\n');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var cols = row.split('\t');
+      if (cols.length == 6) {
+        owners.push(makeOwner(cols));
+      }
     }
+    cb(owners);
   });
 }
 
-var getGames2 = function(cb) {
+var getGames = function(cb) {
   var games = [];
   fs.readFile("./data/games", 'utf8', function(err, data) {
     var rows = data.split('\n');
@@ -129,28 +134,48 @@ var getChallenges = function(cb) {
 }
 
 exports.injectData = function(controller, cb) {
-  for(var i = 0; i < owners.length; i++) {
+  /*for(var i = 0; i < owners.length; i++) {
     var owner = owners[i];
     controller.addOwner(owner.id, owner.name, owner.first, owner.initial, owner.img, owner.color);
   }
   for(var i = 0; i < teams.length; i++) {
     var team = teams[i];
     controller.addTeam(team.id, team.name, team.owner, team.conference, team.division);
-  }
-  getGames2(function(games) {
-    for(var i = 0; i < games.length; i++) {
-      var game = games[i];
-      controller.addGame(game.key, game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore),
-                         parseInt(game.homeScore), game.isFinal == 'true');
+  }*/
+  scheduler.create().add(function (cb) {
+    getOwners(function(owners) {
+      for (var i = 0; i < owners.length; i++) {
+        var owner = owners[i];
+        controller.addOwner(owner.id, owner.name, owner.first, owner.initial, owner.img, owner.color);
+      }
+      cb();
+    });
+  }).add(function (cb) {
+    for(var i = 0; i < teams.length; i++) {
+      var team = teams[i];
+      controller.addTeam(team.id, team.name, team.owner, team.conference, team.division);
     }
+    cb();
+  }).add(function(cb) {
+    getGames(function(games) {
+      for(var i = 0; i < games.length; i++) {
+        var game = games[i];
+        controller.addGame(game.key, game.date, game.time, game.awayId, game.homeId, parseInt(game.awayScore),
+                           parseInt(game.homeScore), game.isFinal == 'true');
+      }
+      cb();
+    });
+  }).add(function(cb) {
     getChallenges(function(challenges) {
       for (var i = 0; i < challenges.length; i++) {
         var challenge = challenges[i];
         controller.addChallenge(challenge.key, parseInt(challenge.acceptedChallenge), parseInt(challenge.newChallenge),
                                 challenge.awayChallengeBit == 'true', challenge.homeChallengeBit == 'true');
       }
-      controller.calculate();
       cb();
-    })
-  });
+    });
+  }).add(function(cb) {
+    controller.calculate();
+    cb();
+  }).run(cb);
 }
