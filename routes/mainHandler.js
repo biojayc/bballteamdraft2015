@@ -8,7 +8,7 @@ var layout = require('../layout'),
 var createTeams = function(controller) {
   var container = [];
   var teams = controller.teams.slice();
-  teams.sort(function(a, b){ return b.pct - a.pct; });
+  teams.sort(function(a, b){ return (b.pct - a.pct) * 100000 + (b.wins - a.wins) * 100 + (a.losses - b.losses); });
   for (var i = 0; i < teams.length; i++) {
     var team = teams[i];
     var owner = team.owner;
