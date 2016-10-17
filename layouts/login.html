@@ -11,6 +11,16 @@
 </tr>
 ##owners-end##
 </table>
-
+<form action="#" method="POST" name="login" id="login_form" style="display:none;">
+  <input type="text" name="owner" id="owner" value="" />
+</form>
 </div>
 
+<script lang="javascript">
+function setOwner(id) {
+  var form = document.getElementById('login_form');
+  var input = document.getElementById('owner');
+  input.value = id;
+  form.submit();
+}
+</script>

@@ -29,6 +29,16 @@ exports.controller = function() {
   return cache.get('controller');
 }
 
+exports.redirectToLogin = function(res) {
+  res.writeHead(302, {'Location': '/login'});
+  res.end("");
+}
+
+exports.redirectToHome = function(res) {
+  res.writeHead(302, {'Location': '/'});
+  res.end("");
+}
+
 var formatWinningPercent = function(pct) {
   var winningPercent = Math.round(pct * 1000);
   if (winningPercent == 0) {

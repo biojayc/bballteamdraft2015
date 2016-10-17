@@ -2,7 +2,8 @@ var layout = require('../layout'),
     url = require('url'),
     requestUtils = require('../requestUtils'),
     qs = require('querystring'),
-    shared = require('./shared');
+    shared = require('./shared'),
+    sessionManager = require('../sessionManager');
 
 var createOwners = function(controller) {
   var container = [];
@@ -39,10 +40,18 @@ var login = function(req, res) {
   layout.create("layouts/login.html", "layouts/layout.html", obj).renderResponse(res);
 }
 
-var logout = function(req, res) {
-  res.writeHead(302, {'Location': '/', 'Set-Cookie': 'owner='});
-  res.end("");
+var loginPOST = function(req, res, session) {
+  requestUtils.getPostObj(req, function(body) {
+    sessionManager.getSession(session.sessionId).owner = body.owner;
+    shared.redirectToHome(res);
+  });
+}
+
+var logout = function(req, res, session) {
+  session.owner = null;
+  shared.redirectToHome(res);
 }
 
 exports.login = login;
+exports.loginPOST = loginPOST;
 exports.logout = logout;

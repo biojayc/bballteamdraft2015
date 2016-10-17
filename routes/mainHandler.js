@@ -2,7 +2,8 @@ var layout = require('../layout'),
     url = require('url'),
     requestUtils = require('../requestUtils'),
     qs = require('querystring'),
-    shared = require('./shared');
+    shared = require('./shared'),
+    sessionManager = require('../sessionManager');
 
 var createTeams = function(controller) {
   var container = [];
@@ -25,7 +26,7 @@ var createTeams = function(controller) {
   return container;
 }
 
-var home = function(req, res) {
+var home = function(req, res, session) {
   var controller = shared.controller();
   var scores = shared.createScores(controller);
   var winningImage = shared.getWinningImage(controller);

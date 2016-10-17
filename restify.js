@@ -5,6 +5,7 @@ var fs = require("fs"),
     log = require('./log');
 
 var routes = [];
+var filter;
 var errorHandler;
 
 function parseCookies (request) {
@@ -21,6 +22,7 @@ function parseCookies (request) {
 
 var Session = function(req) {
   this.sessionId = parseCookies(req)["SessionId"];
+  this.cookies = parseCookies(req);
 }
 
 var handleRequest = function(req, res) {
@@ -29,8 +31,12 @@ var handleRequest = function(req, res) {
   log.info("Incoming Request for: " + req.method + " " + path, session.sessionId);
   log.info("User-agent: " + req.headers['user-agent'], session.sessionId);
   log.info("IPAddress: " + req.connection.remoteAddress, session.sessionId);
-  var handler = findRoute(path, req.method, session);
-  handler(req, res, session);
+  var route = findRoute(path, req.method, session);
+  if (filter && !route.skipFilter) {
+    filter(route.handler, req, res, session);
+  } else {
+    route.handler(req, res, session);  
+  }
 }
 
 var findRoute = function(path, method, session) {
@@ -38,12 +44,12 @@ var findRoute = function(path, method, session) {
     if (path.match("^" + routes[i].route + "$") && 
         (method == routes[i].method || routes[i].method == "*")) {
       log.info("Route found: " + routes[i].method + " " + routes[i].route, session.sessionId);
-      return routes[i].handler;
+      return routes[i];
     }
   }
   if (errorHandler) {
     log.info("No Route found, returning 404 error handler", session.sessionId);
-    return errorHandler;
+    return { handler: errorHandler, skipFilter: true };
   }
 
   // If 404 and no 404 handler.
@@ -74,13 +80,17 @@ var startWebServer = function(port, ip) {
   }
 }
 
-var registerRoute = function(route, method, handler) {
+var registerRoute = function(route, method, handler, skipFilter) {
   log.info("Registering Route: " + method + " " + route);
   if (route == "404") {
     errorHandler = handler;
   } else {
-    routes.push({ route: route, method: method, handler: handler });
+    routes.push({ route: route, method: method, handler: handler, skipFilter: (skipFilter ? true : false) });
   }
+}
+
+var registerFilter = function(f) {
+  filter = f;
 }
 
 var registerStatic = function(path, realpath) {
@@ -130,10 +140,12 @@ var registerStatic = function(path, realpath) {
           returnError(req, res, session);
         }
       });
-    }
+    },
+    skipFilter: true,
   });
 }
 
 exports.startWebServer = startWebServer;
 exports.registerRoute = registerRoute;
 exports.registerStatic = registerStatic;
+exports.registerFilter = registerFilter;
