@@ -49,4 +49,25 @@ var home = function(req, res, session) {
   layout.create("layouts/index.html", "layouts/layout.html", obj).renderResponse(res);
 }
 
+var teamstandings = function (req, res, session) {
+  var controller = shared.controller();
+  var scores = shared.createScores(controller);
+  var winningImage = shared.getWinningImage(controller);
+  var vsTop = shared.createVsTop(controller);
+  var vsRows = shared.createVsRows(controller);
+  var todaysgames = shared.createGames(controller.getGamesByDateOffset(0));
+  var yesterdaysgames = shared.createGames(controller.getGamesByDateOffset(-1));
+  var teams = createTeams(controller);
+  var moreDate = shared.getDateByOffset(new Date(), -2);
+  var obj = { 
+    score: scores,
+    vstop: vsTop,
+    vsrows: vsRows,
+    teams: teams,
+    image: winningImage,
+  };
+  layout.create("layouts/teamstandings.html", "layouts/layout.html", obj).renderResponse(res);
+}
+
 exports.home = home;
+exports.teamstandings = teamstandings;

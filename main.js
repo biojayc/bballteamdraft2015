@@ -21,6 +21,7 @@ logsHandler.init();
 restify.startWebServer(1337);
 restify.registerFilter(filter.filter);
 restify.registerRoute("/", "GET", mainHandler.home);
+restify.registerRoute("/teamstandings", "GET", mainHandler.teamstandings);
 restify.registerRoute("/login", "GET", loginHandler.login, true); // skip filter
 restify.registerRoute("/login", "POST", loginHandler.loginPOST, true); // skip filter
 restify.registerRoute("/logout", "GET", loginHandler.logout);
