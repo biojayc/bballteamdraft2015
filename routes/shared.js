@@ -97,7 +97,7 @@ exports.createScores = function(controller) {
 
 exports.getWinningImage = function(controller) {
   var owners = controller.owners.slice();
-  owners.sort(function(a, b){return b.pct-a.pct});
+  owners.sort(function(a, b){return b.points-a.points});
   return owners[0].image;
 }
 
