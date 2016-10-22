@@ -16,6 +16,8 @@ exports.Owner = function(i,n,f,ini,im,c) {
   this.teamsHash = {};
   this.games = [];
   this.gamesHash = {};
+  this.challenges = [];
+  this.challengesHash = {};
   this.otherOwnersDataHash = {};  // used to store wins and losses vs other owners.  Owner Ids as keys
 };
 

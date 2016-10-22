@@ -183,6 +183,17 @@ Controller.prototype._calculateStatsForGame = function(game) {
         vsStats.pct = vsStats.wins / vsStats.gamesPlayed;
       }
     }
+  } else {
+    // assign pending challenges to owners.
+    var awayOwner = game.awayTeam.owner;
+    var homeOwner = game.homeTeam.owner;
+    var challenge = this.challengesHash[game.key];
+    if (awayOwner && homeOwner) {
+      if (challenge.awayChallengeBit || challenge.homeChallengeBit) {
+        awayOwner.challenges.push(challenge);
+        awayOwner.challengesHash[game.key] = challenge;
+      }
+    }
   }
 }
 Controller.prototype.getGamesByDateOffset = function(offset) {
