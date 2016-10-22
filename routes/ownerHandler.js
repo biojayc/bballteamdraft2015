@@ -128,7 +128,7 @@ var getGames = function(controller, owner, games) {
   return container;
 }
 
-var home = function(req, res) {
+var home = function(req, res, session) {
   var id;
   var queryObj = requestUtils.getQueryObj(req);
   if (queryObj && queryObj['id']) {
@@ -144,6 +144,8 @@ var home = function(req, res) {
   var owner;
   if (id && controller.ownersHash[id]) {
     owner = controller.ownersHash[id];
+  } else if (session.owner && controller.ownersHash[session.owner]) {
+    owner = controller.ownersHash[session.owner];
   } else {
     errorHandler.error(req, res);
     return;
