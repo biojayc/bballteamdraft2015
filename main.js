@@ -5,6 +5,7 @@ var restify = require('./restify'),
     gamesHandler = require('./routes/gamesHandler'),
     teamHandler = require('./routes/teamHandler'),
     conferenceHandler = require('./routes/conferenceHandler'),
+    challengeHandler = require('./routes/challengeHandler'),
     logsHandler = require('./routes/logsHandler'),
     testHandler = require('./routes/testHandler'),
     errorHandler = require('./routes/errorHandler'),
@@ -29,6 +30,8 @@ restify.registerRoute("/owner", "GET", ownerHandler.home);
 restify.registerRoute("/games", "GET", gamesHandler.home);
 restify.registerRoute("/team", "GET", teamHandler.home);
 restify.registerRoute("/conference", "GET", conferenceHandler.home);
+restify.registerRoute("/challenges", "GET", challengeHandler.main);
+restify.registerRoute("/challenges", "POST", challengeHandler.mainPOST);
 restify.registerRoute("/logs", "GET", logsHandler.home);
 restify.registerRoute("404", "GET", errorHandler.error);
 

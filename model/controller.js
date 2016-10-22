@@ -12,6 +12,7 @@ var Controller = function() {
   this.teamsHash = {};  // keyed by id.  value is team object.
   this.games = [];
   this.gamesHash = {};  // keyed by date.  value is array of games.
+  this.gamesHashByKey = {};  // keyed by games key.
   this.challenges = [];
   this.challengesHash = {}; // keyed by games key. value is challenge object.
 };
@@ -42,6 +43,7 @@ Controller.prototype.addGame =
     this.gamesHash[game.date] = [];
   }
   this.gamesHash[game.date].push(game);
+  this.gamesHashByKey[game.key] = game;
   this.games.push(game);
   return game;
 }
@@ -192,6 +194,8 @@ Controller.prototype._calculateStatsForGame = function(game) {
       if (challenge.awayChallengeBit || challenge.homeChallengeBit) {
         awayOwner.challenges.push(challenge);
         awayOwner.challengesHash[game.key] = challenge;
+        homeOwner.challenges.push(challenge);
+        homeOwner.challengesHash[game.key] = challenge;
       }
     }
   }

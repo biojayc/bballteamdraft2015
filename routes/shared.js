@@ -39,6 +39,11 @@ exports.redirectToHome = function(res) {
   res.end("");
 }
 
+exports.redirectTo = function(res, path) {
+  res.writeHead(302, {'Location': path});
+  res.end("");
+}
+
 var formatWinningPercent = function(pct) {
   var winningPercent = Math.round(pct * 1000);
   if (winningPercent == 0) {
