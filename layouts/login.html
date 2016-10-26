@@ -1,6 +1,7 @@
-<div>Using this site requires cookies. Select who you are from the list below!
+<div>Using this site requires cookies. Type in your codeword and select who you are from the list below!
 
-
+<form action="#" method="POST" name="login" id="login_form">
+<div><label>Codeword: <input type="text" name="password" id="password" value="" /></label></div>
 <table id='logintable' border=0 cellpadding=5 cellspacing=1 align=left width='60%'>
 <tr><td colspan=3><h2 align=center>Who are you?</h2></td></tr>
 ##owners-begin##
@@ -11,8 +12,7 @@
 </tr>
 ##owners-end##
 </table>
-<form action="#" method="POST" name="login" id="login_form" style="display:none;">
-  <input type="text" name="owner" id="owner" value="" />
+  <input type="text" name="owner" id="owner" value="" style="display:none;" />
 </form>
 </div>
 

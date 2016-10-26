@@ -17,8 +17,8 @@ var Controller = function() {
   this.challengesHash = {}; // keyed by games key. value is challenge object.
 };
 // Add an owner before adding any of his teams or games.
-Controller.prototype.addOwner = function(i,n,f,ini,im,c) {
-  var owner = new models.Owner(i,n,f,ini,im,c);
+Controller.prototype.addOwner = function(i,n,f,ini,im,c,p) {
+  var owner = new models.Owner(i,n,f,ini,im,c,p);
   this.ownersHash[i] = owner;
   this.owners.push(owner);
 }

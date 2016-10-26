@@ -9,6 +9,7 @@ var makeOwner = function(cols) {
     initial: cols[3],
     color: cols[4],
     img: cols[5],
+    password: cols[6],
   }
 }
 
@@ -52,7 +53,7 @@ var getOwners = function(cb) {
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
       var cols = row.split('\t');
-      if (cols.length == 6) {
+      if (cols.length == 7) {
         owners.push(makeOwner(cols));
       }
     }
@@ -110,7 +111,7 @@ exports.injectData = function(controller, cb) {
     getOwners(function(owners) {
       for (var i = 0; i < owners.length; i++) {
         var owner = owners[i];
-        controller.addOwner(owner.id, owner.name, owner.first, owner.initial, owner.img, owner.color);
+        controller.addOwner(owner.id, owner.name, owner.first, owner.initial, owner.img, owner.color, owner.password);
       }
       cb();
     });

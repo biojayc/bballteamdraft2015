@@ -42,7 +42,15 @@ var login = function(req, res) {
 
 var loginPOST = function(req, res, session) {
   requestUtils.getPostObj(req, function(body) {
-    sessionManager.getSession(session.sessionId).owner = body.owner;
+      console.log("form password: " + body.password);
+    if (body.owner) {
+      var owner = shared.controller().ownersHash[body.owner];
+      console.log("owner password: " + owner.password);
+      if (owner.password === body.password) {
+
+        sessionManager.getSession(session.sessionId).owner = body.owner;  
+      }
+    }
     shared.redirectToHome(res);
   });
 }

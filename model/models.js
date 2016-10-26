@@ -1,10 +1,11 @@
-exports.Owner = function(i,n,f,ini,im,c) {
+exports.Owner = function(i,n,f,ini,im,c,p) {
   this.id = i;
   this.name = n;
   this.first = f;
   this.initial = ini;
   this.image = im;
   this.color = c;
+  this.password = p;
   
   //calculated data
   this.points = 0;
