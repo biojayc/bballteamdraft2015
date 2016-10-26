@@ -191,7 +191,7 @@ Controller.prototype._calculateStatsForGame = function(game) {
     var homeOwner = game.homeTeam.owner;
     var challenge = this.challengesHash[game.key];
     if (awayOwner && homeOwner) {
-      if (challenge.awayChallengeBit || challenge.homeChallengeBit) {
+      if (challenge && (challenge.awayChallengeBit || challenge.homeChallengeBit)) {
         awayOwner.challenges.push(challenge);
         awayOwner.challengesHash[game.key] = challenge;
         homeOwner.challenges.push(challenge);
