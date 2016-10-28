@@ -22,7 +22,7 @@ var createGuid = (function() {
 exports.filter = function(handler, req, res, s) {
   // If no sessionId (first time visiting site) generate one.
   if (!s.sessionId) {
-    res.writeHead(302, {'Location': '/', 'Set-Cookie': 'SessionId=' + createGuid()});
+    res.writeHead(302, {'Location': '/', 'Set-Cookie': 'SessionId=' + createGuid() + ';expires: Wed, 1 Jan 2020 12:00:00 GMT'});
     res.end("");
     return;
   }
