@@ -91,7 +91,7 @@ var formatTimeZone = function(tz, t) {
 exports.createScores = function(controller) {
   var scores = [];
   var owners = controller.owners.slice();
-  owners.sort(function(a, b){return b.points-a.points});
+  owners.sort(function(a, b){return (b.points-a.points) * 1000 + (b.pct - a.pct);});
   for (var i = 0; i < owners.length; i++) {
     var owner = owners[i];
     scores.push({ name: owner.name, wins: owner.points, pct: formatWinningPercent(owner.pct), 
