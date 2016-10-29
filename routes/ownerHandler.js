@@ -138,8 +138,6 @@ var home = function(req, res, session) {
   var controller = shared.controller();
   var scores = shared.createScores(controller);
   var winningImage = shared.getWinningImage(controller);
-  var vsTop = shared.createVsTop(controller);
-  var vsRows = shared.createVsRows(controller);
   
   var owner;
   if (id && controller.ownersHash[id]) {
@@ -156,8 +154,6 @@ var home = function(req, res, session) {
   var games = getGames(controller, owner, controller.games);
   var obj = { 
     score: scores,
-    vstop: vsTop,
-    vsrows: vsRows,
     image: winningImage,
     ownername: owner.name,
     wins: owner.wins,

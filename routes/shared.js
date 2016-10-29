@@ -106,34 +106,3 @@ exports.getWinningImage = function(controller) {
   owners.sort(function(a, b){return b.points-a.points});
   return owners[0].image;
 }
-
-exports.createVsTop = function(controller) {
-  var container = [];
-  for (var i = 0; i < controller.owners.length; i++) {
-    container.push({ initial: controller.owners[i].initial });
-  }
-  return container;
-}
-
-exports.createVsRows = function(controller) {
-  var container = [];
-  var owners = controller.owners;
-  for (var i = 0; i < owners.length; i++) {
-    var owner1 = owners[i];
-    
-    var cols = [];
-    for (var j = 0; j < owners.length; j++) {
-      var owner2 = owners[j];
-      var wins;
-      // This if is needed to prevent an owner with no teams from causing issues.
-      if (owner1.otherOwnersDataHash[owner2.id]) {
-        wins = owner1.otherOwnersDataHash[owner2.id].wins;
-      } else {
-        wins = 0;
-      }
-      cols.push({ wins: wins });
-    }
-    container.push({ first: owner1.first, vsrow: cols });
-  }
-  return container;
-}

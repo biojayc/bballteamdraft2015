@@ -100,16 +100,12 @@ var home = function(req, res, session) {
   var controller = shared.controller();
   var scores = shared.createScores(controller);
   var winningImage = shared.getWinningImage(controller);
-  var vsTop = shared.createVsTop(controller);
-  var vsRows = shared.createVsRows(controller);
   var todaysgames = createGames(controller.getGamesByDateOffset(0));
   var yesterdaysgames = createGames(controller.getGamesByDateOffset(-1));
   var teams = createTeams(controller);
   var moreDate = getDateByOffset(new Date(), -2);
   var obj = { 
     score: scores,
-    vstop: vsTop,
-    vsrows: vsRows,
     todaysgames: todaysgames,
     yesterdaysgames: yesterdaysgames,
     moreDate: moreDate,
@@ -123,13 +119,9 @@ var teamstandings = function (req, res, session) {
   var controller = shared.controller();
   var scores = shared.createScores(controller);
   var winningImage = shared.getWinningImage(controller);
-  var vsTop = shared.createVsTop(controller);
-  var vsRows = shared.createVsRows(controller);
   var teams = createTeams(controller);
   var obj = { 
     score: scores,
-    vstop: vsTop,
-    vsrows: vsRows,
     teams: teams,
     image: winningImage,
   };
@@ -157,16 +149,12 @@ var games = function(req, res) {
   var controller = shared.controller();
   var scores = shared.createScores(controller);
   var winningImage = shared.getWinningImage(controller);
-  var vsTop = shared.createVsTop(controller);
-  var vsRows = shared.createVsRows(controller);
   var games = createGames(controller.getGamesByDate(formattedDateStr));
   var previousDate = getDateByOffset(new Date(formattedDateStr), -1);
   var nextDate = getDateByOffset(new Date(formattedDateStr), 1);
   
   var obj = { 
     score: scores,
-    vstop: vsTop,
-    vsrows: vsRows,
     image: winningImage,
     date: formattedDateStr,
     games: games,
