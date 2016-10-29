@@ -47,17 +47,17 @@ var getVsOwners = function(controller, owner) {
   return container;
 }
 
-var getGames = function(controller, owner, games) {
+var getGames = function(controller, games, ownerId) {
   var container = [];
   var wins = 0, losses = 0, totalPoints = 0;
   for (var i = 0; i < games.length; i++) {
     var game = games[i];
     // filter out games that aren't for the current owner.
-    if (owner.id != game.homeTeam.ownerId && owner.id != game.awayTeam.ownerId) {
+    if (ownerId && (ownerId != game.homeTeam.ownerId && ownerId != game.awayTeam.ownerId)) {
       continue;
     }
     var oppOwnerName = '', oppOwnerColor = '', oppOwnerId = '';
-    if (game.awayTeam.ownerId == owner.id) {
+    if (game.awayTeam.ownerId == ownerId) {
       var oppTeamScore = game.homeScore;
       var teamScore = game.awayScore;
       var teamName = game.awayTeam.name;
@@ -89,14 +89,14 @@ var getGames = function(controller, owner, games) {
     var points = "";
     if (game.winningTeam) {
       var winningOwner = game.winningTeam.owner;
-      if (game.winningTeam.ownerId == owner.id && game.losingTeam.ownerId == owner.id) {
+      if (game.winningTeam.ownerId == ownerId && game.losingTeam.ownerId == ownerId) {
         score = "WL " + teamScore + " - " + oppTeamScore
         scoreClass = "winloss";
         totalPoints += 1;
         wins++;
         losses++;
         // var ownerName = winningOwner ? winningOwner.name : "";
-      } else if (game.winningTeam.ownerId == owner.id) {
+      } else if (game.winningTeam.ownerId == ownerId) {
         score = "W " + teamScore + " - " + oppTeamScore
         scoreClass = 'win';
         totalPoints += 1 + bid;
@@ -151,7 +151,7 @@ var home = function(req, res, session) {
 
   var teams = getOwnerTeams(controller, owner);
   var vsOwners = getVsOwners(controller, owner);
-  var games = getGames(controller, owner, controller.games);
+  var games = getGames(controller, controller.games, owner.id);
   var obj = { 
     score: scores,
     image: winningImage,

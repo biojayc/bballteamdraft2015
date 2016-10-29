@@ -19,14 +19,15 @@
   <div id='ownergames'>
     <h2 align=center>Games</h2>
     <table id='ownergamestable' border=0 cellpadding=5 cellspacing=1 align=center>
-      <tr><th>Date</th><th>Opp</th><th>Result</th><th>W/L</th><th>Other Owner</th></tr>
+      <tr><th>Date</th><th>Opp</th><th>Result</th><th>Bid</th><th>Opp Owner</th><th>Total</th></tr>
       ##games-begin##
       <tr>
         <td>##date##</td>
         <td>##oppName##</td>
         <td class='##scoreClass##'>##score##</td>
-        <td>##wl##</td>
+        <td align="center">##bid##</td>
         <td><a href='/owner?id=##oppOwnerId##' style='color:##oppOwnerColor##;'>##oppOwnerName##</a></td>
+        <td align="center">##points##</td>
       </tr>
       ##games-end##
     </table>
