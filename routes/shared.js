@@ -1,7 +1,8 @@
 var Controller = require('../model/controller').Controller,
     CacheManager = require('../cache').CacheManager,
     data = require('../model/data'),
-    log = require('../log');
+    log = require('../log'),
+    layout = require('../layout');
 
 var cache = new CacheManager();
 exports.init = function() {
@@ -25,9 +26,10 @@ exports.init = function() {
   }, 5 * 60 * 1000);
 }
 
-exports.controller = function() {
+var controller = function() {
   return cache.get('controller');
 }
+exports.controller = controller;
 
 exports.redirectToLogin = function(res) {
   res.writeHead(302, {'Location': '/login'});
@@ -42,6 +44,16 @@ exports.redirectToHome = function(res) {
 exports.redirectTo = function(res, path) {
   res.writeHead(302, {'Location': path});
   res.end("");
+}
+
+exports.renderGeneric = function(res, title, body) {
+  var obj = {
+    title: title,
+    body: body,
+    score: createScores(controller()),
+    image: getWinningImage(controller()),
+  }
+  layout.create("layouts/generic.html", "layouts/layout.html", obj).renderResponse(res);
 }
 
 var formatWinningPercent = function(pct) {
@@ -89,7 +101,7 @@ exports.formatTimeZone = function(tz, t) {
   return hour + ":" + minute + m;
 }
 
-exports.createScores = function(controller) {
+var createScores = function(controller) {
   var scores = [];
   var owners = controller.owners.slice();
   owners.sort(function(a, b){return (b.points-a.points) * 1000 + (b.pct - a.pct);});
@@ -100,9 +112,11 @@ exports.createScores = function(controller) {
   }
   return scores;
 }
+exports.createScores = createScores;
 
-exports.getWinningImage = function(controller) {
+var getWinningImage = function(controller) {
   var owners = controller.owners.slice();
   owners.sort(function(a, b){return b.points-a.points});
   return owners[0].image;
 }
+exports.getWinningImage = getWinningImage;

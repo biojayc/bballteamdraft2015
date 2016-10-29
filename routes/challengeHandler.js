@@ -21,6 +21,9 @@ var getChallenges = function(controller, session) {
       }
     } else if (game.homeTeam && game.homeTeam.owner && game.homeTeam.ownerId == session.owner) {
       var enemyOwner = game.awayTeam ? (game.awayTeam.owner ? game.awayTeam.owner : null) : null;
+      if (challenge.awayChallengeBit) {
+        status = "<a onclick='acceptChallenge(\"" + game.key + "\")' style='cursor:pointer;'>accept</a>";
+      }
     }
     container.push({
       gameKey: game.key,
@@ -37,7 +40,99 @@ var getChallenges = function(controller, session) {
   return container;
 }
 
-var mainPOST = function(req, res, session) {
+var createChallengePOST = function(req, res, session) {
+  var controller = shared.controller();
+  requestUtils.getPostObj(req, function(body) {
+    var gameKey;
+    var bid;
+    if (body && body.gameKey) {
+      gameKey = body.gameKey;
+      bid = body.bid;
+    }
+    var game = controller.gamesHashByKey[gameKey];
+    var challenge = controller.challengesHash[gameKey];
+    if (!bid || bid <= 0) {
+      shared.renderGeneric('Error', 'Invalid bid');
+      return;
+    }
+    if (!challenge) {
+      // Once controller reloads once, this situation shouldn't ever happen, so we just
+      // won't handle it.
+      shared.renderGeneric('Error', 'Challenge hasn\'t been instantiated yet');
+      return;
+    } else {
+      var awayOwner = game.awayTeam.ownerId ? game.awayTeam.owner : null;
+      var homeOwner = game.homeTeam.ownerId ? game.homeTeam.owner : null;
+      if (game.homeTeam.ownerId && game.homeTeam.ownerId == session.owner) {
+        challenge.homeChallengeBit = true;
+        challenge.newChallenge = bid;
+        if (awayOwner) {
+          awayOwner.challenges.push(challenge);
+          awayOwner.challengesHash[game.key] = challenge;
+        }
+        if (homeOwner) {
+          homeOwner.challenges.push(challenge);
+          homeOwner.challengesHash[game.key] = challenge;
+        }
+      } else if (game.awayTeam.ownerId && game.awayTeam.ownerId == session.owner) {
+        challenge.awayChallengeBit = true;
+        challenge.newChallenge = bid;
+        if (awayOwner) {
+          awayOwner.challenges.push(challenge);
+          awayOwner.challengesHash[game.key] = challenge;
+        }
+        if (homeOwner) {
+          homeOwner.challenges.push(challenge);
+          homeOwner.challengesHash[game.key] = challenge;
+        }
+      }
+    }
+    shared.redirectTo(res, "/owner");
+  });
+}
+
+var createChallenge = function(req, res, session) {
+  var controller = shared.controller();
+  var queryObj = requestUtils.getQueryObj(req);
+  var gameKey = null
+  if (queryObj && queryObj['id']) {
+    var gameKey = queryObj['id'];
+  }
+  if (!gameKey) {
+    shared.redirectToHome(res);
+    return;
+  }
+  var game = controller.gamesHashByKey[gameKey];
+  if (!game) {
+    shared.renderGeneric(res, 'Error', 'That game doesn\'t seem to exist.');
+    return;
+  }
+  if (!game.awayTeam || !game.awayTeam.owner) {
+    shared.renderGeneric(res, 'Error', 'No away team or owner');
+    return;
+  }
+  if (!game.homeTeam || !game.homeTeam.owner) {
+    shared.renderGeneric(res, 'Error', 'No home team or owner');
+    return;
+  }
+  var challenge = controller.challengesHash[gameKey];
+  if (challenge && (challenge.awayChallengeBit || challenge.homeChallengeBit)) {
+    shared.renderGeneric(res, 'Error', 'There\'s a pending challenge for that game already.');
+    return;
+  }
+
+  var controller = shared.controller();
+  var scores = shared.createScores(controller);
+  var winningImage = shared.getWinningImage(controller);
+  var obj = { 
+    score: scores,
+    image: winningImage,
+    gameKey: gameKey,
+  };
+  layout.create("layouts/challenge.html", "layouts/layout.html", obj).renderResponse(res);
+}
+
+var acceptChallengePOST = function(req, res, session) {
   var controller = shared.controller();
   requestUtils.getPostObj(req, function(body) {
     var gameKey = body.gamekey;
@@ -72,4 +167,6 @@ var main = function(req, res, session) {
 }
 
 exports.main = main;
-exports.mainPOST = mainPOST;
+exports.acceptChallengePOST = acceptChallengePOST;
+exports.createChallenge = createChallenge;
+exports.createChallengePOST = createChallengePOST;

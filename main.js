@@ -30,7 +30,9 @@ restify.registerRoute("/owner", "GET", ownerHandler.home);
 restify.registerRoute("/team", "GET", teamHandler.home);
 restify.registerRoute("/conference", "GET", conferenceHandler.home);
 restify.registerRoute("/challenges", "GET", challengeHandler.main);
-restify.registerRoute("/challenges", "POST", challengeHandler.mainPOST);
+restify.registerRoute("/challenge", "GET", challengeHandler.createChallenge);
+restify.registerRoute("/challenge", "POST", challengeHandler.createChallengePOST);
+restify.registerRoute("/challenges", "POST", challengeHandler.acceptChallengePOST);
 restify.registerRoute("/logs", "GET", logsHandler.home);
 restify.registerRoute("404", "GET", errorHandler.error);
 

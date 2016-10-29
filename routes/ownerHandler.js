@@ -47,7 +47,7 @@ var getVsOwners = function(controller, owner) {
   return container;
 }
 
-var getGames = function(controller, games, ownerId) {
+var getGames = function(controller, games, ownerId, sessionOwner) {
   var container = [];
   var wins = 0, losses = 0, totalPoints = 0;
   for (var i = 0; i < games.length; i++) {
@@ -84,6 +84,13 @@ var getGames = function(controller, games, ownerId) {
       bid = challenge.acceptedChallenge;
     }
     var score = "";
+    if (ownerId == sessionOwner) {
+      if (challenge && (challenge.awayChallengeBit || challenge.homeChallengeBit)) {
+        score = "pending";
+      } else {
+        score = "<a href='/challenge?id=" + game.key + "'>challenge</a>";
+      }
+    }
     var scoreClass = "";
     var wl = "";
     var points = "";
@@ -151,7 +158,7 @@ var home = function(req, res, session) {
 
   var teams = getOwnerTeams(controller, owner);
   var vsOwners = getVsOwners(controller, owner);
-  var games = getGames(controller, controller.games, owner.id);
+  var games = getGames(controller, controller.games, owner.id, session.owner);
   var obj = { 
     score: scores,
     image: winningImage,
