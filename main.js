@@ -2,7 +2,6 @@ var restify = require('./restify'),
     mainHandler = require('./routes/mainHandler'),
     loginHandler = require('./routes/loginHandler'),
     ownerHandler = require('./routes/ownerHandler'),
-    gamesHandler = require('./routes/gamesHandler'),
     teamHandler = require('./routes/teamHandler'),
     conferenceHandler = require('./routes/conferenceHandler'),
     challengeHandler = require('./routes/challengeHandler'),
@@ -23,11 +22,11 @@ restify.startWebServer(1337);
 restify.registerFilter(filter.filter);
 restify.registerRoute("/", "GET", mainHandler.home);
 restify.registerRoute("/teamstandings", "GET", mainHandler.teamstandings);
+restify.registerRoute("/games", "GET", mainHandler.games);
 restify.registerRoute("/login", "GET", loginHandler.login, true); // skip filter
 restify.registerRoute("/login", "POST", loginHandler.loginPOST, true); // skip filter
 restify.registerRoute("/logout", "GET", loginHandler.logout);
 restify.registerRoute("/owner", "GET", ownerHandler.home);
-restify.registerRoute("/games", "GET", gamesHandler.home);
 restify.registerRoute("/team", "GET", teamHandler.home);
 restify.registerRoute("/conference", "GET", conferenceHandler.home);
 restify.registerRoute("/challenges", "GET", challengeHandler.main);

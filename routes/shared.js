@@ -62,7 +62,8 @@ timezones.EASTERN = -5;
 timezones.CENTRAL = -6;
 timezones.MOUNTAIN = -7;
 timezones.PACIFIC = -8;
-var formatTimeZone = function(tz, t) {
+exports.timezones = timezones;
+exports.formatTimeZone = function(tz, t) {
   var time = t.substr(
        t.indexOf('T')+1, 5);  // e.g. 2015-04-03T23:00Z
   var month = Number(t.substr(5, 2));
@@ -135,74 +136,4 @@ exports.createVsRows = function(controller) {
     container.push({ first: owner1.first, vsrow: cols });
   }
   return container;
-}
-
-exports.createGames = function(games) {
-  var container = [];
-  for (var i = 0; i < games.length; i++) {
-    var game = games[i];
-    var time = formatTimeZone(timezones.EASTERN, game.time);
-    var awayTeamName = (game.awayScore ? '(' + game.awayScore + ') ' : '') + game.awayTeam.name;
-    var homeTeamName = game.homeTeam.name + (game.homeScore ? ' (' + game.homeScore + ')' : '');
-    var awayOwner = game.awayTeam.owner;
-    var homeOwner = game.homeTeam.owner;
-    var awayOwnerId = "";
-    var homeOwnerId = "";
-    var awayOwnerName = "";
-    var homeOwnerName = "";
-    var awayOwnerColor = "";
-    var homeOwnerColor = "";
-    var awayClass = "";
-    var homeClass = "";
-    if (awayOwner) {
-      awayOwnerName = awayOwner.name;
-      awayOwnerColor = awayOwner.color;
-      awayOwnerId = awayOwner.id;
-    }
-    if (homeOwner) {
-      homeOwnerName = homeOwner.name;
-      homeOwnerColor = homeOwner.color;
-      homeOwnerId = homeOwner.id;
-    }
-    if (game.winningTeam) {
-      if (game.winningTeam.id === game.awayTeam.id) {
-        awayClass = 'bold';
-      } else {
-        homeClass = 'bold';
-      }
-    }
-    container.push({
-      date: game.date,
-      time: time,
-      awayTeam: awayTeamName,
-      awayOwner: awayOwnerName,
-      awayOwnerColor: awayOwnerColor,
-      awayOwnerId: awayOwnerId,
-      awayClass: awayClass,
-      homeTeam: homeTeamName,
-      homeOwner: homeOwnerName,
-      homeOwnerColor: homeOwnerColor,
-      homeOwnerId: homeOwnerId,
-      homeClass: homeClass,
-    });
-  }
-  return container;
-}
-
-exports.getDateByOffset = function(startDate, offset) {
-  var newDate = startDate;
-  newDate.setDate(newDate.getDate() + offset);
-  var dd = newDate.getDate();
-  var mm = newDate.getMonth()+1; //January is 0!
-  var yyyy = newDate.getFullYear();
-
-  if(dd<10) {
-    dd='0'+dd
-  }
-
-  if(mm<10) {
-    mm='0'+mm
-  }
-
-  return yyyy + '' + mm + '' + dd;
 }
