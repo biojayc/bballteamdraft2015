@@ -128,7 +128,6 @@ var processConditionalRegions = function(html, vars) {
 
     // Have to go ahead and process internal conditionals
     var tempHTML = processConditionalRegions(region.html, vars);
-    console.log("tempHTML: " + tempHTML);
     var start = html.indexOf('##IF ' + region.name + '##');
     var end = html.indexOf('##ENDIF ' + region.name + "##") + 11 + region.name.length;
     var subhtml = html.substr(start, end-start);
