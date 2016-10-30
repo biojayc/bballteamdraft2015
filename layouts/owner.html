@@ -26,6 +26,25 @@
   </div>
   <div style='clear:both;'></div>
   
+<div id='pendingchallenges'>
+<h2 align=center>Pending Challenges</h2>
+<table id='teamstable' border=0 cellpadding=5 cellspacing=1 align=center width=80%>
+<tr><th align=left>Date</th><th align=left>Teams</th><th align=left>Owner</th><th align=left>Bid</th><th></th></tr>
+##challenges-begin##
+<tr>
+  <td>##date##</td>
+  <td>##awayTeamName## @ ##homeTeamName##</td>
+  <td><a href='owner?id=##ownerId##' style='color:##ownerColor##;'>##ownerName##</a></td>
+  <td>##bid##</td>
+  <td>##status##</td>
+</tr>
+##challenges-end##
+</table>
+<form action='/acceptchallenge' method='POST' name='login' id='login_form' style='display:none;'>
+  <input type='text' name='gamekey' id='gamekey' value='' />
+</form>
+</div>
+
   <div id='ownergames'>
     <h2 align=center>Games</h2>
     <table id='ownergamestable' border=0 cellpadding=5 cellspacing=1 align=center>
@@ -44,3 +63,12 @@
     </table>
   </div>
   <br><br><br>
+
+<script lang="javascript">
+function acceptChallenge(id) {
+  var form = document.getElementById('login_form');
+  var input = document.getElementById('gamekey');
+  input.value = id;
+  form.submit();
+}
+</script>

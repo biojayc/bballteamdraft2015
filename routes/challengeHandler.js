@@ -149,24 +149,10 @@ var acceptChallengePOST = function(req, res, session) {
         break;
       }
     }
-    shared.redirectTo(res, '/challenges');
+    shared.redirectTo(res, '/owner');
   });
 }
 
-var main = function(req, res, session) {
-  var controller = shared.controller();
-  var scores = shared.createScores(controller);
-  var winningImage = shared.getWinningImage(controller);
-  var challenges = getChallenges(controller, session);
-  var obj = { 
-    score: scores,
-    image: winningImage,
-    challenges: challenges,
-  };
-  layout.create("layouts/challenges.html", "layouts/layout.html", obj).renderResponse(res);
-}
-
-exports.main = main;
-exports.acceptChallengePOST = acceptChallengePOST;
 exports.createChallenge = createChallenge;
 exports.createChallengePOST = createChallengePOST;
+exports.acceptChallengePOST = acceptChallengePOST;

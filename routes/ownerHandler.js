@@ -47,6 +47,41 @@ var getVsOwners = function(controller, owner) {
   return container;
 }
 
+var getChallenges = function(controller, session) {
+  var container = [];
+  var challenges = controller.ownersHash[session.owner].challenges.slice();
+  // challenges.sort(function(a, b){ return (b.pct - a.pct) * 100000 + (b.wins - a.wins) * 100 + (a.losses - b.losses); });
+  for (var i = 0; i < challenges.length; i++) {
+    var challenge = challenges[i];
+    var game = controller.gamesHashByKey[challenge.key];
+    var enemyOwner = null;
+    var status = "pending";
+    if (game.awayTeam && game.awayTeam.owner && game.awayTeam.ownerId == session.owner) {
+      var enemyOwner = game.homeTeam ? (game.homeTeam.owner ? game.homeTeam.owner : null) : null;
+      if (challenge.homeChallengeBit) {
+        status = "<a onclick='acceptChallenge(\"" + game.key + "\")' style='cursor:pointer;'>accept</a>";
+      }
+    } else if (game.homeTeam && game.homeTeam.owner && game.homeTeam.ownerId == session.owner) {
+      var enemyOwner = game.awayTeam ? (game.awayTeam.owner ? game.awayTeam.owner : null) : null;
+      if (challenge.awayChallengeBit) {
+        status = "<a onclick='acceptChallenge(\"" + game.key + "\")' style='cursor:pointer;'>accept</a>";
+      }
+    }
+    container.push({
+      gameKey: game.key,
+      date: game.date,
+      bid: challenge.newChallenge,
+      homeTeamName: game.homeTeam.name,
+      awayTeamName: game.awayTeam.name,
+      ownerName: enemyOwner ? enemyOwner.name : "",
+      ownerId: enemyOwner ? enemyOwner.id : "",
+      ownerColor: enemyOwner ? enemyOwner.color : "",
+      status: status,
+    });
+  }
+  return container;
+}
+
 var getGames = function(controller, games, ownerId, sessionOwner) {
   var container = [];
   var wins = 0, losses = 0, totalPoints = 0;
@@ -158,6 +193,7 @@ var home = function(req, res, session) {
 
   var teams = getOwnerTeams(controller, owner);
   var vsOwners = getVsOwners(controller, owner);
+  var challenges = getChallenges(controller, session);
   var games = getGames(controller, controller.games, owner.id, session.owner);
   var obj = { 
     score: scores,
@@ -167,6 +203,7 @@ var home = function(req, res, session) {
     losses: owner.losses,
     teams: teams,
     vsOwners: vsOwners,
+    challenges: challenges,
     games: games,
   };
   layout.create("layouts/owner.html", "layouts/layout.html", obj).renderResponse(res);  
