@@ -26,13 +26,9 @@ var login = function(req, res) {
   var controller = shared.controller();
   var scores = shared.createScores(controller);
   var winningImage = shared.getWinningImage(controller);
-  var vsTop = shared.createVsTop(controller);
-  var vsRows = shared.createVsRows(controller);
   var owners = createOwners(controller);
   var obj = { 
     score: scores,
-    vstop: vsTop,
-    vsrows: vsRows,
     image: winningImage,
     owners: owners,
   };
