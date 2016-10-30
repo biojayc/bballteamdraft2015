@@ -119,10 +119,11 @@ var getGames = function(controller, games, ownerId, sessionOwner) {
       bid = challenge.acceptedChallenge;
     }
     var score = "";
-    if (ownerId == sessionOwner) {
+    // If the owner is the session owner and the game hasn't started, show challenge options.
+    if (ownerId == sessionOwner && !game.homeScore && !game.awayScore) {
       if (challenge && (challenge.awayChallengeBit || challenge.homeChallengeBit)) {
         score = "pending";
-      } else {
+      } else if (controller.ownersHash[ownerId].points > 0) {
         score = "<a href='/challenge?id=" + game.key + "'>challenge</a>";
       }
     }
