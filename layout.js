@@ -99,6 +99,61 @@ var processRepeatedRegions = function(html, vars) {
   return html;
 }
 
+var getConditionalRegions = function(html) {
+  var startRegex = /##IF (\w+)##/;
+  var result = [];
+  var done = false;
+  while (!done) {
+    var match = html.match(startRegex);
+    if (match) {
+      var regionName = match[1];
+      html = html.substr(html.search(startRegex) + regionName.length + 7, html.length);
+      var endRegex = "##ENDIF " + regionName + "##";
+      var innerHTML = html.substr(0, html.search(endRegex));
+      html = html.substr(html.search(endRegex), html.length);
+      if (regionName && innerHTML) {
+        result.push({ name: regionName, html: innerHTML });
+      }
+    } else {
+      done = true;
+    }
+  }
+  return result;
+}
+
+var processConditionalRegions = function(html, vars) {
+  var conditionalRegions = getConditionalRegions(html);
+  for (var i = 0; i < conditionalRegions.length; i++) {
+    var region = conditionalRegions[i];
+
+    // Have to go ahead and process internal conditionals
+    var tempHTML = processConditionalRegions(region.html, vars);
+    console.log("tempHTML: " + tempHTML);
+    var start = html.indexOf('##IF ' + region.name + '##');
+    var end = html.indexOf('##ENDIF ' + region.name + "##") + 11 + region.name.length;
+    var subhtml = html.substr(start, end-start);
+    var mid = tempHTML.indexOf('##ELSE##');
+    var ifhtml = "";
+    var elsehtml = "";
+    if (mid > 0) {
+      ifhtml = tempHTML.substr(0, mid);
+      elsehtml = tempHTML.substr(mid+8, tempHTML.length - (mid+8));
+    } else {
+      ifhtml = tempHTML;
+    }
+    /*tempHTML = processRepeatedRegions(tempHTML, vars);
+    tempHTML += substituteVars(tempHTML, vars);*/
+    var expression = vars[region.name] || false;
+    if (expression) {
+      html = html.replace(subhtml, ifhtml);
+    } else  {
+      html = html.replace(subhtml, elsehtml);
+    }
+  }
+
+  return html;
+}
+
 var LayoutEngine = function(bodyFile, layoutFile, vars) {
   this.bodyFile = bodyFile;
   this.layoutFile = layoutFile;
@@ -108,6 +163,7 @@ LayoutEngine.prototype.render = function(callback) {
   var vars = this.vars;
   var html = getLayoutText(
     function(html) {
+      html = processConditionalRegions(html, vars);
       html = processRepeatedRegions(html, vars);
       html = substituteVars(html, vars);
       if (callback) {
