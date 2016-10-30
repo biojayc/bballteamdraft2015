@@ -196,6 +196,11 @@ var home = function(req, res, session) {
   var vsOwners = getVsOwners(controller, owner);
   var challenges = getChallenges(controller, session);
   var games = getGames(controller, controller.games, owner.id, session.owner);
+  var showChallenges = false;
+  if (session.owner && controller.ownersHash[session.owner] 
+      && owner.id == session.owner && challenges.length > 0) {
+    showChallenges = true;
+  }
   var obj = { 
     score: scores,
     image: winningImage,
@@ -205,6 +210,7 @@ var home = function(req, res, session) {
     teams: teams,
     vsOwners: vsOwners,
     challenges: challenges,
+    showChallenges: showChallenges,
     games: games,
   };
   layout.create("layouts/owner.html", "layouts/layout.html", obj).renderResponse(res);  
