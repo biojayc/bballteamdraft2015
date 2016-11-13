@@ -123,7 +123,8 @@ var getGames = function(controller, games, ownerId, sessionOwner) {
     if (ownerId == sessionOwner && !game.homeScore && !game.awayScore) {
       if (challenge && (challenge.awayChallengeBit || challenge.homeChallengeBit)) {
         score = "pending";
-      } else if (controller.ownersHash[ownerId].points > 0) {
+      } else if (controller.ownersHash[ownerId].points > 0 &&
+                 ownerId != oppOwnerId) {
         score = "<a href='/challenge?id=" + game.key + "'>challenge</a>";
       }
     }
