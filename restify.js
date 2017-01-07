@@ -53,11 +53,11 @@ var findRoute = function(path, method, session) {
   }
 
   // If 404 and no 404 handler.
-  return function(req, res) {
+  return { handler: function(req, res) {
     log.info("No Route found, and no 404 handler.  Returning default error handler.", session.sessionId);
     res.writeHead(404, {'Content-Type': 'text/html'});
     res.end("Sorry, the page you are looking for doesn't exist.");
-  }
+  }}
 }
 
 var returnError = function(req, res, session) {
